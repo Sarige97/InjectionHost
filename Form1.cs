@@ -1,4 +1,5 @@
-﻿using muju.modbus;
+﻿using moju.device.interfaces;
+using muju.modbus;
 using muju.task;
 using System;
 using System.Collections.Generic;
@@ -25,11 +26,14 @@ namespace muju
         /// </summary>
         private void Initialize()
         {
-            byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp("127.0.0.1", 502);
-            Byte[] reqeustBytes = new Byte[12] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, 0x01, 0x03, 0x00, 0x00, 0x00, 0x01 };
+            //byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp("127.0.0.1", 502);
+            //Byte[] reqeustBytes = new Byte[12] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, 0x01, 0x03, 0x00, 0x00, 0x00, 0x01 };
 
-            byte[] bytes= ModbusTCPClientManager.modbusRequestByBytes("127.0.0.1", 502, reqeustBytes);
-            Console.WriteLine(BitConverter.ToString(bytes));
+            //byte[] bytes= ModbusTCPClientManager.modbusRequestByBytes("127.0.0.1", 502, reqeustBytes);
+            //Console.WriteLine(BitConverter.ToString(bytes));
+
+            ModbusSlave modbusSlave = new ModbusSlave("127.0.0.1", 502);
+            Dictionary<ushort, bool> dictionary = modbusSlave.ReadWritableCoil(0x01, 0x0000, 03);
         }
 
         private void overviewBox_Enter(object sender, EventArgs e)
