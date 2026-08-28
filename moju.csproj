@@ -46,8 +46,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="device\interfaces\Device.cs" />
-    <Compile Include="device\interfaces\ModbusServer.cs" />
+    <Compile Include="constants\ModbusConstans.cs" />
+    <Compile Include="device\interfaces\ModbusSlave.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -60,6 +60,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="task\TimerTask.cs" />
     <Compile Include="task\TimerTaskManager.cs" />
+    <Compile Include="tool\NumberBaseConvertor.cs" />
     <Compile Include="tool\StreamTool.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
