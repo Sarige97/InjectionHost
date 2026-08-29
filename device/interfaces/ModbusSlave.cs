@@ -432,7 +432,7 @@ namespace moju.device.interfaces
                 if (transactionBytes[0] != responseBytes[0] || transactionBytes[1] != responseBytes[1])
                 {
                     // TODO warning 事务id对不上 不处理但是需要记录异常日志
-                }
+        }
 
                 // 获取响应数据字节数
                 int responseDataLengh = responseBytes[8];
