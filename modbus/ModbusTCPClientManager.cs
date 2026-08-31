@@ -89,7 +89,7 @@ namespace muju.modbus
         /// <param name="port"></param>
         /// <param name="requestBytes"></param>
         /// <returns></returns>
-        public static Byte[] modbusRequestByBytes(String ip, int port, Byte[] requestBytes)
+        public static Byte[] ModbusRequestByBytes(String ip, int port, Byte[] requestBytes)
         {
             try
             {

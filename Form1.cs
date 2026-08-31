@@ -33,7 +33,15 @@ namespace muju
             //Console.WriteLine(BitConverter.ToString(bytes));
 
             ModbusSlave modbusSlave = new ModbusSlave("127.0.0.1", 502);
-            Dictionary<ushort, bool> dictionary = modbusSlave.ReadWritableCoil(0x01, 0x0000, 03);
+            //Dictionary<ushort, bool> writableCoil = modbusSlave.ReadWritableCoil(0x01, 0x00, 03);
+            //Dictionary<ushort, bool> readOnlyCoil = modbusSlave.ReadReadOnlyCoil(0x01, 0x00, 0x03);
+            //Dictionary<ushort, ushort> writableRegister = modbusSlave.ReadWritableRegister(0x01, 0x00, 0x0A);
+            //Dictionary<ushort, ushort> readOnlyRegister = modbusSlave.ReadReadOnlyRegister(0x01, 0x00, 0x0A);
+            //modbusSlave.WriteSingleCoil(0x01, (ushort)10, true);
+            //modbusSlave.WriteMultiCoil(0x01, 0, 16,  new bool[] {true, true, false, true, true, false, true, true, false, true, true, false, true, true, false, true});
+            //modbusSlave.WriteSingleRegister(1, 0, 0x1234);
+            //modbusSlave.WriteMultiRegister(1, 0, 16, new ushort[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xE, 0xF });
+            Console.WriteLine(1);
         }
 
         private void overviewBox_Enter(object sender, EventArgs e)

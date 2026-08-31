@@ -59,7 +59,7 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.modbusRequestByBytes(ip, port, requestBytes);
+                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 // 解析响应报文
 
@@ -99,7 +99,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress">查询开始地址</param>
         /// <param name="length">查询个数</param>
         /// <returns>地址和寄存器值的映射</returns>
-        protected Dictionary<ushort, ushort> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh)
+        public Dictionary<ushort, ushort> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh)
         {
             try
             {
@@ -117,7 +117,7 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.modbusRequestByBytes(ip, port, requestBytes);
+                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 // 解析响应报文
 
@@ -132,9 +132,10 @@ namespace moju.device.interfaces
                 byte[] dataBytes = responseBytes.Skip(9).Take(responseDataLengh).ToArray();
 
                 Dictionary<ushort, ushort> resultKV = new Dictionary<ushort, ushort>();
-                for (int i = 0; i < dataLengh; i++)
+                for (int i = 0; i < dataBytes.Length; i += 2)
                 {
-                    resultKV.Add(startAddress++, dataBytes[i]);
+                    ushort result = NumberBaseConvertor.CombineTwoByte2Ushrot(dataBytes[i], dataBytes[i + 1]);
+                    resultKV.Add(startAddress++, result);
                 }
 
                 return resultKV;
@@ -154,7 +155,7 @@ namespace moju.device.interfaces
         /// <param name="writeAddress"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected bool WriteSingleCoil(byte slaveId, ushort writeAddress, bool input)
+        public bool WriteSingleCoil(byte slaveId, ushort writeAddress, bool input)
         {
             try
             {
@@ -162,7 +163,7 @@ namespace moju.device.interfaces
 
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
-                byte[] requestBody = new byte[5] { ModbusConstans.ModbusFunctionCodeWriteSingleCoil, addressBytes[0], addressBytes[1], 0xFF, 0x00 };
+                byte[] requestBody = new byte[5] { ModbusConstans.ModbusFunctionCodeWriteSingleCoil, addressBytes[0], addressBytes[1], (byte)(input ? 0xFF : 0x00), 0x00 };
 
                 MemoryStream memoryStream = new MemoryStream();
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
@@ -170,7 +171,7 @@ namespace moju.device.interfaces
 
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.modbusRequestByBytes(ip, port, requestBytes);
+                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 // 校验请求与返回报文是否一致
                 if (!requestBytes.SequenceEqual(responseBytes))
@@ -195,7 +196,7 @@ namespace moju.device.interfaces
         /// <param name="dataLengh"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        protected bool WriteMultiCoil(byte slaveId, ushort writeStartAddress, byte[] writeData)
+        public bool WriteMultiCoil(byte slaveId, ushort writeStartAddress, ushort writeLenght, byte[] writeData)
         {
             try
             {
@@ -207,11 +208,12 @@ namespace moju.device.interfaces
 
                 MemoryStream memoryStream = new MemoryStream();
                 byte[] addressBytes = NumberBaseConvertor.SplitUshort2Byte(writeStartAddress);
-                byte[] lengthBytes = NumberBaseConvertor.SplitUshort2Byte((byte)(writeData.Length));
+                byte[] lengthBytes = NumberBaseConvertor.SplitUshort2Byte(writeLenght);
 
 
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
+                // 数据长度是 slaveId(1字节) 功能码(1字节) 起始地址(2字节) 数量(2字节) 字节数(1字节)数据(n字节)
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, (byte)(7 + writeData.Length), slaveId };
 
                 // 拼接请求报文
@@ -222,7 +224,7 @@ namespace moju.device.interfaces
                 byte[] requestBytes = requestMemoryStream.ToArray();
 
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.modbusRequestByBytes(ip, port, requestBytes);
+                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 // 解析响应报文
                 if (!requestBytes.SequenceEqual(responseBytes))
@@ -244,13 +246,27 @@ namespace moju.device.interfaces
         }
 
         /// <summary>
+        /// 重载方法，直接用boolList入参，减少烧脑
+        /// </summary>
+        /// <param name="slaveId"></param>
+        /// <param name="writeStartAddress"></param>
+        /// <param name="boolList"></param>
+        /// <returns></returns>
+        public bool WriteMultiCoil(byte slaveId, ushort writeStartAddress, ushort writeLenght, params bool[] boolList)
+        {
+            byte[] toBeWriteBytes = NumberBaseConvertor.BoolList2ByteArray(boolList);
+            return WriteMultiCoil(slaveId, writeStartAddress, writeLenght, toBeWriteBytes);
+
+        }
+
+        /// <summary>
         /// 写单个保持寄存器
         /// </summary>
         /// <param name="slaveId"></param>
         /// <param name="writeAddress"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        protected bool WriteSingleRegister(byte slaveId, ushort writeAddress, ushort writeData)
+        public bool WriteSingleRegister(byte slaveId, ushort writeAddress, ushort writeData)
         {
             try
             {
@@ -267,7 +283,7 @@ namespace moju.device.interfaces
 
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.modbusRequestByBytes(ip, port, requestBytes);
+                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 // 校验请求与返回报文是否一致
                 if (!requestBytes.SequenceEqual(responseBytes))
@@ -293,34 +309,40 @@ namespace moju.device.interfaces
         /// <param name="dataLengh"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        protected bool WriteMultiRegister(byte slaveId, ushort writeStartAddress, byte[] writeData)
+        public bool WriteMultiRegister(byte slaveId, ushort writeStartAddress, ushort writeLength, ushort[] writeData)
         {
             try
             {
                 // 校验
-                if (writeData.Length + 7 > byte.MaxValue)
+                if (writeData.Length > 123)
                 {
-                    throw new ArgumentException("写入多个寄存器数据时，数据超长，最多同时写入248个字节");
+                    throw new ArgumentException("写入多个寄存器数据时，数据超长，最多同时写入123个寄存器)");
+                }
+
+                if (writeData.Length != writeLength)
+                {
+                    throw new ArgumentException("写入多个寄存器数据时，writeLength和writeData的长度不一致");
                 }
 
                 MemoryStream memoryStream = new MemoryStream();
                 byte[] addressBytes = NumberBaseConvertor.SplitUshort2Byte(writeStartAddress);
-                byte[] lengthBytes = NumberBaseConvertor.SplitUshort2Byte((byte)(writeData.Length));
+                byte[] lengthBytes = NumberBaseConvertor.SplitUshort2Byte((writeLength));
 
 
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
-                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, (byte)(7 + writeData.Length), slaveId };
+                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, (byte)(7 + (writeData.Length * 2)), slaveId };
 
                 // 拼接请求报文
                 MemoryStream requestMemoryStream = new MemoryStream();
                 requestMemoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
-                requestMemoryStream.Write(new byte[6] { ModbusConstans.ModbusFunctionCodeWriteMultipleRegisters, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1], (byte)writeData.Length }, 0, 6);
-                requestMemoryStream.Write(writeData, 0, writeData.Length);
+                requestMemoryStream.Write(new byte[6] { ModbusConstans.ModbusFunctionCodeWriteMultipleRegisters, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1], (byte)(writeData.Length * 2) }, 0, 6);
+                byte[] writeDataBytes = NumberBaseConvertor.UshortArray2ByteArray(writeData);
+                requestMemoryStream.Write(writeDataBytes, 0, writeDataBytes.Length);
                 byte[] requestBytes = requestMemoryStream.ToArray();
 
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.modbusRequestByBytes(ip, port, requestBytes);
+                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 // 解析响应报文
                 if (!requestBytes.SequenceEqual(responseBytes))
@@ -349,7 +371,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        protected Dictionary<ushort, bool> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length)
+        public Dictionary<ushort, bool> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length)
         {
             try
             {
@@ -367,7 +389,7 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.modbusRequestByBytes(ip, port, requestBytes);
+                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 // 解析响应报文
 
@@ -406,7 +428,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        protected Dictionary<ushort, ushort> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh)
+        public Dictionary<ushort, ushort> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh)
         {
             try
             {
@@ -418,13 +440,13 @@ namespace moju.device.interfaces
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
-                byte[] requestBody = new byte[5] { ModbusConstans.ModbusFunctionCodeReadHoldingRegister, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
+                byte[] requestBody = new byte[5] { ModbusConstans.ModbusFunctionCodeReadInputRegisters, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.modbusRequestByBytes(ip, port, requestBytes);
+                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 // 解析响应报文
 
@@ -432,16 +454,17 @@ namespace moju.device.interfaces
                 if (transactionBytes[0] != responseBytes[0] || transactionBytes[1] != responseBytes[1])
                 {
                     // TODO warning 事务id对不上 不处理但是需要记录异常日志
-        }
+                }
 
                 // 获取响应数据字节数
                 int responseDataLengh = responseBytes[8];
                 byte[] dataBytes = responseBytes.Skip(9).Take(responseDataLengh).ToArray();
 
                 Dictionary<ushort, ushort> resultKV = new Dictionary<ushort, ushort>();
-                for (int i = 0; i < dataLengh; i++)
+                for (int i = 0; i < dataBytes.Length; i += 2)
                 {
-                    resultKV.Add(startAddress++, dataBytes[i]);
+                    ushort result = NumberBaseConvertor.CombineTwoByte2Ushrot(dataBytes[i], dataBytes[i + 1]);
+                    resultKV.Add(startAddress++, result);
                 }
 
                 return resultKV;
