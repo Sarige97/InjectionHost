@@ -46,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="config\ConfigManager.cs" />
     <Compile Include="constants\ModbusConstans.cs" />
     <Compile Include="device\interfaces\ModbusSlave.cs" />
     <Compile Include="Form1.cs">
@@ -54,7 +55,11 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="modbus\ModbudsRequestResult.cs" />
     <Compile Include="modbus\ModbusTCPClientManager.cs" />
+    <Compile Include="modbus\SlaveChannel.cs" />
+    <Compile Include="modbus\SlaveChennelStatus.cs" />
+    <Compile Include="modbus\SlaveRequestResult.cs" />
     <Compile Include="modbus\TransactionIdGenerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

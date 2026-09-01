@@ -42,5 +42,10 @@ namespace moju.constants
         /// </summary>
         public const byte ModbusFunctionCodeWriteMultipleRegisters = 0x10;
 
+        /// <summary>
+        /// 定义超时次数与重试间隔的关系
+        /// </summary>
+        public readonly static int[] RetryArray = new int[] { 1000, 2000, 2000, 4000, 4000, 8000, 15000, 30000, 60000, 300000 };
+
     }
 }

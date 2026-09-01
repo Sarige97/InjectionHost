@@ -1,4 +1,5 @@
 ﻿using moju.constants;
+using moju.modbus;
 using moju.tool;
 using muju.modbus;
 using System;
@@ -67,7 +68,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress">查询开始地址</param>
         /// <param name="length">查询个数</param>
         /// <returns>地址和布尔值的映射</returns>
-        public Dictionary<ushort, bool> ReadWritableCoil(byte slaveId, ushort startAddress, ushort length, ReadWritableCoilResponseParse readWritableCoilResponseParse)
+        public async Task<Dictionary<ushort, bool>> ReadWritableCoil(byte slaveId, ushort startAddress, ushort length, ReadWritableCoilResponseParse readWritableCoilResponseParse)
         {
             try
             {
@@ -85,7 +86,15 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+
+                if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
+                {
+                    return null;
+                }
+
+                byte[] responseBytes = modbudsRequestResult.ResponseBytes;
+
 
                 // 如果有委托方法，直接使用委托方法解析，否则用后续默认方法解析
                 if (readWritableCoilResponseParse != null)
@@ -119,7 +128,7 @@ namespace moju.device.interfaces
             catch (Exception e)
             {
                 // TODO 异常
-                return new Dictionary<ushort, bool>();
+                return null;
             }
 
 
@@ -132,9 +141,9 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public Dictionary<ushort, bool> ReadWritableCoil(byte slaveId, ushort startAddress, ushort length)
+        public async Task<Dictionary<ushort, bool>> ReadWritableCoil(byte slaveId, ushort startAddress, ushort length)
         {
-            return ReadWritableCoil(slaveId, startAddress, length, null);
+            return await ReadWritableCoil(slaveId, startAddress, length, null);
         }
 
         /// <summary>
@@ -144,7 +153,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress">查询开始地址</param>
         /// <param name="length">查询个数</param>
         /// <returns>地址和寄存器值的映射</returns>
-        public Dictionary<ushort, ushort> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh, ReadWritableRegisterResponseParse readWritableRegisterResponseParse)
+        public async Task<Dictionary<ushort, ushort>> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh, ReadWritableRegisterResponseParse readWritableRegisterResponseParse)
         {
             try
             {
@@ -162,7 +171,14 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+
+                if(modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
+                {
+                    return null;
+                }
+
+                byte[] responseBytes = modbudsRequestResult.ResponseBytes;
 
                 // 如果有委托方法，直接使用委托方法解析，否则用后续默认方法解析
                 if (readWritableRegisterResponseParse != null)
@@ -208,9 +224,9 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public Dictionary<ushort, ushort> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh)
+        public async Task<Dictionary<ushort, ushort>> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh)
         {
-            return ReadWritableRegister(slaveId, startAddress, dataLengh);
+            return await ReadWritableRegister(slaveId, startAddress, dataLengh);
         }
 
         /// <summary>
@@ -220,7 +236,7 @@ namespace moju.device.interfaces
         /// <param name="writeAddress"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        public bool WriteSingleCoil(byte slaveId, ushort writeAddress, bool input)
+        public async Task<bool> WriteSingleCoil(byte slaveId, ushort writeAddress, bool input)
         {
             try
             {
@@ -236,7 +252,15 @@ namespace moju.device.interfaces
 
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+
+                if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
+                {
+                    return false;
+                }
+
+                byte[] responseBytes = modbudsRequestResult.ResponseBytes;
+
 
                 // 校验请求与返回报文是否一致
                 if (!requestBytes.SequenceEqual(responseBytes))
@@ -261,7 +285,7 @@ namespace moju.device.interfaces
         /// <param name="dataLengh"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        public bool WriteMultiCoil(byte slaveId, ushort writeStartAddress, ushort writeLenght, byte[] writeData)
+        public async Task<bool> WriteMultiCoil(byte slaveId, ushort writeStartAddress, ushort writeLenght, byte[] writeData)
         {
             try
             {
@@ -289,7 +313,15 @@ namespace moju.device.interfaces
                 byte[] requestBytes = requestMemoryStream.ToArray();
 
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+
+                if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
+                {
+                    return false;
+                }
+
+                byte[] responseBytes = modbudsRequestResult.ResponseBytes;
+
 
                 // 解析响应报文
                 if (!requestBytes.SequenceEqual(responseBytes))
@@ -317,10 +349,10 @@ namespace moju.device.interfaces
         /// <param name="writeStartAddress"></param>
         /// <param name="boolList"></param>
         /// <returns></returns>
-        public bool WriteMultiCoil(byte slaveId, ushort writeStartAddress, ushort writeLenght, params bool[] boolList)
+        public async Task<bool> WriteMultiCoil(byte slaveId, ushort writeStartAddress, ushort writeLenght, params bool[] boolList)
         {
             byte[] toBeWriteBytes = NumberBaseConvertor.BoolList2ByteArray(boolList);
-            return WriteMultiCoil(slaveId, writeStartAddress, writeLenght, toBeWriteBytes);
+            return await WriteMultiCoil(slaveId, writeStartAddress, writeLenght, toBeWriteBytes);
 
         }
 
@@ -331,7 +363,7 @@ namespace moju.device.interfaces
         /// <param name="writeAddress"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        public bool WriteSingleRegister(byte slaveId, ushort writeAddress, ushort writeData)
+        public async Task<bool> WriteSingleRegister(byte slaveId, ushort writeAddress, ushort writeData)
         {
             try
             {
@@ -348,7 +380,16 @@ namespace moju.device.interfaces
 
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+
+
+                if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
+                {
+                    return false;
+                }
+
+                byte[] responseBytes = modbudsRequestResult.ResponseBytes;
+
 
                 // 校验请求与返回报文是否一致
                 if (!requestBytes.SequenceEqual(responseBytes))
@@ -374,7 +415,7 @@ namespace moju.device.interfaces
         /// <param name="dataLengh"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        public bool WriteMultiRegister(byte slaveId, ushort writeStartAddress, ushort writeLength, ushort[] writeData)
+        public async Task<bool> WriteMultiRegister(byte slaveId, ushort writeStartAddress, ushort writeLength, ushort[] writeData)
         {
             try
             {
@@ -407,7 +448,15 @@ namespace moju.device.interfaces
                 byte[] requestBytes = requestMemoryStream.ToArray();
 
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+
+                if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
+                {
+                    return false;
+                }
+
+                byte[] responseBytes = modbudsRequestResult.ResponseBytes;
+
 
                 // 解析响应报文
                 if (!requestBytes.SequenceEqual(responseBytes))
@@ -436,7 +485,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public Dictionary<ushort, bool> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length, ReadReadOnlyCoilResponseParse readOnlyCoilResponseParse)
+        public async Task<Dictionary<ushort, bool>> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length, ReadReadOnlyCoilResponseParse readOnlyCoilResponseParse)
         {
             try
             {
@@ -454,7 +503,15 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+
+                if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
+                {
+                    return null;
+                }
+
+                byte[] responseBytes = modbudsRequestResult.ResponseBytes;
+
 
                 // 如果有委托方法，直接使用委托方法解析，否则用后续默认方法解析
                 if (readOnlyCoilResponseParse != null)
@@ -494,9 +551,9 @@ namespace moju.device.interfaces
 
         }
 
-        public Dictionary<ushort, bool> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length)
+        public async Task<Dictionary<ushort, bool>> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length)
         {
-            return ReadReadOnlyCoil(slaveId, startAddress, length);
+            return await ReadReadOnlyCoil(slaveId, startAddress, length);
         }
 
 
@@ -507,7 +564,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public Dictionary<ushort, ushort> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh, ReadReadOnlyRegisterResponseParse readOnlyRegisterResponseParse)
+        public async Task<Dictionary<ushort, ushort>> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh, ReadReadOnlyRegisterResponseParse readOnlyRegisterResponseParse)
         {
             try
             {
@@ -525,7 +582,15 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+
+                if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
+                {
+                    return null;
+                }
+
+                byte[] responseBytes = modbudsRequestResult.ResponseBytes;
+
 
 
                 // 如果有委托方法，直接使用委托方法解析，否则用后续默认方法解析
@@ -564,9 +629,9 @@ namespace moju.device.interfaces
             }
         }
 
-        public Dictionary<ushort, ushort> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh)
+        public async Task<Dictionary<ushort, ushort>> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh)
         {
-            return ReadReadOnlyRegister(slaveId, startAddress, dataLengh, null);
+            return await ReadReadOnlyRegister(slaveId, startAddress, dataLengh, null);
         }
     }
 }

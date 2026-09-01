@@ -9,6 +9,9 @@ namespace muju.task
 {
     internal class TimerTaskManager
     {
+        /// <summary>
+        /// 定时间隔和定时任务的映射
+        /// </summary>
         private static readonly Dictionary<int, TimerTask> _timerTaskDict = new Dictionary<int, TimerTask>();
         
         public static void AddTimerEvent(int loopTime, Action action)

@@ -10,6 +10,14 @@ namespace muju.tool
     internal class StreamTool
     {
 
+        /// <summary>
+        /// 读取流到字节数组里，将字节数组读取满为止
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="bytes"></param>
+        /// <param name="timeOutTime"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static Byte[] StreamRead(Stream stream, byte[] bytes, int timeOutTime)
         {
             long startTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
