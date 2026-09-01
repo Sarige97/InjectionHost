@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static moju.device.interfaces.ModbusSlave;
 
 namespace moju.device.interfaces
 {
@@ -16,6 +17,31 @@ namespace moju.device.interfaces
 
         String ip { get; set; }
         int port { get; set; }
+
+        /// <summary>
+        /// 用于解析读取可读写线圈值时的委托方法
+        /// </summary>
+        /// <param name="responseBytes"></param>
+        /// <returns></returns>
+        public delegate Dictionary<ushort, bool> ReadWritableCoilResponseParse(byte[] responseBytes);
+        /// <summary>
+        /// 用于解析读取可读写寄存器值时的委托方法
+        /// </summary>
+        /// <param name="responseBytes"></param>
+        /// <returns></returns>
+        public delegate Dictionary<ushort, ushort> ReadWritableRegisterResponseParse(byte[] responseBytes);
+        /// <summary>
+        /// 用于解析读取只读线圈时的委托方法
+        /// </summary>
+        /// <param name="responseBytes"></param>
+        /// <returns></returns>
+        public delegate Dictionary<ushort, bool> ReadReadOnlyCoilResponseParse(byte[] responseBytes);
+        /// <summary>
+        /// 用于解析读取只读寄存器时的委托方法
+        /// </summary>
+        /// <param name="responseBytes"></param>
+        /// <returns></returns>
+        public delegate Dictionary<ushort, ushort> ReadReadOnlyRegisterResponseParse(byte[] responseBytes);
 
         /// <summary>
         /// 把ip和端口组合成ip:port的格式
@@ -41,7 +67,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress">查询开始地址</param>
         /// <param name="length">查询个数</param>
         /// <returns>地址和布尔值的映射</returns>
-        public Dictionary<ushort, bool> ReadWritableCoil(byte slaveId, ushort startAddress, ushort length)
+        public Dictionary<ushort, bool> ReadWritableCoil(byte slaveId, ushort startAddress, ushort length, ReadWritableCoilResponseParse readWritableCoilResponseParse)
         {
             try
             {
@@ -61,27 +87,34 @@ namespace moju.device.interfaces
                 // 发起请求，拿到响应报文
                 byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
-                // 解析响应报文
-
-                // 校验transactionId
-                if (transactionBytes[0] != responseBytes[0] || transactionBytes[1] != responseBytes[1])
+                // 如果有委托方法，直接使用委托方法解析，否则用后续默认方法解析
+                if (readWritableCoilResponseParse != null)
                 {
-                    // TODO warning 事务id对不上
+                    return readWritableCoilResponseParse(responseBytes);
                 }
-
-                // 获取响应数据字节数
-                int responseDataLengh = responseBytes[8];
-                byte[] dataBytes = responseBytes.Skip(9).Take(responseDataLengh).ToArray();
-
-                Dictionary<ushort, bool> resultKV = new Dictionary<ushort, bool>();
-
-                BitArray bitArray = new BitArray(dataBytes);
-                for (int i = 0; i < length; i++)
+                else
                 {
-                    resultKV.Add(startAddress++, bitArray[i]);
-                }
-                return resultKV;
+                    // 解析响应报文
 
+                    // 校验transactionId
+                    if (transactionBytes[0] != responseBytes[0] || transactionBytes[1] != responseBytes[1])
+                    {
+                        // TODO warning 事务id对不上
+                    }
+
+                    // 获取响应数据字节数
+                    int responseDataLengh = responseBytes[8];
+                    byte[] dataBytes = responseBytes.Skip(9).Take(responseDataLengh).ToArray();
+
+                    Dictionary<ushort, bool> resultKV = new Dictionary<ushort, bool>();
+
+                    BitArray bitArray = new BitArray(dataBytes);
+                    for (int i = 0; i < length; i++)
+                    {
+                        resultKV.Add(startAddress++, bitArray[i]);
+                    }
+                    return resultKV;
+                }
             }
             catch (Exception e)
             {
@@ -93,13 +126,25 @@ namespace moju.device.interfaces
         }
 
         /// <summary>
+        /// 重载方法，不用委托方法用默认方式解析响应数据
+        /// </summary>
+        /// <param name="slaveId"></param>
+        /// <param name="startAddress"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public Dictionary<ushort, bool> ReadWritableCoil(byte slaveId, ushort startAddress, ushort length)
+        {
+            return ReadWritableCoil(slaveId, startAddress, length, null);
+        }
+
+        /// <summary>
         /// 读保持寄存器（可读写寄存器）
         /// </summary>
         /// <param name="slaveId">从站id</param>
         /// <param name="startAddress">查询开始地址</param>
         /// <param name="length">查询个数</param>
         /// <returns>地址和寄存器值的映射</returns>
-        public Dictionary<ushort, ushort> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh)
+        public Dictionary<ushort, ushort> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh, ReadWritableRegisterResponseParse readWritableRegisterResponseParse)
         {
             try
             {
@@ -119,33 +164,53 @@ namespace moju.device.interfaces
                 // 发起请求，拿到响应报文
                 byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
-                // 解析响应报文
-
-                // 校验transactionId
-                if (transactionBytes[0] != responseBytes[0] || transactionBytes[1] != responseBytes[1])
+                // 如果有委托方法，直接使用委托方法解析，否则用后续默认方法解析
+                if (readWritableRegisterResponseParse != null)
                 {
-                    // TODO warning 事务id对不上 不处理但是需要记录异常日志
+                    return readWritableRegisterResponseParse(responseBytes);
                 }
-
-                // 获取响应数据字节数
-                int responseDataLengh = responseBytes[8];
-                byte[] dataBytes = responseBytes.Skip(9).Take(responseDataLengh).ToArray();
-
-                Dictionary<ushort, ushort> resultKV = new Dictionary<ushort, ushort>();
-                for (int i = 0; i < dataBytes.Length; i += 2)
+                else
                 {
-                    ushort result = NumberBaseConvertor.CombineTwoByte2Ushrot(dataBytes[i], dataBytes[i + 1]);
-                    resultKV.Add(startAddress++, result);
+                    // 解析响应报文
+
+                    // 校验transactionId
+                    if (transactionBytes[0] != responseBytes[0] || transactionBytes[1] != responseBytes[1])
+                    {
+                        // TODO warning 事务id对不上 不处理但是需要记录异常日志
+                    }
+
+                    // 获取响应数据字节数
+                    int responseDataLengh = responseBytes[8];
+                    byte[] dataBytes = responseBytes.Skip(9).Take(responseDataLengh).ToArray();
+
+                    Dictionary<ushort, ushort> resultKV = new Dictionary<ushort, ushort>();
+                    for (int i = 0; i < dataBytes.Length; i += 2)
+                    {
+                        ushort result = NumberBaseConvertor.CombineTwoByte2Ushrot(dataBytes[i], dataBytes[i + 1]);
+                        resultKV.Add(startAddress++, result);
+                    }
+
+                    return resultKV;
+
                 }
-
-                return resultKV;
-
             }
             catch (Exception e)
             {
                 // TODO 异常
                 return new Dictionary<ushort, ushort>();
             }
+        }
+
+        /// <summary>
+        /// 重载方法，不用委托方法用默认方式解析响应数据
+        /// </summary>
+        /// <param name="slaveId"></param>
+        /// <param name="startAddress"></param>
+        /// <param name="length"></param>
+        /// <returns></returns>
+        public Dictionary<ushort, ushort> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh)
+        {
+            return ReadWritableRegister(slaveId, startAddress, dataLengh);
         }
 
         /// <summary>
@@ -371,7 +436,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public Dictionary<ushort, bool> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length)
+        public Dictionary<ushort, bool> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length, ReadReadOnlyCoilResponseParse readOnlyCoilResponseParse)
         {
             try
             {
@@ -391,27 +456,35 @@ namespace moju.device.interfaces
                 // 发起请求，拿到响应报文
                 byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
-                // 解析响应报文
-
-                // 校验transactionId
-                if (transactionBytes[0] != responseBytes[0] || transactionBytes[1] != responseBytes[1])
+                // 如果有委托方法，直接使用委托方法解析，否则用后续默认方法解析
+                if (readOnlyCoilResponseParse != null)
                 {
-                    // TODO warning 事务id对不上
+                    return readOnlyCoilResponseParse(responseBytes);
                 }
-
-                // 获取响应数据字节数
-                int responseDataLengh = responseBytes[8];
-                byte[] dataBytes = responseBytes.Skip(9).Take(responseDataLengh).ToArray();
-
-                Dictionary<ushort, bool> resultKV = new Dictionary<ushort, bool>();
-
-                BitArray bitArray = new BitArray(dataBytes);
-                for (int i = 0; i < length; i++)
+                else
                 {
-                    resultKV.Add(startAddress++, bitArray[i]);
-                }
-                return resultKV;
+                    // 解析响应报文
 
+                    // 校验transactionId
+                    if (transactionBytes[0] != responseBytes[0] || transactionBytes[1] != responseBytes[1])
+                    {
+                        // TODO warning 事务id对不上
+                    }
+
+                    // 获取响应数据字节数
+                    int responseDataLengh = responseBytes[8];
+                    byte[] dataBytes = responseBytes.Skip(9).Take(responseDataLengh).ToArray();
+
+                    Dictionary<ushort, bool> resultKV = new Dictionary<ushort, bool>();
+
+                    BitArray bitArray = new BitArray(dataBytes);
+                    for (int i = 0; i < length; i++)
+                    {
+                        resultKV.Add(startAddress++, bitArray[i]);
+                    }
+                    return resultKV;
+
+                }
             }
             catch (Exception e)
             {
@@ -421,6 +494,12 @@ namespace moju.device.interfaces
 
         }
 
+        public Dictionary<ushort, bool> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length)
+        {
+            return ReadReadOnlyCoil(slaveId, startAddress, length);
+        }
+
+
         /// <summary>
         /// 读只读寄存器（输入寄存器）
         /// </summary>
@@ -428,7 +507,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public Dictionary<ushort, ushort> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh)
+        public Dictionary<ushort, ushort> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh, ReadReadOnlyRegisterResponseParse readOnlyRegisterResponseParse)
         {
             try
             {
@@ -448,27 +527,35 @@ namespace moju.device.interfaces
                 // 发起请求，拿到响应报文
                 byte[] responseBytes = ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
-                // 解析响应报文
 
-                // 校验transactionId
-                if (transactionBytes[0] != responseBytes[0] || transactionBytes[1] != responseBytes[1])
+                // 如果有委托方法，直接使用委托方法解析，否则用后续默认方法解析
+                if (readOnlyRegisterResponseParse != null)
                 {
-                    // TODO warning 事务id对不上 不处理但是需要记录异常日志
-                }
-
-                // 获取响应数据字节数
-                int responseDataLengh = responseBytes[8];
-                byte[] dataBytes = responseBytes.Skip(9).Take(responseDataLengh).ToArray();
-
-                Dictionary<ushort, ushort> resultKV = new Dictionary<ushort, ushort>();
-                for (int i = 0; i < dataBytes.Length; i += 2)
+                    return readOnlyRegisterResponseParse(responseBytes);
+                } else
                 {
-                    ushort result = NumberBaseConvertor.CombineTwoByte2Ushrot(dataBytes[i], dataBytes[i + 1]);
-                    resultKV.Add(startAddress++, result);
+                    // 解析响应报文
+
+                    // 校验transactionId
+                    if (transactionBytes[0] != responseBytes[0] || transactionBytes[1] != responseBytes[1])
+                    {
+                        // TODO warning 事务id对不上 不处理但是需要记录异常日志
+                    }
+
+                    // 获取响应数据字节数
+                    int responseDataLengh = responseBytes[8];
+                    byte[] dataBytes = responseBytes.Skip(9).Take(responseDataLengh).ToArray();
+
+                    Dictionary<ushort, ushort> resultKV = new Dictionary<ushort, ushort>();
+                    for (int i = 0; i < dataBytes.Length; i += 2)
+                    {
+                        ushort result = NumberBaseConvertor.CombineTwoByte2Ushrot(dataBytes[i], dataBytes[i + 1]);
+                        resultKV.Add(startAddress++, result);
+                    }
+
+                    return resultKV;
+
                 }
-
-                return resultKV;
-
             }
             catch (Exception e)
             {
@@ -477,7 +564,9 @@ namespace moju.device.interfaces
             }
         }
 
-
-
+        public Dictionary<ushort, ushort> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh)
+        {
+            return ReadReadOnlyRegister(slaveId, startAddress, dataLengh, null);
+        }
     }
 }
