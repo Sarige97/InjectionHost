@@ -105,7 +105,7 @@ namespace muju.modbus
         {
             try
             {
-                TcpClient tcpClient = slaveChannel.GetTcpClient();
+                TcpClient tcpClient = await slaveChannel.GetTcpClient();
                 NetworkStream stream = tcpClient.GetStream();
 
                 await stream.WriteAsync(requestBytes, 0, requestBytes.Length);
@@ -113,12 +113,13 @@ namespace muju.modbus
                 // 获取报文头
                 Byte[] bytesHead = new Byte[7];
 
-                await stream.ReadAsync(bytesHead, 0, bytesHead.Length);
+                //await stream.ReadAsync(bytesHead, 0, bytesHead.Length);
+                await StreamTool.StreamReadAsync(stream, bytesHead);
                 int dataLength = (bytesHead[4] << 8 | bytesHead[5]);
                 // 获取报文体
 
                 Byte[] bytesBody = new Byte[dataLength - 1];
-                await stream.ReadAsync(bytesBody, 0, bytesBody.Length);
+                await StreamTool.StreamReadAsync(stream, bytesBody);
 
                 // 组合报文
                 Byte[] resultByte = new Byte[bytesHead.Length + bytesBody.Length];

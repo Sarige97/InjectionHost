@@ -60,7 +60,7 @@
     <Compile Include="modbus\ModbusRequestResult.cs" />
     <Compile Include="modbus\ModbusTCPClientManager.cs" />
     <Compile Include="modbus\SlaveChannel.cs" />
-    <Compile Include="modbus\SlaveChennelStatus.cs" />
+    <Compile Include="modbus\SlaveChannelStatus.cs" />
     <Compile Include="modbus\SlaveRequestResult.cs" />
     <Compile Include="modbus\TransactionIdGenerator.cs" />
     <Compile Include="Program.cs" />

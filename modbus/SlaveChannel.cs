@@ -15,15 +15,13 @@ namespace moju.modbus
         public TcpClient tcpClient { get; private set; }
         public int failedCount { get; private set; }
 
-        public SemaphoreSlim asyncLock { get; }
-
         public int nextAllowedTimeMs { get; private set; }
 
         public String ip { get; }
 
         public int port { get; }
 
-        public SlaveChennelStatus status { get; private set; }
+        public SlaveChannelStatus status { get; private set; }
 
         public
 
@@ -31,26 +29,11 @@ namespace moju.modbus
         {
             this.ip = ip;
             this.port = port;
-            this.asyncLock = new SemaphoreSlim(1, 1);
             this.nextAllowedTimeMs = 0;
             this.failedCount = 0;
-            this.tcpClient = new TcpClient();
-
-            try
-            {
-                this.tcpClient.Connect(ip, port);
-                this.status = SlaveChennelStatus.Ok;
-            }
-            catch (Exception e)
-            {
-                // TODO 日志，连接失败但是channel创建成功
-                failedCount++;
-                this.status = SlaveChennelStatus.ConnectFailed;
-
-            }
         }
 
-        public TcpClient GetTcpClient()
+        public async Task<TcpClient> GetTcpClient()
         {
             if (this.tcpClient != null)
             {
@@ -58,12 +41,12 @@ namespace moju.modbus
             }
             else
             {
-                return RecreateTcpClient();
+                return await RecreateTcpClient();
             }
         }
 
 
-        public TcpClient RecreateTcpClient()
+        public async Task<TcpClient> RecreateTcpClient()
         {
             // 重新创建tcpClient
             try
@@ -77,7 +60,16 @@ namespace moju.modbus
             finally
             {
                 this.tcpClient = new TcpClient();
-                this.tcpClient.Connect(ip, port);
+                Task connectTask = this.tcpClient.ConnectAsync(ip, port);
+                Task completeTask = await Task.WhenAny(connectTask, Task.Delay(ConfigManager.Instance.ModbusRequestTimeoutMs));
+                if (!(completeTask == connectTask))
+                {
+                    //超时
+                    CloseAndSetTcpClientNull();
+                    connectTask.ContinueWith(t => t.Exception);
+                    this.tcpClient = null;
+                    throw new InvalidOperationException();
+                }
             }
             return tcpClient;
 
@@ -96,8 +88,9 @@ namespace moju.modbus
         public void OnFailed()
         {
             failedCount++;
-            nextAllowedTimeMs = GetNow() + ConfigManager.Instance.RetryArray[failedCount];
-            status = SlaveChennelStatus.ReqeustFailed;
+            int RetryArrayIndex = Math.Min(failedCount - 1, ConfigManager.Instance.RetryArray.Length - 1);
+            nextAllowedTimeMs = GetNow() + ConfigManager.Instance.RetryArray[RetryArrayIndex];
+            status = SlaveChannelStatus.ReqeustFailed;
             CloseAndSetTcpClientNull();
         }
 
@@ -105,15 +98,15 @@ namespace moju.modbus
         {
             failedCount = 0;
             nextAllowedTimeMs = 0;
-            status = SlaveChennelStatus.Ok;
+            status = SlaveChannelStatus.Ok;
         }
 
         public void OnTimeout()
         {
             failedCount++;
-            int RetryArrayIndex = failedCount > (ConfigManager.Instance.RetryArray.Length - 1) ? (ConfigManager.Instance.RetryArray.Length - 1) : failedCount;
+            int RetryArrayIndex = Math.Min(failedCount - 1, ConfigManager.Instance.RetryArray.Length - 1);
             nextAllowedTimeMs = GetNow() + ConfigManager.Instance.RetryArray[RetryArrayIndex];
-            status = SlaveChennelStatus.Timeout;
+            status = SlaveChannelStatus.Timeout;
             CloseAndSetTcpClientNull();
         }
 

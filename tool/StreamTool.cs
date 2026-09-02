@@ -18,27 +18,18 @@ namespace muju.tool
         /// <param name="timeOutTime"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public static Byte[] StreamRead(Stream stream, byte[] bytes, int timeOutTime)
+        public static async Task<Byte[]> StreamReadAsync(Stream stream, byte[] bytes)
         {
-            long startTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
             int readed = 0;
             while (true)
             {
-                int read = stream.Read(bytes, readed, bytes.Length - readed);
+                int read = await stream.ReadAsync(bytes, readed, bytes.Length - readed);
                 readed += read;
 
                 if (readed >= bytes.Length)
                 {
                     return bytes;
                 }
-
-                long nowTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-                if ((nowTime - startTime) > timeOutTime)
-                {
-                    throw new Exception("流读取超时");
-                }
-
             }
         }
 

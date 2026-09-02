@@ -48,13 +48,13 @@ namespace muju
             //modbusSlave.WriteMultiCoil(0x01, 0, 16,  new bool[] {true, true, false, true, true, false, true, true, false, true, true, false, true, true, false, true});
             //modbusSlave.WriteSingleRegister(1, 0, 0x1234);
             //modbusSlave.WriteMultiRegister(1, 0, 16, new ushort[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0xA, 0xB, 0xC, 0xD, 0xE, 0xF });
-            ConfigManager instance = ConfigManager.Instance;
+            //ConfigManager instance = ConfigManager.Instance;
 
-            SimpleLogger.Instance.Debug("DebugTest");
-            SimpleLogger.Instance.Info("InfoTest");
-            SimpleLogger.Instance.Warn("WarnTest");
-            SimpleLogger.Instance.Error("ErrorTest");
-            SimpleLogger.Instance.Fatal("FatalTest");
+            //SimpleLogger.Instance.Debug("DebugTest");
+            //SimpleLogger.Instance.Info("InfoTest");
+            //SimpleLogger.Instance.Warn("WarnTest");
+            //SimpleLogger.Instance.Error("ErrorTest");
+            //SimpleLogger.Instance.Fatal("FatalTest");
         }
 
         private void overviewBox_Enter(object sender, EventArgs e)
