@@ -80,13 +80,13 @@ namespace moju.device.interfaces
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
-                byte[] requestBody = new byte[5] { ModbusConstans.ModbusFunctionCodeReadCoil, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
+                byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadCoil, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -165,13 +165,13 @@ namespace moju.device.interfaces
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
-                byte[] requestBody = new byte[5] { ModbusConstans.ModbusFunctionCodeReadHoldingRegister, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
+                byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadHoldingRegister, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 if(modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -244,7 +244,7 @@ namespace moju.device.interfaces
 
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
-                byte[] requestBody = new byte[5] { ModbusConstans.ModbusFunctionCodeWriteSingleCoil, addressBytes[0], addressBytes[1], (byte)(input ? 0xFF : 0x00), 0x00 };
+                byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeWriteSingleCoil, addressBytes[0], addressBytes[1], (byte)(input ? 0xFF : 0x00), 0x00 };
 
                 MemoryStream memoryStream = new MemoryStream();
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
@@ -252,7 +252,7 @@ namespace moju.device.interfaces
 
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -308,12 +308,12 @@ namespace moju.device.interfaces
                 // 拼接请求报文
                 MemoryStream requestMemoryStream = new MemoryStream();
                 requestMemoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
-                requestMemoryStream.Write(new byte[6] { ModbusConstans.ModbusFunctionCodeWriteMultipleCoils, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1], (byte)writeData.Length }, 0, 6);
+                requestMemoryStream.Write(new byte[6] { ModbusConstants.ModbusFunctionCodeWriteMultipleCoils, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1], (byte)writeData.Length }, 0, 6);
                 requestMemoryStream.Write(writeData, 0, writeData.Length);
                 byte[] requestBytes = requestMemoryStream.ToArray();
 
                 // 发起请求，拿到响应报文
-                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -372,7 +372,7 @@ namespace moju.device.interfaces
 
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
-                byte[] requestBody = new byte[5] { ModbusConstans.ModbusFunctionCodeWriteSingleRegister, addressBytes[0], addressBytes[1], writeDataBytes[0], writeDataBytes[1] };
+                byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeWriteSingleRegister, addressBytes[0], addressBytes[1], writeDataBytes[0], writeDataBytes[1] };
 
                 MemoryStream memoryStream = new MemoryStream();
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
@@ -380,7 +380,7 @@ namespace moju.device.interfaces
 
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
@@ -442,13 +442,13 @@ namespace moju.device.interfaces
                 // 拼接请求报文
                 MemoryStream requestMemoryStream = new MemoryStream();
                 requestMemoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
-                requestMemoryStream.Write(new byte[6] { ModbusConstans.ModbusFunctionCodeWriteMultipleRegisters, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1], (byte)(writeData.Length * 2) }, 0, 6);
+                requestMemoryStream.Write(new byte[6] { ModbusConstants.ModbusFunctionCodeWriteMultipleRegisters, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1], (byte)(writeData.Length * 2) }, 0, 6);
                 byte[] writeDataBytes = NumberBaseConvertor.UshortArray2ByteArray(writeData);
                 requestMemoryStream.Write(writeDataBytes, 0, writeDataBytes.Length);
                 byte[] requestBytes = requestMemoryStream.ToArray();
 
                 // 发起请求，拿到响应报文
-                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -497,13 +497,13 @@ namespace moju.device.interfaces
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
-                byte[] requestBody = new byte[5] { ModbusConstans.ModbusFunctionCodeReadDiscreteInputs, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
+                byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadDiscreteInputs, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -576,13 +576,13 @@ namespace moju.device.interfaces
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
-                byte[] requestBody = new byte[5] { ModbusConstans.ModbusFunctionCodeReadInputRegisters, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
+                byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadInputRegisters, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbudsRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {

@@ -1,4 +1,5 @@
-﻿using moju.constants;
+﻿using moju.config;
+using moju.constants;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,7 +96,7 @@ namespace moju.modbus
         public void OnFailed()
         {
             failedCount++;
-            nextAllowedTimeMs = GetNow() + ModbusConstans.RetryArray[failedCount];
+            nextAllowedTimeMs = GetNow() + ConfigManager.Instance.RetryArray[failedCount];
             status = SlaveChennelStatus.ReqeustFailed;
             CloseAndSetTcpClientNull();
         }
@@ -110,7 +111,8 @@ namespace moju.modbus
         public void OnTimeout()
         {
             failedCount++;
-            nextAllowedTimeMs = GetNow() + ModbusConstans.RetryArray[failedCount];
+            int RetryArrayIndex = failedCount > (ConfigManager.Instance.RetryArray.Length - 1) ? (ConfigManager.Instance.RetryArray.Length - 1) : failedCount;
+            nextAllowedTimeMs = GetNow() + ConfigManager.Instance.RetryArray[RetryArrayIndex];
             status = SlaveChennelStatus.Timeout;
             CloseAndSetTcpClientNull();
         }

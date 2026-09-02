@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<project>
+
+	<!-- DEBUG INFO WARN ERROR FATAL -->
+	<Log>
+		<LogLevel>WARN</LogLevel>
+		<!-- 0：文件日志  1：控制台  2：UI日志-->
+		<outputTarget>0,1,2</outputTarget>
+	</Log>
+	
+	<modbusProtocol>
+		<!-- modbus请求超时时间, 单位毫秒 -->
+		<requestTimeoutMs>2000</requestTimeoutMs>
+		<!-- modbus请求失败后，退避间隔，单位毫秒 -->
+		<retryArray>1000,1000,2000,2000,4000,6000,10000,30000,60000</retryArray>
+	</modbusProtocol>
+	
+	
+</project>

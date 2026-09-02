@@ -1,4 +1,5 @@
 ﻿using moju.config;
+using moju.log;
 using moju.modbus;
 using muju.tool;
 using System;
@@ -37,7 +38,7 @@ namespace muju.modbus
         /// <param name="port"></param>
         /// <param name="requestBytes"></param>
         /// <returns></returns>
-        public async static Task<ModbudsRequestResult> ModbusRequestByBytes(String ip, int port, byte[] requestBytes)
+        public async static Task<ModbusRequestResult> ModbusRequestByBytes(String ip, int port, byte[] requestBytes)
         {
             String targetAddress = CombineAddress(ip, port);
             if (!_slaveChannelMapping.TryGetValue(targetAddress, out SlaveChannel slaveChannel))
@@ -52,47 +53,48 @@ namespace muju.modbus
 
             try
             {
-                if(!slaveChannel.CanRequest())
+                if (!slaveChannel.CanRequest())
                 {
-                    Console.WriteLine("未到请求间隔，跳过请求");
-                    return new ModbudsRequestResult(new byte[0], SlaveRequestResult.Passed, "未到请求间隔，跳过请求");
+                    SimpleLogger.Instance.Debug("未到请求间隔，跳过请求");
+                    return new ModbusRequestResult(new byte[0], SlaveRequestResult.Passed, "未到请求间隔，跳过请求");
                 }
 
                 Task<byte[]> requestTask = requestAndParse(slaveChannel, requestBytes);
                 // 发起请求，设置超时
-                Console.WriteLine("开始请求");
-                Task completeTask = await Task.WhenAny(requestTask, Task.Delay(ConfigManager.ModbusRequestTimeoutMs));
+                SimpleLogger.Instance.Debug("开始请求");
+                Task completeTask = await Task.WhenAny(requestTask, Task.Delay(ConfigManager.Instance.ModbusRequestTimeoutMs));
                 if (completeTask == requestTask)
                 {
                     // 没有超时
                     byte[] responseByte = await requestTask;
                     slaveChannel.OnSuccess();
-                    return new ModbudsRequestResult(responseByte, SlaveRequestResult.Success);
+                    return new ModbusRequestResult(responseByte, SlaveRequestResult.Success);
                 }
                 else
                 {
                     // 超时
-                    Console.WriteLine("请求超时，目标地址：" + CombineAddress(ip, port) + "  请求报文：" + BitConverter.ToString(requestBytes));
+                    SimpleLogger.Instance.Error("请求超时，目标地址：" + CombineAddress(ip, port) + "  请求报文：" + BitConverter.ToString(requestBytes));
                     slaveChannel.OnTimeout();
-                    return new ModbudsRequestResult(new byte[0], SlaveRequestResult.Timeout, "请求超时");
+                    _ = requestTask.ContinueWith(t => t.Exception);
+                    return new ModbusRequestResult(new byte[0], SlaveRequestResult.Timeout, "请求超时");
                 }
 
 
             }
             catch (InvalidOperationException e)
             {
-                Console.WriteLine("请求失败,和目标的连接断开，目标地址：" + CombineAddress(ip, port) + "  请求报文：" + BitConverter.ToString(requestBytes));
+                SimpleLogger.Instance.Error("请求失败,和目标的连接断开，目标地址：" + CombineAddress(ip, port) + "  请求报文：" + BitConverter.ToString(requestBytes));
                 slaveChannel.OnFailed();
                 // TODO 异常日志
-                return new ModbudsRequestResult(new byte[0], SlaveRequestResult.OtherError);
+                return new ModbusRequestResult(new byte[0], SlaveRequestResult.OtherError);
 
             }
             catch (Exception e)
             {
-                Console.WriteLine("请求失败，目标地址：" + CombineAddress(ip, port) + "  请求报文：" + BitConverter.ToString(requestBytes));
+                SimpleLogger.Instance.Error("请求失败，目标地址：" + CombineAddress(ip, port) + "  请求报文：" + BitConverter.ToString(requestBytes));
                 slaveChannel.OnFailed();
                 // TODO 异常日志
-                return new ModbudsRequestResult(new byte[0], SlaveRequestResult.OtherError);
+                return new ModbusRequestResult(new byte[0], SlaveRequestResult.OtherError);
             }
             finally
             {
