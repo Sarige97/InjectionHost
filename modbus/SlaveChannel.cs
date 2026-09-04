@@ -65,6 +65,7 @@ namespace moju.modbus
                 if (!(completeTask == connectTask))
                 {
                     //超时
+                    status = SlaveChannelStatus.ConnectFailed;
                     CloseAndSetTcpClientNull();
                     connectTask.ContinueWith(t => t.Exception);
                     this.tcpClient = null;

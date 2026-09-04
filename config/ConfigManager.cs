@@ -23,9 +23,13 @@ namespace moju.config
         /// </summary>
         public int[] RetryArray { get; private set; } = new int[] { 1000, 2000, 2000, 4000, 4000, 8000, 15000, 30000, 60000, 300000 };
 
-        public string errorMessage { get; private set; } = null;
+        public string FileName { get; private set; }
 
-        public int status { get; private set; } = -1;
+        public string ErrorMessage { get; private set; } = null;
+
+        public int Status { get; private set; } = -1;
+
+        public string ModbusMappingJsonAddress { get; private set; } = "config/slave/SlaveAddressMapping.json";
 
 
         private ConfigManager()
@@ -41,8 +45,8 @@ namespace moju.config
             string[] logLevelArray = new string[5] { LogConstants.LogLevelDebug, LogConstants.LogLevelInfo, LogConstants.LogLevelWarn, LogConstants.LogLevelError, LogConstants.LogLevelFatal };
             if (Array.IndexOf(logLevelArray, logLevel) == -1)
             {
-                status = 1;
-                errorMessage = "初始化配置失败, 日志配置LogLevel初始化错误";
+                Status = 1;
+                ErrorMessage = "初始化配置失败, 日志配置LogLevel初始化错误";
             }
             LogLevel = logLevel;
 
@@ -58,8 +62,8 @@ namespace moju.config
                 }
                 else
                 {
-                    status = 1;
-                    errorMessage = "初始化配置失败, 日志配置outputTarget初始化错误";
+                    Status = 1;
+                    ErrorMessage = "初始化配置失败, 日志配置outputTarget初始化错误";
                     tempOutputTargetList = new int[0];
                     break;
                 }
@@ -78,8 +82,8 @@ namespace moju.config
             }
             else
             {
-                status = 1;
-                errorMessage = "初始化配置失败, Modbus配置requestTimeoutMs初始化错误";
+                Status = 1;
+                ErrorMessage = "初始化配置失败, Modbus配置requestTimeoutMs初始化错误";
             }
             string retryArray = modbusProtocol.SelectSingleNode("retryArray").InnerText;
             string[] retryArrayString = retryArray.Split(',');
@@ -92,16 +96,22 @@ namespace moju.config
                 }
                 else
                 {
-                    status = 1;
-                    errorMessage = "初始化配置失败, Modbus配置retryArray初始化错误";
+                    Status = 1;
+                    ErrorMessage = "初始化配置失败, Modbus配置retryArray初始化错误";
                     retryArrayInt = new int[0];
                     break;
                 }
             }
+
+            this.ModbusMappingJsonAddress = modbusProtocol.SelectSingleNode("mappingJsonAddress").InnerText;
+
             RetryArray = retryArrayInt;
 
+            XmlNode database = xmlNode.SelectSingleNode("database");
+            FileName = database.SelectSingleNode("fileName").InnerText;
+
             // 设置初始化成功标记
-            status = 0;
+            Status = 0;
 
         }
 

@@ -1,0 +1,994 @@
+﻿{
+  "InjectionMoldingMachine": {
+    "mapping": {
+      "00001": {
+        "Name": "power",
+        "region": 0,
+        "address": 0,
+        "Description": "电源;控制: 0=断电整机停",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "00002": {
+        "Name": "running",
+        "region": 0,
+        "address": 1,
+        "Description": "运行;控制: 0=停机待机",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "00003": {
+        "Name": "auto_mode",
+        "region": 0,
+        "address": 2,
+        "Description": "自动模式;控制: 0=手动",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10001": {
+        "Name": "mold_close",
+        "region": 1,
+        "address": 0,
+        "Description": "合模;合模/开模阶段置位",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10002": {
+        "Name": "ready",
+        "region": 1,
+        "address": 1,
+        "Description": "就绪;电源开且无故障",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10003": {
+        "Name": "producing",
+        "region": 1,
+        "address": 2,
+        "Description": "生产中;生产中",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10004": {
+        "Name": "alarm",
+        "region": 1,
+        "address": 3,
+        "Description": "报警;故障时置位",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30001": {
+        "Name": "run_status_word",
+        "region": 3,
+        "address": 0,
+        "Description": "运行状态字;bit0电源 bit1合模 bit2注射 bit3保压 bit4熔胶 bit5冷却 bit6开模 bit7顶出 bit8故障;故障时置bit8",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30002": {
+        "Name": "alarm_code",
+        "region": 3,
+        "address": 1,
+        "Description": "报警码;0无/1油温过高/2模具报警/4射胶异常;随机故障时写入",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30003": {
+        "Name": "alarm_group_word",
+        "region": 3,
+        "address": 2,
+        "Description": "报警组字;bit0生产报警 bit1设备报警;故障时置位",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30004": {
+        "Name": "total_shots",
+        "region": 3,
+        "address": 3,
+        "Description": "总模数;每完成一个生产循环 +1;达产后自动停机",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30006": {
+        "Name": "good_parts",
+        "region": 3,
+        "address": 5,
+        "Description": "合格品数;合格 +1",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30008": {
+        "Name": "reject_parts",
+        "region": 3,
+        "address": 7,
+        "Description": "次品数;约 0.4% 概率次品 +1;偶发次品",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30010": {
+        "Name": "current_cycle_time",
+        "region": 3,
+        "address": 9,
+        "Description": "当前周期时间;约30s 注塑周期, 含噪声",
+        "dotIndex": 1,
+        "unit": "s"
+      },
+      "30011": {
+        "Name": "avg_cycle_time",
+        "region": 3,
+        "address": 10,
+        "Description": "平均周期时间;周期滑动平均",
+        "dotIndex": 1,
+        "unit": "s"
+      },
+      "30012": {
+        "Name": "operating_rate",
+        "region": 3,
+        "address": 11,
+        "Description": "稼动率;停机/故障时下降",
+        "dotIndex": 0,
+        "unit": "%"
+      },
+      "30020": {
+        "Name": "barrel_temp_1",
+        "region": 3,
+        "address": 19,
+        "Description": "料筒1段温度;实际温度, 向设定热惯性靠拢;故障时波动",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30021": {
+        "Name": "barrel_temp_2",
+        "region": 3,
+        "address": 20,
+        "Description": "料筒2段温度;同上;同上",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30022": {
+        "Name": "barrel_temp_3",
+        "region": 3,
+        "address": 21,
+        "Description": "料筒3段温度;同上;同上",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30023": {
+        "Name": "barrel_temp_4",
+        "region": 3,
+        "address": 22,
+        "Description": "料筒4段温度;同上;同上",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30024": {
+        "Name": "barrel_temp_5",
+        "region": 3,
+        "address": 23,
+        "Description": "料筒5段温度;同上;同上",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30030": {
+        "Name": "mold_temp_actual",
+        "region": 3,
+        "address": 29,
+        "Description": "模具实际温度;向模具设定热惯性靠拢;模具报警时异常升高",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30031": {
+        "Name": "hydraulic_oil_temp",
+        "region": 3,
+        "address": 30,
+        "Description": "液压油温;稳定 45C 波动;油温过高报警(>58C)",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30032": {
+        "Name": "cooling_water_temp",
+        "region": 3,
+        "address": 31,
+        "Description": "冷却水温度;28C 波动",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30040": {
+        "Name": "injection_pressure",
+        "region": 3,
+        "address": 39,
+        "Description": "射胶压力;注射期 130~175, 保压期 60~90, 其余 0;射胶异常时尖峰",
+        "dotIndex": 0,
+        "unit": "bar"
+      },
+      "30041": {
+        "Name": "injection_speed",
+        "region": 3,
+        "address": 40,
+        "Description": "射胶速度;注射期 70~95",
+        "dotIndex": 0,
+        "unit": "%"
+      },
+      "30042": {
+        "Name": "holding_pressure",
+        "region": 3,
+        "address": 41,
+        "Description": "保压压力;保压期 55~85",
+        "dotIndex": 0,
+        "unit": "bar"
+      },
+      "30043": {
+        "Name": "screw_speed",
+        "region": 3,
+        "address": 42,
+        "Description": "螺杆转速;熔胶期 150~240",
+        "dotIndex": 0,
+        "unit": "rpm"
+      },
+      "30044": {
+        "Name": "melt_back_pressure",
+        "region": 3,
+        "address": 43,
+        "Description": "熔胶背压;熔胶期 8~20",
+        "dotIndex": 0,
+        "unit": "bar"
+      },
+      "30045": {
+        "Name": "clamp_pressure",
+        "region": 3,
+        "address": 44,
+        "Description": "合模压力;合模/开模期 30~60",
+        "dotIndex": 0,
+        "unit": "bar"
+      },
+      "30046": {
+        "Name": "injection_position",
+        "region": 3,
+        "address": 45,
+        "Description": "注射位置;注射期递减, 合模后回 1000",
+        "dotIndex": 0,
+        "unit": "mm"
+      },
+      "30047": {
+        "Name": "screw_position",
+        "region": 3,
+        "address": 46,
+        "Description": "螺杆位置;熔胶期递增, 注射期递减",
+        "dotIndex": 0,
+        "unit": "mm"
+      },
+      "30048": {
+        "Name": "pump_motor_current",
+        "region": 3,
+        "address": 47,
+        "Description": "泵电机电流;随负载 20~90",
+        "dotIndex": 1,
+        "unit": "A"
+      },
+      "30049": {
+        "Name": "pump_motor_speed",
+        "region": 3,
+        "address": 48,
+        "Description": "泵电机转速;900~1500",
+        "dotIndex": 0,
+        "unit": "rpm"
+      },
+      "30050": {
+        "Name": "hydraulic_pump_pressure",
+        "region": 3,
+        "address": 49,
+        "Description": "液压泵压力;注射/保压期 30~60",
+        "dotIndex": 0,
+        "unit": "bar"
+      },
+      "30051": {
+        "Name": "instantaneous_power",
+        "region": 3,
+        "address": 50,
+        "Description": "瞬时功率;随阶段 8~45kW, 断电0",
+        "dotIndex": 0,
+        "unit": "kW"
+      },
+      "30052": {
+        "Name": "shift_output",
+        "region": 3,
+        "address": 51,
+        "Description": "当班产量;每循环 +1",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30053": {
+        "Name": "shift_uptime",
+        "region": 3,
+        "address": 52,
+        "Description": "当班开机时长;自启动累计",
+        "dotIndex": 0,
+        "unit": "s"
+      },
+      "40001": {
+        "Name": "work_mode",
+        "region": 4,
+        "address": 0,
+        "Description": "工作模式;控制: 0停止/1手动/2半自动/3全自动",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "40002": {
+        "Name": "target_output",
+        "region": 4,
+        "address": 1,
+        "Description": "目标产量;控制: 总模数达到后自动停机",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "40003": {
+        "Name": "barrel_setpoint_1",
+        "region": 4,
+        "address": 2,
+        "Description": "料筒1段设定;控制: 实际温度跟随",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "40004": {
+        "Name": "barrel_setpoint_2",
+        "region": 4,
+        "address": 3,
+        "Description": "料筒2段设定;控制: 实际温度跟随",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "40005": {
+        "Name": "barrel_setpoint_3",
+        "region": 4,
+        "address": 4,
+        "Description": "料筒3段设定;控制: 实际温度跟随",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "40006": {
+        "Name": "barrel_setpoint_4",
+        "region": 4,
+        "address": 5,
+        "Description": "料筒4段设定;控制: 实际温度跟随",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "40007": {
+        "Name": "barrel_setpoint_5",
+        "region": 4,
+        "address": 6,
+        "Description": "料筒5段设定;控制: 实际温度跟随",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "40008": {
+        "Name": "mold_temp_setpoint",
+        "region": 4,
+        "address": 7,
+        "Description": "模具设定温度;控制: 实际温度跟随",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "40009": {
+        "Name": "holding_time",
+        "region": 4,
+        "address": 8,
+        "Description": "保压时间;控制: 影响生产周期时长",
+        "dotIndex": 1,
+        "unit": "s"
+      }
+    }
+  },
+  "MoldTemperatureController": {
+    "mapping": {
+      "00001": {
+        "Name": "power",
+        "region": 0,
+        "address": 0,
+        "Description": "电源;控制: 0=断电温度冷却泵停",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "00002": {
+        "Name": "running",
+        "region": 0,
+        "address": 1,
+        "Description": "运行;控制: 0=停机泵停",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "00003": {
+        "Name": "heater_on",
+        "region": 0,
+        "address": 2,
+        "Description": "加热;控制: 0=停止加热(降温), 1=加热向设定升",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10001": {
+        "Name": "ready",
+        "region": 1,
+        "address": 0,
+        "Description": "就绪;电源开",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10002": {
+        "Name": "heating",
+        "region": 1,
+        "address": 1,
+        "Description": "加热中;加热且实际<设定",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10003": {
+        "Name": "alarm",
+        "region": 1,
+        "address": 2,
+        "Description": "报警;故障时置位",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30001": {
+        "Name": "run_status_word",
+        "region": 3,
+        "address": 0,
+        "Description": "运行状态字;bit0电源 bit1运行 bit2加热 bit3冷却 bit4报警",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30002": {
+        "Name": "alarm_code",
+        "region": 3,
+        "address": 1,
+        "Description": "报警码;0无/1超温/2泵故障;随机故障时写入",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30003": {
+        "Name": "temp_actual",
+        "region": 3,
+        "address": 2,
+        "Description": "实际温度;向设定热惯性靠拢;偶发超温 5~12C",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30004": {
+        "Name": "return_water_temp",
+        "region": 3,
+        "address": 3,
+        "Description": "回水温度;跟随实际-4C",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30005": {
+        "Name": "pump_pressure",
+        "region": 3,
+        "address": 4,
+        "Description": "泵压力;2~5 波动;泵故障时归零",
+        "dotIndex": 0,
+        "unit": "bar"
+      },
+      "30006": {
+        "Name": "pump_flow",
+        "region": 3,
+        "address": 5,
+        "Description": "泵流量;15~40 波动;泵故障时归零",
+        "dotIndex": 0,
+        "unit": "L/min"
+      },
+      "30007": {
+        "Name": "pump_current",
+        "region": 3,
+        "address": 6,
+        "Description": "泵电流;3~6A 波动",
+        "dotIndex": 1,
+        "unit": "A"
+      },
+      "40001": {
+        "Name": "temp_setpoint",
+        "region": 4,
+        "address": 0,
+        "Description": "设定温度;控制: 实际温度跟随",
+        "dotIndex": 1,
+        "unit": "C"
+      }
+    }
+  },
+  "Dryer": {
+    "mapping": {
+      "00001": {
+        "Name": "power",
+        "region": 0,
+        "address": 0,
+        "Description": "电源;控制: 0=断电",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "00002": {
+        "Name": "running",
+        "region": 0,
+        "address": 1,
+        "Description": "运行;控制: 0=停机",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "00003": {
+        "Name": "fan_on",
+        "region": 0,
+        "address": 2,
+        "Description": "风机;控制: 0=风机关",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "00004": {
+        "Name": "heater_on",
+        "region": 0,
+        "address": 3,
+        "Description": "加热;控制: 0=停止加热",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10001": {
+        "Name": "ready",
+        "region": 1,
+        "address": 0,
+        "Description": "就绪;电源开",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10002": {
+        "Name": "drying",
+        "region": 1,
+        "address": 1,
+        "Description": "干燥中;电源/运行/风机/加热均开",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10003": {
+        "Name": "level_low",
+        "region": 1,
+        "address": 2,
+        "Description": "料位低;料位<25%",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10004": {
+        "Name": "alarm",
+        "region": 1,
+        "address": 3,
+        "Description": "报警;故障时置位",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30001": {
+        "Name": "run_status_word",
+        "region": 3,
+        "address": 0,
+        "Description": "运行状态字;bit0电源 bit1运行 bit2风机 bit3加热 bit4料位低 bit5报警",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30002": {
+        "Name": "alarm_code",
+        "region": 3,
+        "address": 1,
+        "Description": "报警码;0无/1露点高/2超温;随机故障时写入",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30003": {
+        "Name": "dry_temp_actual",
+        "region": 3,
+        "address": 2,
+        "Description": "干燥温度实际;向设定热惯性靠拢;偶发超温",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30004": {
+        "Name": "dew_point",
+        "region": 3,
+        "address": 3,
+        "Description": "露点;-31~-37C 缓慢漂移;偶发除湿失效升高",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30005": {
+        "Name": "material_level",
+        "region": 3,
+        "address": 4,
+        "Description": "料位;缓降, 低于20%后补料回90%",
+        "dotIndex": 0,
+        "unit": "%"
+      },
+      "30006": {
+        "Name": "heating_power",
+        "region": 3,
+        "address": 5,
+        "Description": "加热功率;3~8 波动",
+        "dotIndex": 0,
+        "unit": "kW"
+      },
+      "30007": {
+        "Name": "fan_current",
+        "region": 3,
+        "address": 6,
+        "Description": "风机电流;0.8~2.0A 波动",
+        "dotIndex": 1,
+        "unit": "A"
+      },
+      "40001": {
+        "Name": "dry_temp_setpoint",
+        "region": 4,
+        "address": 0,
+        "Description": "干燥温度设定;控制: 实际温度跟随",
+        "dotIndex": 1,
+        "unit": "C"
+      }
+    }
+  },
+  "Robot": {
+    "mapping": {
+      "00001": {
+        "Name": "power",
+        "region": 0,
+        "address": 0,
+        "Description": "电源;控制: 0=断电停",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "00002": {
+        "Name": "auto",
+        "region": 0,
+        "address": 1,
+        "Description": "自动;控制: 1=自动跟随生产, 0=手动等指令",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "00003": {
+        "Name": "start_pick",
+        "region": 0,
+        "address": 2,
+        "Description": "启动取件;控制: 手动模式下写1触发一次取件",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10001": {
+        "Name": "ready",
+        "region": 1,
+        "address": 0,
+        "Description": "就绪;电源开",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10002": {
+        "Name": "part_gripped",
+        "region": 1,
+        "address": 1,
+        "Description": "夹持到位;取件/放件阶段",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10003": {
+        "Name": "alarm",
+        "region": 1,
+        "address": 2,
+        "Description": "报警;故障时置位",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10004": {
+        "Name": "safety_door_closed",
+        "region": 1,
+        "address": 3,
+        "Description": "安全门关闭;常开",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30001": {
+        "Name": "run_status_word",
+        "region": 3,
+        "address": 0,
+        "Description": "运行状态字;bit0电源 bit1就绪 bit2取件 bit3放件 bit4回位 bit5故障 bit6自动;故障时置bit5",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30002": {
+        "Name": "alarm_code",
+        "region": 3,
+        "address": 1,
+        "Description": "报警码;0无/1取件失败/2机械故障;随机故障时写入",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30003": {
+        "Name": "cycle_time",
+        "region": 3,
+        "address": 2,
+        "Description": "循环时间;取件动作周期 约3s",
+        "dotIndex": 1,
+        "unit": "s"
+      },
+      "30004": {
+        "Name": "total_picks",
+        "region": 3,
+        "address": 3,
+        "Description": "累计取件数;每完成一次取件 +1",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30006": {
+        "Name": "pick_success",
+        "region": 3,
+        "address": 5,
+        "Description": "取出成功数;成功 +1",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30008": {
+        "Name": "pick_fail",
+        "region": 3,
+        "address": 7,
+        "Description": "取出失败数;约 2% 概率失败;偶发",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30010": {
+        "Name": "x_position",
+        "region": 3,
+        "address": 9,
+        "Description": "X轴位置;待机缓慢漂移 0~8, 动作期动画",
+        "dotIndex": 0,
+        "unit": "mm"
+      },
+      "30011": {
+        "Name": "y_position",
+        "region": 3,
+        "address": 10,
+        "Description": "Y轴位置;同上",
+        "dotIndex": 0,
+        "unit": "mm"
+      },
+      "30012": {
+        "Name": "z_position",
+        "region": 3,
+        "address": 11,
+        "Description": "Z轴位置;同上",
+        "dotIndex": 0,
+        "unit": "mm"
+      },
+      "30013": {
+        "Name": "grip_status",
+        "region": 3,
+        "address": 12,
+        "Description": "抓取状态;0空/1夹持",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30014": {
+        "Name": "instantaneous_power",
+        "region": 3,
+        "address": 13,
+        "Description": "瞬时功率;0.2~0.8kW",
+        "dotIndex": 0,
+        "unit": "kW"
+      },
+      "30015": {
+        "Name": "current_action_id",
+        "region": 3,
+        "address": 14,
+        "Description": "当前动作号;0待机 1取件 2放件 3回位",
+        "dotIndex": 0,
+        "unit": ""
+      }
+    }
+  },
+  "PowerMeter": {
+    "mapping": {
+      "00001": {
+        "Name": "remote_close",
+        "region": 0,
+        "address": 0,
+        "Description": "远程合闸;控制: 0=断电, 电压/电流/功率归零电能冻结",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10001": {
+        "Name": "comm_status",
+        "region": 1,
+        "address": 0,
+        "Description": "通讯状态;常开",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10002": {
+        "Name": "demand_over_limit",
+        "region": 1,
+        "address": 1,
+        "Description": "需量超限;功率因数<0.8 置位",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30001": {
+        "Name": "total_energy",
+        "region": 3,
+        "address": 0,
+        "Description": "累计电能;按功率累计递增, 断电冻结",
+        "dotIndex": 2,
+        "unit": "kWh"
+      },
+      "30003": {
+        "Name": "forward_active_energy",
+        "region": 3,
+        "address": 2,
+        "Description": "正向有功电能;同累计递增",
+        "dotIndex": 2,
+        "unit": "kWh"
+      },
+      "30005": {
+        "Name": "voltage_a",
+        "region": 3,
+        "address": 4,
+        "Description": "A相电压;375~385 波动, 断电0;偶发暂降-8%",
+        "dotIndex": 0,
+        "unit": "V"
+      },
+      "30006": {
+        "Name": "voltage_b",
+        "region": 3,
+        "address": 5,
+        "Description": "B相电压;同上;偶发暂降-8%",
+        "dotIndex": 0,
+        "unit": "V"
+      },
+      "30007": {
+        "Name": "voltage_c",
+        "region": 3,
+        "address": 6,
+        "Description": "C相电压;同上;偶发暂降-8%",
+        "dotIndex": 0,
+        "unit": "V"
+      },
+      "30008": {
+        "Name": "current_a",
+        "region": 3,
+        "address": 7,
+        "Description": "A相电流;120~220A 波动, 断电0",
+        "dotIndex": 1,
+        "unit": "A"
+      },
+      "30009": {
+        "Name": "current_b",
+        "region": 3,
+        "address": 8,
+        "Description": "B相电流;同上",
+        "dotIndex": 1,
+        "unit": "A"
+      },
+      "30010": {
+        "Name": "current_c",
+        "region": 3,
+        "address": 9,
+        "Description": "C相电流;同上",
+        "dotIndex": 1,
+        "unit": "A"
+      },
+      "30011": {
+        "Name": "total_active_power",
+        "region": 3,
+        "address": 10,
+        "Description": "总有功功率;80~150kW 平滑波动, 断电0",
+        "dotIndex": 0,
+        "unit": "kW"
+      },
+      "30012": {
+        "Name": "total_reactive_power",
+        "region": 3,
+        "address": 11,
+        "Description": "总无功功率;20~40kvar",
+        "dotIndex": 0,
+        "unit": "kvar"
+      },
+      "30013": {
+        "Name": "power_factor",
+        "region": 3,
+        "address": 12,
+        "Description": "功率因数;0.86~0.95;需量超限时 0.70~0.82",
+        "dotIndex": 3,
+        "unit": ""
+      },
+      "30014": {
+        "Name": "frequency",
+        "region": 3,
+        "address": 13,
+        "Description": "频率;50.00Hz 波动, 断电0",
+        "dotIndex": 2,
+        "unit": "Hz"
+      },
+      "30015": {
+        "Name": "alarm_code",
+        "region": 3,
+        "address": 14,
+        "Description": "报警码;0无/1电压暂降/2需量超限;随机故障时写入",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30016": {
+        "Name": "realtime_demand",
+        "region": 3,
+        "address": 15,
+        "Description": "实时需量;跟随总有功",
+        "dotIndex": 0,
+        "unit": "kW"
+      }
+    }
+  },
+  "WorkshopEnvironment": {
+    "mapping": {
+      "10001": {
+        "Name": "high_temp_alarm",
+        "region": 1,
+        "address": 0,
+        "Description": "高温报警;高温故障或温度>32C;高温故障置位",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "10002": {
+        "Name": "high_humidity_alarm",
+        "region": 1,
+        "address": 1,
+        "Description": "高湿报警;高湿故障或湿度>70;高湿故障置位",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30001": {
+        "Name": "workshop_temp",
+        "region": 3,
+        "address": 0,
+        "Description": "车间温度;向空调设定靠拢 + 随机波动;偶发高温报警",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30002": {
+        "Name": "humidity",
+        "region": 3,
+        "address": 1,
+        "Description": "湿度;向目标湿度靠拢 + 随机波动;偶发高湿报警",
+        "dotIndex": 0,
+        "unit": "%RH"
+      },
+      "30003": {
+        "Name": "dew_point",
+        "region": 3,
+        "address": 2,
+        "Description": "露点;随温湿度变化",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "30004": {
+        "Name": "noise_level",
+        "region": 3,
+        "address": 3,
+        "Description": "噪音;70~80 波动",
+        "dotIndex": 0,
+        "unit": "dB"
+      },
+      "40001": {
+        "Name": "hvac_temp_setpoint",
+        "region": 4,
+        "address": 0,
+        "Description": "空调设定温度;控制: 环境温度向此靠拢",
+        "dotIndex": 1,
+        "unit": "C"
+      },
+      "40002": {
+        "Name": "humidity_setpoint",
+        "region": 4,
+        "address": 1,
+        "Description": "目标湿度;控制: 环境湿度向此靠拢",
+        "dotIndex": 0,
+        "unit": "%RH"
+      }
+    }
+  }
+}

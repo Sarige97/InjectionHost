@@ -1,4 +1,5 @@
 ﻿using moju.constants;
+using moju.domain;
 using moju.modbus;
 using moju.tool;
 using muju.modbus;
@@ -16,8 +17,17 @@ namespace moju.device.interfaces
     internal class ModbusSlave
     {
 
-        String ip { get; set; }
-        int port { get; set; }
+        public String Ip { get; private set; }
+        public int Port { get; private set; }
+        /// <summary>
+        /// 状态机
+        /// </summary>
+        public SlaveChannelStatus SlaveChannelStatus { get; private set; }
+        /// <summary>
+        /// 这台机器modbus地址和具体数据的映射关系
+        /// </summary>
+        public List<ModbusAddressInfo> modbusAddressInfos;
+
 
         /// <summary>
         /// 用于解析读取可读写线圈值时的委托方法
@@ -57,8 +67,8 @@ namespace moju.device.interfaces
 
         public ModbusSlave(String ip, int port)
         {
-            this.ip = ip;
-            this.port = port;
+            this.Ip = ip;
+            this.Port = port;
         }
 
         /// <summary>
@@ -78,7 +88,7 @@ namespace moju.device.interfaces
 
 
                 // 获取两个byte作为事务id
-                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
+                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadCoil, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
@@ -86,7 +96,9 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(Ip, Port, requestBytes);
+                // 同步从站状态
+                this.SlaveChannelStatus = modbudsRequestResult.SlaveChannelStatus;
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -163,7 +175,7 @@ namespace moju.device.interfaces
 
 
                 // 获取两个byte作为事务id
-                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
+                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadHoldingRegister, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
@@ -171,9 +183,11 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(Ip, Port, requestBytes);
+                // 同步从站状态
+                this.SlaveChannelStatus = modbudsRequestResult.SlaveChannelStatus;
 
-                if(modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
+                if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
                     return null;
                 }
@@ -242,7 +256,7 @@ namespace moju.device.interfaces
             {
                 byte[] addressBytes = NumberBaseConvertor.SplitUshort2Byte(writeAddress);
 
-                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
+                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeWriteSingleCoil, addressBytes[0], addressBytes[1], (byte)(input ? 0xFF : 0x00), 0x00 };
 
@@ -252,7 +266,10 @@ namespace moju.device.interfaces
 
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(Ip, Port, requestBytes);
+                // 同步从站状态
+                this.SlaveChannelStatus = modbudsRequestResult.SlaveChannelStatus;
+
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -301,7 +318,7 @@ namespace moju.device.interfaces
 
 
                 // 获取两个byte作为事务id
-                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
+                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
                 // 数据长度是 slaveId(1字节) 功能码(1字节) 起始地址(2字节) 数量(2字节) 字节数(1字节)数据(n字节)
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, (byte)(7 + writeData.Length), slaveId };
 
@@ -313,7 +330,9 @@ namespace moju.device.interfaces
                 byte[] requestBytes = requestMemoryStream.ToArray();
 
                 // 发起请求，拿到响应报文
-                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(Ip, Port, requestBytes);
+                // 同步从站状态
+                this.SlaveChannelStatus = modbudsRequestResult.SlaveChannelStatus;
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -370,7 +389,7 @@ namespace moju.device.interfaces
                 byte[] addressBytes = NumberBaseConvertor.SplitUshort2Byte(writeAddress);
                 byte[] writeDataBytes = NumberBaseConvertor.SplitUshort2Byte(writeData);
 
-                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
+                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeWriteSingleRegister, addressBytes[0], addressBytes[1], writeDataBytes[0], writeDataBytes[1] };
 
@@ -380,7 +399,9 @@ namespace moju.device.interfaces
 
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(Ip, Port, requestBytes);
+                // 同步从站状态
+                this.SlaveChannelStatus = modbudsRequestResult.SlaveChannelStatus;
 
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
@@ -436,7 +457,7 @@ namespace moju.device.interfaces
 
 
                 // 获取两个byte作为事务id
-                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
+                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, (byte)(7 + (writeData.Length * 2)), slaveId };
 
                 // 拼接请求报文
@@ -448,7 +469,9 @@ namespace moju.device.interfaces
                 byte[] requestBytes = requestMemoryStream.ToArray();
 
                 // 发起请求，拿到响应报文
-                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(Ip, Port, requestBytes);
+                // 同步从站状态
+                this.SlaveChannelStatus = modbudsRequestResult.SlaveChannelStatus;
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -495,7 +518,7 @@ namespace moju.device.interfaces
 
 
                 // 获取两个byte作为事务id
-                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
+                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadDiscreteInputs, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
@@ -503,7 +526,9 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(Ip, Port, requestBytes);
+                // 同步从站状态
+                this.SlaveChannelStatus = modbudsRequestResult.SlaveChannelStatus;
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -574,7 +599,7 @@ namespace moju.device.interfaces
 
 
                 // 获取两个byte作为事务id
-                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(ip, port);
+                byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
                 byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadInputRegisters, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
@@ -582,7 +607,9 @@ namespace moju.device.interfaces
                 memoryStream.Write(requestBody, 0, requestBody.Length);
                 byte[] requestBytes = memoryStream.ToArray();
                 // 发起请求，拿到响应报文
-                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(ip, port, requestBytes);
+                ModbusRequestResult modbudsRequestResult = await ModbusTCPClientManager.ModbusRequestByBytes(Ip, Port, requestBytes);
+                // 同步从站状态
+                this.SlaveChannelStatus = modbudsRequestResult.SlaveChannelStatus;
 
                 if (modbudsRequestResult.SlaveRequestResult != SlaveRequestResult.Success)
                 {
@@ -597,7 +624,8 @@ namespace moju.device.interfaces
                 if (readOnlyRegisterResponseParse != null)
                 {
                     return readOnlyRegisterResponseParse(responseBytes);
-                } else
+                }
+                else
                 {
                     // 解析响应报文
 

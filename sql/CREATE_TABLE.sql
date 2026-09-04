@@ -1,0 +1,20 @@
+create table if not exists USER(
+	id Integer primary key AUTOINCREMENT,
+	username text not null UNIQUE,
+	password text not null,
+	salt text not null,
+	realname text not null,
+	department text,
+	remark text,
+	status Integer not null,
+	extFiled1 text,
+	extFiled2 text,
+	extFiled3 text,
+	extFiled4 text,
+	extFiled5 text,
+	extFiled6 text,
+	extFiled7 text,
+	extFiled8 text,
+	extFiled9 text,
+	extFiled10 text
+);

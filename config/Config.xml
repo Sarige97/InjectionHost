@@ -4,8 +4,8 @@
 	<!-- DEBUG INFO WARN ERROR FATAL -->
 	<Log>
 		<LogLevel>DEBUG</LogLevel>
-		<!-- 0：文件日志  1：控制台  2：UI日志-->
-		<outputTarget>0,1,2</outputTarget>
+		<!-- 0：文件日志  1：控制台  2：UI日志  3： 数据库日志-->
+		<outputTarget>0,1,2,3</outputTarget>
 	</Log>
 	
 	<modbusProtocol>
@@ -13,7 +13,22 @@
 		<requestTimeoutMs>2000</requestTimeoutMs>
 		<!-- modbus请求失败后，退避间隔，单位毫秒 -->
 		<retryArray>1000,2000,2000,4000,4000,8000,15000,30000,60000,300000</retryArray>
+		<mappingJsonAddress>config/slave/SlaveAddressMapping.json</mappingJsonAddress>
 	</modbusProtocol>
+
+	<!--
+	<modbusSlave>
+		<diviceList>
+			<diviceName></diviceName>
+			<diviceModbusAddressMapping></diviceModbusAddressMapping>
+		</diviceList>
+	</modbusSlave>
+	-->
+
+	<database>
+		<dataBaseType>sqlite</dataBaseType>
+		<fileName>default.db</fileName>
+	</database>
 	
 	
 </project>

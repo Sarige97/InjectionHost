@@ -1,6 +1,10 @@
 ﻿using moju.config;
+using moju.device;
 using moju.device.interfaces;
+using moju.domain;
 using moju.log;
+using moju.repository;
+using moju.service;
 using muju.modbus;
 using muju.task;
 using System;
@@ -15,12 +19,21 @@ using System.Windows.Forms;
 
 namespace muju
 {
-    public partial class Form1 : Form
+    public partial class MainForm1 : Form
     {
-        public Form1()
+        public MainForm1()
         {
             InitializeComponent();
             TimerTaskManager.AddTimerEvent(1000, Initialize);
+            test();
+        }
+
+        public async void test()
+        {
+            List<ModbusAddressInfo> modbusAddressInfos = SlaveManager.GetInjectionMoldingMachineAddressMapping();
+            List<List<ModbusAddressInfo>> list = SlaveManager.GroupByConsecutiveAddress(modbusAddressInfos);
+            
+            await Console.Out.WriteLineAsync("123");
         }
 
         /// <summary>
@@ -28,6 +41,7 @@ namespace muju
         /// </summary>
         private async void Initialize()
         {
+
             //byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp("127.0.0.1", 502);
             //Byte[] reqeustBytes = new Byte[12] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, 0x01, 0x03, 0x00, 0x00, 0x00, 0x01 };
 

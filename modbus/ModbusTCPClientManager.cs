@@ -56,7 +56,7 @@ namespace muju.modbus
                 if (!slaveChannel.CanRequest())
                 {
                     SimpleLogger.Instance.Debug("未到请求间隔，跳过请求");
-                    return new ModbusRequestResult(new byte[0], SlaveRequestResult.Passed, "未到请求间隔，跳过请求");
+                    return new ModbusRequestResult(new byte[0], SlaveRequestResult.Passed, GetSlaveChannelStatus(ip,port), "未到请求间隔，跳过请求");
                 }
 
                 Task<byte[]> requestTask = requestAndParse(slaveChannel, requestBytes);
@@ -68,7 +68,7 @@ namespace muju.modbus
                     // 没有超时
                     byte[] responseByte = await requestTask;
                     slaveChannel.OnSuccess();
-                    return new ModbusRequestResult(responseByte, SlaveRequestResult.Success);
+                    return new ModbusRequestResult(responseByte, SlaveRequestResult.Success, GetSlaveChannelStatus(ip, port));
                 }
                 else
                 {
@@ -76,7 +76,7 @@ namespace muju.modbus
                     SimpleLogger.Instance.Error("请求超时，目标地址：" + CombineAddress(ip, port) + "  请求报文：" + BitConverter.ToString(requestBytes));
                     slaveChannel.OnTimeout();
                     _ = requestTask.ContinueWith(t => t.Exception);
-                    return new ModbusRequestResult(new byte[0], SlaveRequestResult.Timeout, "请求超时");
+                    return new ModbusRequestResult(new byte[0], SlaveRequestResult.Timeout, GetSlaveChannelStatus(ip,port), "请求超时");
                 }
 
 
@@ -86,7 +86,7 @@ namespace muju.modbus
                 SimpleLogger.Instance.Error("请求失败,和目标的连接断开，目标地址：" + CombineAddress(ip, port) + "  请求报文：" + BitConverter.ToString(requestBytes));
                 slaveChannel.OnFailed();
                 // TODO 异常日志
-                return new ModbusRequestResult(new byte[0], SlaveRequestResult.OtherError);
+                return new ModbusRequestResult(new byte[0], SlaveRequestResult.OtherError, GetSlaveChannelStatus(ip, port));
 
             }
             catch (Exception e)
@@ -94,7 +94,7 @@ namespace muju.modbus
                 SimpleLogger.Instance.Error("请求失败，目标地址：" + CombineAddress(ip, port) + "  请求报文：" + BitConverter.ToString(requestBytes));
                 slaveChannel.OnFailed();
                 // TODO 异常日志
-                return new ModbusRequestResult(new byte[0], SlaveRequestResult.OtherError);
+                return new ModbusRequestResult(new byte[0], SlaveRequestResult.OtherError, GetSlaveChannelStatus(ip, port));
             }
             finally
             {
@@ -131,6 +131,17 @@ namespace muju.modbus
             catch
             {
                 throw;
+            }
+        }
+
+        public static SlaveChannelStatus GetSlaveChannelStatus(string ip, int port)
+        {
+            if (_slaveChannelMapping.TryGetValue(CombineAddress(ip, port), out SlaveChannel slaveChannel))
+            {
+                return slaveChannel.status;
+            } else
+            {
+                return SlaveChannelStatus.OtherError;
             }
         }
     }
