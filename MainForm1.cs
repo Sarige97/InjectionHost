@@ -24,16 +24,16 @@ namespace muju
         public MainForm1()
         {
             InitializeComponent();
+
+            ModbusSlave injectionMoldingMachineSlave = SlaveManager.Instance.GetOrCreateSlave<InjectionMoldingMachineSlave>("127.0.0.1", 502, 1, "InjectionMoldingMachine", (ip, port, slaveId, catagoryName) => new InjectionMoldingMachineSlave(ip,port, slaveId, catagoryName));
+
             TimerTaskManager.AddTimerEvent(1000, Initialize);
-            test();
+            TimerTaskManager.AddTimerEvent(1000, injectionMoldingMachineSlave.RefreshData);
+            TimerTaskManager.AddTimerEvent(1000, injectionMoldingMachineSlave.RefreshData);
         }
 
         public async void test()
         {
-            List<ModbusAddressInfo> modbusAddressInfos = SlaveManager.GetInjectionMoldingMachineAddressMapping();
-            List<List<ModbusAddressInfo>> list = SlaveManager.GroupByConsecutiveAddress(modbusAddressInfos);
-            
-            await Console.Out.WriteLineAsync("123");
         }
 
         /// <summary>
@@ -48,12 +48,6 @@ namespace muju
             //byte[] bytes= ModbusTCPClientManager.modbusRequestByBytes("127.0.0.1", 502, reqeustBytes);
             //Console.WriteLine(BitConverter.ToString(bytes));
 
-            ModbusSlave modbusSlave = new ModbusSlave("127.0.0.1", 502);
-            Dictionary<ushort, bool> writableCoil = await modbusSlave.ReadWritableCoil(0x01, 0x00, 03);
-            if (writableCoil != null)
-            {
-                SimpleLogger.Instance.Debug("1:" + writableCoil[0].ToString() + "2:" + writableCoil[1].ToString() + "3:" + writableCoil[2].ToString());
-            }
 
             //Dictionary<ushort, bool> readOnlyCoil = modbusSlave.ReadReadOnlyCoil(0x01, 0x00, 0x03);
             //Dictionary<ushort, ushort> writableRegister = modbusSlave.ReadWritableRegister(0x01, 0x00, 0x0A);
@@ -69,6 +63,8 @@ namespace muju
             //SimpleLogger.Instance.Warn("WarnTest");
             //SimpleLogger.Instance.Error("ErrorTest");
             //SimpleLogger.Instance.Fatal("FatalTest");
+
+
         }
 
         private void overviewBox_Enter(object sender, EventArgs e)

@@ -1,11 +1,13 @@
 ﻿using moju.constants;
 using moju.domain;
+using moju.log;
 using moju.modbus;
 using moju.tool;
 using muju.modbus;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,19 +16,20 @@ using static moju.device.interfaces.ModbusSlave;
 
 namespace moju.device.interfaces
 {
-    internal class ModbusSlave
+    internal abstract class ModbusSlave
     {
 
-        public String Ip { get; private set; }
-        public int Port { get; private set; }
+        protected String Ip { get; private set; }
+        protected int Port { get; private set; }
+        protected int SlaveId { get; private set; }
         /// <summary>
         /// 状态机
         /// </summary>
-        public SlaveChannelStatus SlaveChannelStatus { get; private set; }
+        protected SlaveChannelStatus SlaveChannelStatus { get; private set; }
         /// <summary>
         /// 这台机器modbus地址和具体数据的映射关系
         /// </summary>
-        public List<ModbusAddressInfo> modbusAddressInfos;
+        protected List<SlaveAttribute> SlaveAttributeList { get; private set; }
 
 
         /// <summary>
@@ -34,25 +37,25 @@ namespace moju.device.interfaces
         /// </summary>
         /// <param name="responseBytes"></param>
         /// <returns></returns>
-        public delegate Dictionary<ushort, bool> ReadWritableCoilResponseParse(byte[] responseBytes);
+        protected delegate Dictionary<ushort, bool> ReadWritableCoilResponseParse(byte[] responseBytes);
         /// <summary>
         /// 用于解析读取可读写寄存器值时的委托方法
         /// </summary>
         /// <param name="responseBytes"></param>
         /// <returns></returns>
-        public delegate Dictionary<ushort, ushort> ReadWritableRegisterResponseParse(byte[] responseBytes);
+        protected delegate Dictionary<ushort, ushort> ReadWritableRegisterResponseParse(byte[] responseBytes);
         /// <summary>
         /// 用于解析读取只读线圈时的委托方法
         /// </summary>
         /// <param name="responseBytes"></param>
         /// <returns></returns>
-        public delegate Dictionary<ushort, bool> ReadReadOnlyCoilResponseParse(byte[] responseBytes);
+        protected delegate Dictionary<ushort, bool> ReadReadOnlyCoilResponseParse(byte[] responseBytes);
         /// <summary>
         /// 用于解析读取只读寄存器时的委托方法
         /// </summary>
         /// <param name="responseBytes"></param>
         /// <returns></returns>
-        public delegate Dictionary<ushort, ushort> ReadReadOnlyRegisterResponseParse(byte[] responseBytes);
+        protected delegate Dictionary<ushort, ushort> ReadReadOnlyRegisterResponseParse(byte[] responseBytes);
 
         /// <summary>
         /// 把ip和端口组合成ip:port的格式
@@ -60,25 +63,34 @@ namespace moju.device.interfaces
         /// <param name="ip"></param>
         /// <param name="port"></param>
         /// <returns></returns>
-        private static String CombineAddress(String ip, long port)
+        protected static String CombineAddress(String ip, long port)
         {
             return ip + ":" + port.ToString();
         }
 
-        public ModbusSlave(String ip, int port)
+        public ModbusSlave(String ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList)
         {
             this.Ip = ip;
             this.Port = port;
+            this.SlaveId = slaveId;
+            this.SlaveAttributeList = slaveAttributeList;
+        }
+
+        public ModbusSlave(String ip, int port, int slaveId, string catagoryName)
+        {
+            this.Ip = ip;
+            this.Port = port;
+            this.SlaveId = slaveId;
+            this.SlaveAttributeList = SlaveManager.GetModbusMapping(catagoryName);
         }
 
         /// <summary>
         /// 读可读写线圈
         /// </summary>
-        /// <param name="slaveId">从站id</param>
         /// <param name="startAddress">查询开始地址</param>
         /// <param name="length">查询个数</param>
         /// <returns>地址和布尔值的映射</returns>
-        public async Task<Dictionary<ushort, bool>> ReadWritableCoil(byte slaveId, ushort startAddress, ushort length, ReadWritableCoilResponseParse readWritableCoilResponseParse)
+        protected async Task<Dictionary<ushort, bool>> ReadWritableCoil(ushort startAddress, ushort length, ReadWritableCoilResponseParse readWritableCoilResponseParse)
         {
             try
             {
@@ -89,7 +101,7 @@ namespace moju.device.interfaces
 
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
-                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
+                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, (byte)SlaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadCoil, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
@@ -149,23 +161,21 @@ namespace moju.device.interfaces
         /// <summary>
         /// 重载方法，不用委托方法用默认方式解析响应数据
         /// </summary>
-        /// <param name="slaveId"></param>
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public async Task<Dictionary<ushort, bool>> ReadWritableCoil(byte slaveId, ushort startAddress, ushort length)
+        protected async Task<Dictionary<ushort, bool>> ReadWritableCoil(ushort startAddress, ushort length)
         {
-            return await ReadWritableCoil(slaveId, startAddress, length, null);
+            return await ReadWritableCoil(startAddress, length, null);
         }
 
         /// <summary>
         /// 读保持寄存器（可读写寄存器）
         /// </summary>
-        /// <param name="slaveId">从站id</param>
         /// <param name="startAddress">查询开始地址</param>
         /// <param name="length">查询个数</param>
         /// <returns>地址和寄存器值的映射</returns>
-        public async Task<Dictionary<ushort, ushort>> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh, ReadWritableRegisterResponseParse readWritableRegisterResponseParse)
+        protected async Task<Dictionary<ushort, ushort>> ReadWritableRegister(ushort startAddress, ushort dataLengh, ReadWritableRegisterResponseParse readWritableRegisterResponseParse)
         {
             try
             {
@@ -176,7 +186,7 @@ namespace moju.device.interfaces
 
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
-                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
+                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, (byte)SlaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadHoldingRegister, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
@@ -234,30 +244,28 @@ namespace moju.device.interfaces
         /// <summary>
         /// 重载方法，不用委托方法用默认方式解析响应数据
         /// </summary>
-        /// <param name="slaveId"></param>
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public async Task<Dictionary<ushort, ushort>> ReadWritableRegister(byte slaveId, ushort startAddress, ushort dataLengh)
+        protected async Task<Dictionary<ushort, ushort>> ReadWritableRegister(ushort startAddress, ushort dataLengh)
         {
-            return await ReadWritableRegister(slaveId, startAddress, dataLengh);
+            return await ReadWritableRegister(startAddress, dataLengh, null);
         }
 
         /// <summary>
         /// 写单个线圈
         /// </summary>
-        /// <param name="slaveId"></param>
         /// <param name="writeAddress"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        public async Task<bool> WriteSingleCoil(byte slaveId, ushort writeAddress, bool input)
+        protected async Task<bool> WriteSingleCoil(ushort writeAddress, bool input)
         {
             try
             {
                 byte[] addressBytes = NumberBaseConvertor.SplitUshort2Byte(writeAddress);
 
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
-                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
+                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, (byte)SlaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeWriteSingleCoil, addressBytes[0], addressBytes[1], (byte)(input ? 0xFF : 0x00), 0x00 };
 
                 MemoryStream memoryStream = new MemoryStream();
@@ -297,12 +305,11 @@ namespace moju.device.interfaces
         /// <summary>
         /// 写多个线圈（用字节作为写入结果）
         /// </summary>
-        /// <param name="slaveId"></param>
         /// <param name="writeStartAddress"></param>
         /// <param name="dataLengh"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        public async Task<bool> WriteMultiCoil(byte slaveId, ushort writeStartAddress, ushort writeLenght, byte[] writeData)
+        protected async Task<bool> WriteMultiCoil(ushort writeStartAddress, ushort writeLenght, byte[] writeData)
         {
             try
             {
@@ -320,7 +327,7 @@ namespace moju.device.interfaces
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
                 // 数据长度是 slaveId(1字节) 功能码(1字节) 起始地址(2字节) 数量(2字节) 字节数(1字节)数据(n字节)
-                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, (byte)(7 + writeData.Length), slaveId };
+                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, (byte)(7 + writeData.Length), (byte)SlaveId };
 
                 // 拼接请求报文
                 MemoryStream requestMemoryStream = new MemoryStream();
@@ -364,25 +371,23 @@ namespace moju.device.interfaces
         /// <summary>
         /// 重载方法，直接用boolList入参，减少烧脑
         /// </summary>
-        /// <param name="slaveId"></param>
         /// <param name="writeStartAddress"></param>
         /// <param name="boolList"></param>
         /// <returns></returns>
-        public async Task<bool> WriteMultiCoil(byte slaveId, ushort writeStartAddress, ushort writeLenght, params bool[] boolList)
+        protected async Task<bool> WriteMultiCoil(ushort writeStartAddress, ushort writeLenght, params bool[] boolList)
         {
             byte[] toBeWriteBytes = NumberBaseConvertor.BoolList2ByteArray(boolList);
-            return await WriteMultiCoil(slaveId, writeStartAddress, writeLenght, toBeWriteBytes);
+            return await WriteMultiCoil(writeStartAddress, writeLenght, toBeWriteBytes);
 
         }
 
         /// <summary>
         /// 写单个保持寄存器
         /// </summary>
-        /// <param name="slaveId"></param>
         /// <param name="writeAddress"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        public async Task<bool> WriteSingleRegister(byte slaveId, ushort writeAddress, ushort writeData)
+        protected async Task<bool> WriteSingleRegister(ushort writeAddress, ushort writeData)
         {
             try
             {
@@ -390,7 +395,7 @@ namespace moju.device.interfaces
                 byte[] writeDataBytes = NumberBaseConvertor.SplitUshort2Byte(writeData);
 
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
-                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
+                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, (byte)SlaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeWriteSingleRegister, addressBytes[0], addressBytes[1], writeDataBytes[0], writeDataBytes[1] };
 
                 MemoryStream memoryStream = new MemoryStream();
@@ -431,12 +436,11 @@ namespace moju.device.interfaces
         /// <summary>
         ///  写多个保持寄存器
         /// </summary>
-        /// <param name="slaveId"></param>
         /// <param name="writeStartAddress"></param>
         /// <param name="dataLengh"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        public async Task<bool> WriteMultiRegister(byte slaveId, ushort writeStartAddress, ushort writeLength, ushort[] writeData)
+        protected async Task<bool> WriteMultiRegister(ushort writeStartAddress, ushort writeLength, ushort[] writeData)
         {
             try
             {
@@ -458,7 +462,7 @@ namespace moju.device.interfaces
 
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
-                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, (byte)(7 + (writeData.Length * 2)), slaveId };
+                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, (byte)(7 + (writeData.Length * 2)), (byte)SlaveId };
 
                 // 拼接请求报文
                 MemoryStream requestMemoryStream = new MemoryStream();
@@ -504,11 +508,10 @@ namespace moju.device.interfaces
         /// <summary>
         /// 读只读线圈（离散输入）
         /// </summary>
-        /// <param name="slaveId"></param>
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public async Task<Dictionary<ushort, bool>> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length, ReadReadOnlyCoilResponseParse readOnlyCoilResponseParse)
+        protected async Task<Dictionary<ushort, bool>> ReadReadOnlyCoil(ushort startAddress, ushort length, ReadReadOnlyCoilResponseParse readOnlyCoilResponseParse)
         {
             try
             {
@@ -519,7 +522,7 @@ namespace moju.device.interfaces
 
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
-                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
+                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, (byte)SlaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadDiscreteInputs, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
@@ -576,20 +579,19 @@ namespace moju.device.interfaces
 
         }
 
-        public async Task<Dictionary<ushort, bool>> ReadReadOnlyCoil(byte slaveId, ushort startAddress, ushort length)
+        protected async Task<Dictionary<ushort, bool>> ReadReadOnlyCoil(ushort startAddress, ushort length)
         {
-            return await ReadReadOnlyCoil(slaveId, startAddress, length);
+            return await ReadReadOnlyCoil(startAddress, length, null);
         }
 
 
         /// <summary>
         /// 读只读寄存器（输入寄存器）
         /// </summary>
-        /// <param name="slaveId"></param>
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        public async Task<Dictionary<ushort, ushort>> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh, ReadReadOnlyRegisterResponseParse readOnlyRegisterResponseParse)
+        protected async Task<Dictionary<ushort, ushort>> ReadReadOnlyRegister(ushort startAddress, ushort dataLengh, ReadReadOnlyRegisterResponseParse readOnlyRegisterResponseParse)
         {
             try
             {
@@ -600,7 +602,7 @@ namespace moju.device.interfaces
 
                 // 获取两个byte作为事务id
                 byte[] transactionBytes = TransactionIdGenerator.getTransactionIdBytesByIp(Ip, Port);
-                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, slaveId };
+                byte[] requestMbapHead = new byte[7] { transactionBytes[0], transactionBytes[1], 0x00, 0x00, 0x00, 0x06, (byte)SlaveId };
                 byte[] requestBody = new byte[5] { ModbusConstants.ModbusFunctionCodeReadInputRegisters, addressBytes[0], addressBytes[1], lengthBytes[0], lengthBytes[1] };
 
                 memoryStream.Write(requestMbapHead, 0, requestMbapHead.Length);
@@ -657,9 +659,41 @@ namespace moju.device.interfaces
             }
         }
 
-        public async Task<Dictionary<ushort, ushort>> ReadReadOnlyRegister(byte slaveId, ushort startAddress, ushort dataLengh)
+        protected async Task<Dictionary<ushort, ushort>> ReadReadOnlyRegister(ushort startAddress, ushort dataLengh)
         {
-            return await ReadReadOnlyRegister(slaveId, startAddress, dataLengh, null);
+            return await ReadReadOnlyRegister(startAddress, dataLengh, null);
         }
+
+        protected void FillResultInMapping<T>(Dictionary<ushort, T> result, List<SlaveAttribute> modbusMappingList)
+        {
+            // 将获取到的结果填充到_modbusMappingList
+            foreach (SlaveAttribute addressInfo in modbusMappingList)
+            {
+                ushort address = addressInfo.Address;
+                if (result.ContainsKey(address))
+                {
+                    addressInfo.Value = result[address];
+                }
+            }
+
+        }
+
+        protected SlaveAttribute GetAttributeByRegionAndAddress(int region, ushort address )
+        {
+            foreach (SlaveAttribute attribute in SlaveAttributeList)
+            {
+                if (address == attribute.Address && region == attribute.Region)
+                {
+                    return attribute;
+                }
+            }
+            string errorMsg = $"从站{Ip}:{Port}-{SlaveId}获取地址${address}时失败，可能Modbus协议配置中没有改地址";
+            SimpleLogger.Instance.Error(errorMsg);
+            throw new ArgumentException(errorMsg);
+
+
+        }
+
+        abstract public void RefreshData();
     }
 }

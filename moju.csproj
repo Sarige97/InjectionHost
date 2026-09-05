@@ -62,7 +62,7 @@
     <Compile Include="device\InjectionMoldingMachineSlave.cs" />
     <Compile Include="device\interfaces\ModbusSlave.cs" />
     <Compile Include="device\SlaveManager.cs" />
-    <Compile Include="domain\ModbusAddressInfo.cs" />
+    <Compile Include="domain\SlaveAttribute.cs" />
     <Compile Include="domain\User.cs" />
     <Compile Include="MainForm1.cs">
       <SubType>Form</SubType>
@@ -86,6 +86,7 @@
     <Compile Include="service\UserService.cs" />
     <Compile Include="task\TimerTask.cs" />
     <Compile Include="task\TimerTaskManager.cs" />
+    <Compile Include="tool\ModbusTool.cs" />
     <Compile Include="tool\NumberBaseConvertor.cs" />
     <Compile Include="tool\StreamTool.cs" />
     <EmbeddedResource Include="MainForm1.resx">

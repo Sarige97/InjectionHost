@@ -1,4 +1,5 @@
 ﻿using moju.config;
+using moju.device.interfaces;
 using moju.domain;
 using Newtonsoft.Json.Linq;
 using System;
@@ -14,11 +15,20 @@ namespace moju.device
     {
         public static SlaveManager Instance { get; private set; } = new SlaveManager();
 
-        private static Dictionary<string, List<ModbusAddressInfo>> _modbusAddressInfoListMapping = new Dictionary<string, List<ModbusAddressInfo>>();
+        /// <summary>
+        /// 读取json配置后，按机器将配置保存在这里
+        /// </summary>
+        private static Dictionary<string, List<SlaveAttribute>> _modbusAddressInfoListMapping = new Dictionary<string, List<SlaveAttribute>>();
+
+        /// <summary>
+        /// 根据ip:port-slaveId为键，保存从站实例
+        /// </summary>
+        private static Dictionary<string, ModbusSlave> _slaveMapping = new Dictionary<string, ModbusSlave>();
 
 
         static SlaveManager()
         {
+            // 读取json配置保存在这个类
             string jsonAddress = ConfigManager.Instance.ModbusMappingJsonAddress;
             string absoluteAddress = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonAddress);
             string jsonContent = File.ReadAllText(absoluteAddress);
@@ -26,71 +36,51 @@ namespace moju.device
             // 解析成型机的json
             JToken injectionMoldingMachine = root["InjectionMoldingMachine"];
             JToken mapping = injectionMoldingMachine["mapping"];
-            List<ModbusAddressInfo> injectionMoldingMachineList = ((JObject)mapping).Properties().Select(x => x.Value.ToObject<ModbusAddressInfo>()).ToList();
+            List<SlaveAttribute> injectionMoldingMachineList = ((JObject)mapping).Properties().Select(x => x.Value.ToObject<SlaveAttribute>()).ToList();
             _modbusAddressInfoListMapping.Add("InjectionMoldingMachine", injectionMoldingMachineList);
         }
 
         public SlaveManager()
         {
+
         }
 
-        public static List<ModbusAddressInfo> GetInjectionMoldingMachineAddressMapping()
+        public static List<SlaveAttribute> GetModbusMapping(string catagoryName)
         {
-            return _modbusAddressInfoListMapping["InjectionMoldingMachine"];
+            return _modbusAddressInfoListMapping[catagoryName];
         }
 
         /// <summary>
-        /// 按 region、Address 升序排序后，把 region 相同且 Address 连续（逐个 +1）的
-        /// ModbusAddressInfo 分成一组，每组一个 ModbusAddressInfo[]，
-        /// 整体用 List<ModbusAddressInfo[]> 返回。
+        /// 工厂方法
+        /// 创建一个从站实例，保存后返回。 如果该ip,port,slaveId的实例已存在则直接返回
         /// </summary>
-        public static List<List<ModbusAddressInfo>> GroupByConsecutiveAddress(List<ModbusAddressInfo> list)
-        {
-            var result = new List<List<ModbusAddressInfo>>();
-            if (list == null || list.Count == 0)
-                return result;
-
-            // 1. 先按 region 排，region 相同的再按 Address 升序排
-            List<ModbusAddressInfo> sorted = list.OrderBy(x => x.region).ThenBy(x => x.Address).ToList();
-
-            // 2. 逐个扫描：region 相同且 Address 恰好 +1 才并入当前组
-            var currentGroup = new List<ModbusAddressInfo> { sorted[0] };
-            for (int i = 1; i < sorted.Count; i++)
-            {
-                bool consecutive = sorted[i].region == sorted[i - 1].region
-                                && sorted[i].Address == sorted[i - 1].Address + 1;
-                if (consecutive)
-                {
-                    currentGroup.Add(sorted[i]);
-                }
-                else
-                {
-                    // 断档/换区，当前组封口
-                    result.Add(currentGroup);
-                    // 开新组
-                    currentGroup = new List<ModbusAddressInfo> { sorted[i] };     
-                }
-            }
-            // 最后一组收尾
-            result.Add(currentGroup);                                   
-
-            return result;
-        }
-
-        /// <summary>
-        /// 将地址信息转换为地址->地址信息的映射关系
-        /// </summary>
-        /// <param name="modbusAddressInfoList"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="ip">ip</param>
+        /// <param name="port">端口</param>
+        /// <param name="slaveId">从站id</param>
+        /// <param name="catagory">json配置中的机器名</param>
+        /// <param name="factory">工厂方法，用于获取从站实例，返回实例必须继承ModbusSlave</param>
         /// <returns></returns>
-        public static Dictionary<ushort, ModbusAddressInfo> transferAddressList2Mapping(List<ModbusAddressInfo> modbusAddressInfoList)
+        public T GetOrCreateSlave<T>(string ip, int port, int slaveId, string catagory, Func<string, int, int, string, T> factory) where T : ModbusSlave
         {
-            Dictionary<ushort, ModbusAddressInfo> resultDictionary = new Dictionary<ushort, ModbusAddressInfo>();
-            for (int i = 0; i < modbusAddressInfoList.Count; i++)
+            
+            if (_slaveMapping.TryGetValue(GetModbusSlaveKey(ip, port, slaveId), out ModbusSlave modbusSlave))
             {
-                ModbusAddressInfo modbusAddressInfo = modbusAddressInfoList[i];
-                resultDictionary.Add(modbusAddressInfo.Address, modbusAddressInfo);
+                // 获取到了直接返回
+                return (T)modbusSlave;
             }
-            return resultDictionary;
+            else
+            {
+                List<SlaveAttribute> slaveAttributeList = _modbusAddressInfoListMapping[catagory];
+                ModbusSlave tempModbusSlave = factory(ip, port, slaveId, catagory);
+                _slaveMapping.Add(GetModbusSlaveKey(ip, port, slaveId), tempModbusSlave);
+                return (T)tempModbusSlave;
+            }
+        }
+
+        private string GetModbusSlaveKey(string ip, int port, int slaveId)
+        {
+            return $"{ip}:{port}-{slaveId}";
         }
     }
 }
