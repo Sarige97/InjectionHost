@@ -4,6 +4,7 @@ using moju.log;
 using moju.tool;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,12 @@ namespace moju.device
                 return GetAttributeByRegionAndAddress(0, 1).GetBool();
             }
         }
+
+        public async Task<bool> SetRunning(bool value)
+        {
+            return await WriteSingleCoil(1, value);
+        }
+
         // 报警
         public bool Alarm
         {
@@ -133,6 +140,12 @@ namespace moju.device
                 return GetAttributeByRegionAndAddress(4, 2).GetUshort();
             }
         }
+
+        public async Task<bool> SetBarrelSetPoint1(ushort value)
+        {
+            return await WriteSingleRegister(2, value);
+        }
+
         // 料筒2段温度设定 读写
         public ushort BarrelSetpoint2
         {
@@ -141,6 +154,12 @@ namespace moju.device
                 return GetAttributeByRegionAndAddress(4, 3).GetUshort();
             }
         }
+
+        public async Task<bool> SetBarrelSetPoint2(ushort value)
+        {
+            return await WriteSingleRegister(3, value);
+        }
+
         // 料筒3段温度设定 读写
         public ushort BarrelSetpoint3
         {
@@ -149,6 +168,12 @@ namespace moju.device
                 return GetAttributeByRegionAndAddress(4, 4).GetUshort();
             }
         }
+
+        public async Task<bool> SetBarrelSetPoint3(ushort value)
+        {
+            return await WriteSingleRegister(4, value);
+        }
+
         // 料筒4段温度设定 读写
         public ushort BarrelSetpoint4
         {
@@ -157,6 +182,12 @@ namespace moju.device
                 return GetAttributeByRegionAndAddress(4, 5).GetUshort();
             }
         }
+
+        public async Task<bool> SetBarrelSetPoint4(ushort value)
+        {
+            return await WriteSingleRegister(5, value);
+        }
+
         // 模具设定温度 读写
         public ushort MoldTempSetpoint
         {
@@ -165,6 +196,12 @@ namespace moju.device
                 return GetAttributeByRegionAndAddress(4, 6).GetUshort();
             }
         }
+        public async Task<bool> SetMoldTempSetpoint(ushort value)
+        {
+            return await WriteSingleRegister(6, value);
+        }
+
+
 
         public InjectionMoldingMachineSlave(String ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList) : base(ip, port, slaveId, slaveAttributeList)
         {
