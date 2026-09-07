@@ -23,9 +23,9 @@ namespace moju.modbus
 
         public SlaveChannelStatus status { get; private set; }
 
-        public
+        public SemaphoreSlim SemaphoreSlim { get; private set; } = new SemaphoreSlim(1, 1);
 
-        SlaveChannel(String ip, int port)
+        public SlaveChannel(String ip, int port)
         {
             this.ip = ip;
             this.port = port;

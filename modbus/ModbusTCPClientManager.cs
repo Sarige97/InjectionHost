@@ -53,10 +53,11 @@ namespace muju.modbus
 
             try
             {
+                await slaveChannel.SemaphoreSlim.WaitAsync();
                 if (!slaveChannel.CanRequest())
                 {
                     SimpleLogger.Instance.Debug("未到请求间隔，跳过请求");
-                    return new ModbusRequestResult(new byte[0], SlaveRequestResult.Passed, GetSlaveChannelStatus(ip,port), "未到请求间隔，跳过请求");
+                    return new ModbusRequestResult(new byte[0], SlaveRequestResult.Passed, GetSlaveChannelStatus(ip, port), "未到请求间隔，跳过请求");
                 }
 
                 Task<byte[]> requestTask = requestAndParse(slaveChannel, requestBytes);
@@ -76,7 +77,7 @@ namespace muju.modbus
                     SimpleLogger.Instance.Error("请求超时，目标地址：" + CombineAddress(ip, port) + "  请求报文：" + BitConverter.ToString(requestBytes));
                     slaveChannel.OnTimeout();
                     _ = requestTask.ContinueWith(t => t.Exception);
-                    return new ModbusRequestResult(new byte[0], SlaveRequestResult.Timeout, GetSlaveChannelStatus(ip,port), "请求超时");
+                    return new ModbusRequestResult(new byte[0], SlaveRequestResult.Timeout, GetSlaveChannelStatus(ip, port), "请求超时");
                 }
 
 
@@ -98,6 +99,7 @@ namespace muju.modbus
             }
             finally
             {
+                slaveChannel.SemaphoreSlim.Release();
             }
         }
 
@@ -105,31 +107,41 @@ namespace muju.modbus
         {
             try
             {
+                int start = Environment.TickCount;
+                SimpleLogger.Instance.Debug($"modbus请求开始({slaveChannel.ip}:{slaveChannel.port})");
                 TcpClient tcpClient = await slaveChannel.GetTcpClient();
                 NetworkStream stream = tcpClient.GetStream();
-
+                SimpleLogger.Instance.Debug($"开始异步写入({slaveChannel.ip}:{slaveChannel.port})");
                 await stream.WriteAsync(requestBytes, 0, requestBytes.Length);
-
+                SimpleLogger.Instance.Debug($"异步写入完成，await后开始读取输出流({slaveChannel.ip}:{slaveChannel.port})");
                 // 获取报文头
                 Byte[] bytesHead = new Byte[7];
 
-                //await stream.ReadAsync(bytesHead, 0, bytesHead.Length);
+                SimpleLogger.Instance.Debug($"开始异步读取报文头({slaveChannel.ip}:{slaveChannel.port})");
                 await StreamTool.StreamReadAsync(stream, bytesHead);
+                SimpleLogger.Instance.Debug($"异步读取报文头完成，await后开始读取输出流({slaveChannel.ip}:{slaveChannel.port})");
+
                 int dataLength = (bytesHead[4] << 8 | bytesHead[5]);
                 // 获取报文体
 
                 Byte[] bytesBody = new Byte[dataLength - 1];
+                SimpleLogger.Instance.Debug($"开始异步读取报文体({slaveChannel.ip}:{slaveChannel.port})");
                 await StreamTool.StreamReadAsync(stream, bytesBody);
+                int over = Environment.TickCount;
+                SimpleLogger.Instance.Debug($"异步读取报文体完成({slaveChannel.ip}:{slaveChannel.port})");
+                SimpleLogger.Instance.Debug($"modbus请求完成({slaveChannel.ip}:{slaveChannel.port}),本次请求消耗{over - start}ms");
 
                 // 组合报文
                 Byte[] resultByte = new Byte[bytesHead.Length + bytesBody.Length];
                 Buffer.BlockCopy(bytesHead, 0, resultByte, 0, bytesHead.Length);
                 Buffer.BlockCopy(bytesBody, 0, resultByte, bytesHead.Length, bytesBody.Length);
+
                 return resultByte;
 
             }
-            catch
+            catch (Exception e)
             {
+                SimpleLogger.Instance.Debug("modbus异步请求出错({slaveChannel.ip}:{slaveChannel.port})，错误信息：" + e.Message);
                 throw;
             }
         }
@@ -139,7 +151,8 @@ namespace muju.modbus
             if (_slaveChannelMapping.TryGetValue(CombineAddress(ip, port), out SlaveChannel slaveChannel))
             {
                 return slaveChannel.status;
-            } else
+            }
+            else
             {
                 return SlaveChannelStatus.OtherError;
             }

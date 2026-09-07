@@ -193,7 +193,10 @@ namespace moju.device
                             // 获取连续地址组的第一个地址
                             ushort firstAddress = modbusAddressesInfoList[0].Address;
                             Dictionary<ushort, bool> writableCoilMapping = await ReadWritableCoil(firstAddress, (ushort)modbusAddressesInfoList.Count);
-                            FillResultInMapping<bool>(writableCoilMapping, SlaveAttributeList);
+                            if (writableCoilMapping != null)
+                            {
+                                FillResultInMapping<bool>(writableCoilMapping, SlaveAttributeList);
+                            }
                             break;
                         }
                     case 1:
@@ -202,7 +205,10 @@ namespace moju.device
                             // 获取连续地址组的第一个地址
                             ushort firstAddress = modbusAddressesInfoList[0].Address;
                             Dictionary<ushort, bool> readonlyCoilMapping = await ReadReadOnlyCoil(firstAddress, (ushort)modbusAddressesInfoList.Count);
-                            FillResultInMapping<bool>(readonlyCoilMapping, SlaveAttributeList);
+                            if (readonlyCoilMapping != null)
+                            {
+                                FillResultInMapping<bool>(readonlyCoilMapping, SlaveAttributeList);
+                            }
                             break;
                         }
                     case 4:
@@ -211,7 +217,10 @@ namespace moju.device
                             // 获取连续地址组的第一个地址
                             ushort firstAddress = modbusAddressesInfoList[0].Address;
                             Dictionary<ushort, ushort> writableRegisterMapping = await ReadWritableRegister(firstAddress, (ushort)modbusAddressesInfoList.Count);
-                            FillResultInMapping<ushort>(writableRegisterMapping, SlaveAttributeList);
+                            if (writableRegisterMapping != null)
+                            {
+                                FillResultInMapping<ushort>(writableRegisterMapping, SlaveAttributeList);
+                            }
                             break;
                         }
                     case 3:
@@ -220,7 +229,10 @@ namespace moju.device
                             // 获取连续地址组的第一个地址
                             ushort firstAddress = modbusAddressesInfoList[0].Address;
                             Dictionary<ushort, ushort> readOnlyRegisterMapping = await ReadReadOnlyRegister(firstAddress, (ushort)modbusAddressesInfoList.Count);
-                            FillResultInMapping<ushort>(readOnlyRegisterMapping, SlaveAttributeList);
+                            if (readOnlyRegisterMapping != null)
+                            {
+                                FillResultInMapping<ushort>(readOnlyRegisterMapping, SlaveAttributeList);
+                            }
                             break;
                         }
                     default:
