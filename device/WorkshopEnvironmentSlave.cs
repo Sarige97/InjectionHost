@@ -10,175 +10,126 @@ using System.Threading.Tasks;
 
 namespace moju.device
 {
-    internal class InjectionMoldingMachineSlave : ModbusSlaveTcp
+    internal class WorkshopEnvironmentSlave : ModbusSlaveTcp
     {
-        // 运行 读写
-        public bool Running
+        /// <summary>
+        /// 高温报警
+        /// </summary>
+        public bool HighTempAlarm
         {
             get
             {
-                return GetAttributeByRegionAndAddress(0, 1).GetBool();
+                return GetAttributeByRegionAndAddress(1, 0).GetBool();
             }
         }
-        // 报警
-        public bool Alarm
+
+        /// <summary>
+        /// 高湿报警
+        /// </summary>
+        public bool HighHumidityAlarm
         {
             get
             {
-                return GetAttributeByRegionAndAddress(1, 3).GetBool();
+                return GetAttributeByRegionAndAddress(1, 1).GetBool();
             }
         }
-        // 运行状态字
-        public ushort RunStatusWord
+
+        /// <summary>
+        /// 车间温度
+        /// </summary>
+        public ushort WorkshopTemp
         {
             get
             {
                 return GetAttributeByRegionAndAddress(3, 0).GetUshort();
             }
         }
-        // 报警码
-        public ushort AlarmCode
+
+        /// <summary>
+        /// 湿度
+        /// </summary>
+        public ushort Humidity
         {
             get
             {
                 return GetAttributeByRegionAndAddress(3, 1).GetUshort();
             }
         }
-        // 报警组字
-        public ushort AlarmGroupWord
+
+        /// <summary>
+        /// 露点
+        /// </summary>
+        public ushort DewPoint
         {
             get
             {
                 return GetAttributeByRegionAndAddress(3, 2).GetUshort();
             }
         }
-        // 总模数
-        public ushort TotalShots
+
+        /// <summary>
+        /// 噪音
+        /// </summary>
+        public ushort NoiseLevel
         {
             get
             {
                 return GetAttributeByRegionAndAddress(3, 3).GetUshort();
             }
         }
-        // 合格品数
-        public ushort GoodParts
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 5).GetUshort();
-            }
-        }
-        // 次品数
-        public ushort RejectParts
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 7).GetUshort();
-            }
-        }
-        // 料筒1段温度
-        public ushort BarrelTemp1
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 19).GetUshort();
-            }
-        }
-        // 料筒2段温度
-        public ushort BarrelTemp2
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 20).GetUshort();
-            }
-        }
-        // 料筒3段温度
-        public ushort BarrelTemp3
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 21).GetUshort();
-            }
-        }
-        // 料筒4段温度
-        public ushort BarrelTemp4
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 22).GetUshort();
-            }
-        }
-        // 料筒5段温度
-        public ushort BarrelTemp5
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 23).GetUshort();
-            }
-        }
-
-        // 模具温度
-        public ushort MoldTempActual
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 29).GetUshort();
-            }
-        }
-        // 料筒1段温度设定 读写
-        public ushort BarrelSetpoint1
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(4, 2).GetUshort();
-            }
-        }
-        // 料筒2段温度设定 读写
-        public ushort BarrelSetpoint2
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(4, 3).GetUshort();
-            }
-        }
-        // 料筒3段温度设定 读写
-        public ushort BarrelSetpoint3
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(4, 4).GetUshort();
-            }
-        }
-        // 料筒4段温度设定 读写
-        public ushort BarrelSetpoint4
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(4, 5).GetUshort();
-            }
-        }
-        // 模具设定温度 读写
-        public ushort MoldTempSetpoint
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(4, 6).GetUshort();
-            }
-        }
-
-        public InjectionMoldingMachineSlave(String ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList) : base(ip, port, slaveId, slaveAttributeList)
-        {
-        }
-
-        public InjectionMoldingMachineSlave(String ip, int port, int slaveId, string catagoryName) : base(ip, port, slaveId, catagoryName)
-        {
-        }
-
-
 
         /// <summary>
-        /// 自动请求modbus，读取所有数据
+        /// 空调设定温度
         /// </summary>
+        public ushort HvacTempSetPoint
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(4, 0).GetUshort();
+            }
+        }
+
+        /// <summary>
+        /// 目标湿度
+        /// </summary>
+        public ushort HumiditySetPoint
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(4, 1).GetUshort();
+            }
+        }
+
+        /// <summary>
+        /// 设定空调温度
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public async Task<bool> setHvacTEmpSetPoint(ushort value)
+        {
+            return await WriteSingleRegister(0, value);
+        }
+
+        /// <summary>
+        /// 设定目标湿度
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public async Task<bool> setHumiditySetPoint(ushort value)
+        {
+            return await WriteSingleRegister(1, value);
+        }
+
+
+
+        public WorkshopEnvironmentSlave(string ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList) : base(ip, port, slaveId, slaveAttributeList)
+        {
+        }
+
+        public WorkshopEnvironmentSlave(string ip, int port, int slaveId, string catagoryName) : base(ip, port, slaveId, catagoryName)
+        {
+        }
+
         public override async void RefreshData()
         {
             List<List<SlaveAttribute>> modbusRequestAddressGroup = ModbusTool.GroupByConsecutiveAddress(SlaveAttributeList);
@@ -246,5 +197,6 @@ namespace moju.device
                 }
             }
         }
+
     }
 }

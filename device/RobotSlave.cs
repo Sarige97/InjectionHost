@@ -10,25 +10,57 @@ using System.Threading.Tasks;
 
 namespace moju.device
 {
-    internal class InjectionMoldingMachineSlave : ModbusSlaveTcp
+    internal class RobotSlave : ModbusSlaveTcp
     {
-        // 运行 读写
-        public bool Running
+
+        /// <summary>
+        /// 电源
+        /// </summary>
+        public bool Power
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(0, 0).GetBool();
+            }
+        }
+
+        /// <summary>
+        /// 就绪（电源）
+        /// </summary>
+        public bool Ready
         {
             get
             {
                 return GetAttributeByRegionAndAddress(0, 1).GetBool();
             }
         }
-        // 报警
+
+
+        /// <summary>
+        /// 夹持到位
+        /// </summary>
+        public bool PartGripped
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(1, 1).GetBool();
+            }
+        }
+
+        /// <summary>
+        /// 报警
+        /// </summary>
         public bool Alarm
         {
             get
             {
-                return GetAttributeByRegionAndAddress(1, 3).GetBool();
+                return GetAttributeByRegionAndAddress(1, 2).GetBool();
             }
         }
-        // 运行状态字
+
+        /// <summary>
+        /// 运行状态字 bit0电源 bit1就绪 bit2取件 bit3放件 bit4回位 bit5故障 bit6自动
+        /// </summary>
         public ushort RunStatusWord
         {
             get
@@ -36,7 +68,10 @@ namespace moju.device
                 return GetAttributeByRegionAndAddress(3, 0).GetUshort();
             }
         }
-        // 报警码
+
+        /// <summary>
+        /// 报警码
+        /// </summary>
         public ushort AlarmCode
         {
             get
@@ -44,141 +79,92 @@ namespace moju.device
                 return GetAttributeByRegionAndAddress(3, 1).GetUshort();
             }
         }
-        // 报警组字
-        public ushort AlarmGroupWord
+
+        /// <summary>
+        /// 循环时间
+        /// </summary>
+        public ushort CycleTime
         {
             get
             {
                 return GetAttributeByRegionAndAddress(3, 2).GetUshort();
             }
         }
-        // 总模数
-        public ushort TotalShots
+        
+        /// <summary>
+        /// 累计取件数
+        /// </summary>
+        public ushort TotalPicks
         {
             get
             {
                 return GetAttributeByRegionAndAddress(3, 3).GetUshort();
             }
         }
-        // 合格品数
-        public ushort GoodParts
+
+        /// <summary>
+        /// 取出成功数
+        /// </summary>
+        public ushort PickSuccess
         {
             get
             {
                 return GetAttributeByRegionAndAddress(3, 5).GetUshort();
             }
         }
-        // 次品数
-        public ushort RejectParts
+
+        /// <summary>
+        /// 取出失败数
+        /// </summary>
+        public ushort PickFail
         {
             get
             {
                 return GetAttributeByRegionAndAddress(3, 7).GetUshort();
             }
         }
-        // 料筒1段温度
-        public ushort BarrelTemp1
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 19).GetUshort();
-            }
-        }
-        // 料筒2段温度
-        public ushort BarrelTemp2
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 20).GetUshort();
-            }
-        }
-        // 料筒3段温度
-        public ushort BarrelTemp3
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 21).GetUshort();
-            }
-        }
-        // 料筒4段温度
-        public ushort BarrelTemp4
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 22).GetUshort();
-            }
-        }
-        // 料筒5段温度
-        public ushort BarrelTemp5
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 23).GetUshort();
-            }
-        }
-
-        // 模具温度
-        public ushort MoldTempActual
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(3, 29).GetUshort();
-            }
-        }
-        // 料筒1段温度设定 读写
-        public ushort BarrelSetpoint1
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(4, 2).GetUshort();
-            }
-        }
-        // 料筒2段温度设定 读写
-        public ushort BarrelSetpoint2
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(4, 3).GetUshort();
-            }
-        }
-        // 料筒3段温度设定 读写
-        public ushort BarrelSetpoint3
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(4, 4).GetUshort();
-            }
-        }
-        // 料筒4段温度设定 读写
-        public ushort BarrelSetpoint4
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(4, 5).GetUshort();
-            }
-        }
-        // 模具设定温度 读写
-        public ushort MoldTempSetpoint
-        {
-            get
-            {
-                return GetAttributeByRegionAndAddress(4, 6).GetUshort();
-            }
-        }
-
-        public InjectionMoldingMachineSlave(String ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList) : base(ip, port, slaveId, slaveAttributeList)
-        {
-        }
-
-        public InjectionMoldingMachineSlave(String ip, int port, int slaveId, string catagoryName) : base(ip, port, slaveId, catagoryName)
-        {
-        }
-
-
 
         /// <summary>
-        /// 自动请求modbus，读取所有数据
+        /// 住区状态 0空/1夹持
         /// </summary>
+        public ushort GripStatus
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(3, 12).GetUshort();
+            }
+        }
+
+        /// <summary>
+        /// 瞬时功率(kw)
+        /// </summary>
+        public ushort InstantaneousPower
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(3, 13).GetUshort();
+            }
+        }
+
+        /// <summary>
+        /// 当前动作号 0待机 1取件 2放件 3回位
+        /// </summary>
+        public ushort CurrentActionId
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(3, 14).GetUshort();
+            }
+        }
+
+        public RobotSlave(string ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList) : base(ip, port, slaveId, slaveAttributeList)
+        {
+        }
+
+        public RobotSlave(string ip, int port, int slaveId, string catagoryName) : base(ip, port, slaveId, catagoryName)
+        {
+        }
+
         public override async void RefreshData()
         {
             List<List<SlaveAttribute>> modbusRequestAddressGroup = ModbusTool.GroupByConsecutiveAddress(SlaveAttributeList);

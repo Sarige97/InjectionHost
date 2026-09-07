@@ -141,7 +141,7 @@ namespace muju.modbus
             }
             catch (Exception e)
             {
-                SimpleLogger.Instance.Debug("modbus异步请求出错({slaveChannel.ip}:{slaveChannel.port})，错误信息：" + e.Message);
+                SimpleLogger.Instance.Error("modbus异步请求出错({slaveChannel.ip}:{slaveChannel.port})，错误信息：" + e.Message);
                 throw;
             }
         }

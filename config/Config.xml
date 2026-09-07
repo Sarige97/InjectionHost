@@ -3,7 +3,7 @@
 
 	<!-- DEBUG INFO WARN ERROR FATAL -->
 	<Log>
-		<LogLevel>DEBUG</LogLevel>
+		<LogLevel>INFO</LogLevel>
 		<!-- 0：文件日志  1：控制台  2：UI日志  3： 数据库日志-->
 		<outputTarget>0,1,2,3</outputTarget>
 	</Log>

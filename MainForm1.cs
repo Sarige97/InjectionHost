@@ -14,6 +14,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -24,16 +25,93 @@ namespace muju
         public MainForm1()
         {
             InitializeComponent();
+            //ModbusSlaveTcp injectionMoldingMachineSlave = SlaveManager.GetOrCreateSlave<InjectionMoldingMachineSlave>("127.0.0.1", 502, 1, "InjectionMoldingMachine", (ip, port, slaveId, catagoryName) => new InjectionMoldingMachineSlave(ip, port, slaveId, catagoryName));
+            //ModbusSlaveTcp moldTemperatureControllerSlave = SlaveManager.GetOrCreateSlave<MoldTemperatureControllerSlave>("127.0.0.1", 503, 2, "MoldTemperatureController", (ip, port, slaveId, catagoryName) => new MoldTemperatureControllerSlave(ip, port, slaveId, catagoryName));
+            //ModbusSlaveTcp dryerSlave = SlaveManager.GetOrCreateSlave<DryerSlave>("127.0.0.1", 504, 3, "Dryer", (ip, port, slaveId, catagoryName) => new DryerSlave(ip, port, slaveId, catagoryName));
+            //ModbusSlaveTcp robotSlave = SlaveManager.GetOrCreateSlave<RobotSlave>("127.0.0.1", 505, 4, "Robot", (ip, port, slaveId, catagoryName) => new RobotSlave(ip, port, slaveId, catagoryName));
 
-            ModbusSlave injectionMoldingMachineSlave = SlaveManager.Instance.GetOrCreateSlave<InjectionMoldingMachineSlave>("127.0.0.1", 502, 1, "InjectionMoldingMachine", (ip, port, slaveId, catagoryName) => new InjectionMoldingMachineSlave(ip,port, slaveId, catagoryName));
+            //ModbusSlaveTcp powerMeterSlave = SlaveManager.GetOrCreateSlave<PowerMeterSlave>("127.0.0.1", 518, 61, "PowerMeter", (ip, port, slaveId, catagoryName) => new PowerMeterSlave(ip, port, slaveId, catagoryName));
+            //ModbusSlaveTcp workshopEnvironmentSlave = SlaveManager.GetOrCreateSlave<WorkshopEnvironmentSlave>("127.0.0.1", 519, 71, "WorkshopEnvironment", (ip, port, slaveId, catagoryName) => new WorkshopEnvironmentSlave(ip, port, slaveId, catagoryName));
+
+            // 获取机器modbus映射和地址等配置数据
+            List<SlaveDeviceInfo> IMInfoLIst = SlaveManager.getModbusSlaveInstance("InjectionMoldingMachine");
+            List<SlaveDeviceInfo> MTCInfoLIst = SlaveManager.getModbusSlaveInstance("MoldTemperatureController");
+            List<SlaveDeviceInfo> DRYInfoLIst = SlaveManager.getModbusSlaveInstance("Dryer");
+            List<SlaveDeviceInfo> ROBInfoLIst = SlaveManager.getModbusSlaveInstance("Robot");
+            List<SlaveDeviceInfo> PMInfoLIst = SlaveManager.getModbusSlaveInstance("PowerMeter");
+            List<SlaveDeviceInfo> WEInfoLIst = SlaveManager.getModbusSlaveInstance("WorkshopEnvironment");
+
+            // 注册注塑机的定时数据刷新
+            foreach (SlaveDeviceInfo slaveDeviceInfo in IMInfoLIst)
+            {
+                ModbusSlaveTcp injectionMoldingMachineSlave = SlaveManager.GetOrCreateSlave<InjectionMoldingMachineSlave>(slaveDeviceInfo.Ip, slaveDeviceInfo.Port, slaveDeviceInfo.SlaveId, slaveDeviceInfo.SlaveCatagoryName, (ip, port, slaveId, catagoryName) => new InjectionMoldingMachineSlave(ip, port, slaveId, catagoryName));
+                TimerTaskManager.AddTimerEvent(1000, injectionMoldingMachineSlave.RefreshData);
+            }
+
+            // 注册模温机的定时数据刷新
+            foreach (SlaveDeviceInfo slaveDeviceInfo in MTCInfoLIst)
+            {
+                ModbusSlaveTcp moldTemperatureControllerSlave = SlaveManager.GetOrCreateSlave<MoldTemperatureControllerSlave>(slaveDeviceInfo.Ip, slaveDeviceInfo.Port, slaveDeviceInfo.SlaveId, slaveDeviceInfo.SlaveCatagoryName, (ip, port, slaveId, catagoryName) => new MoldTemperatureControllerSlave(ip, port, slaveId, catagoryName));
+                TimerTaskManager.AddTimerEvent(1000, moldTemperatureControllerSlave.RefreshData);
+            }
+
+            // 注册干燥机的定时数据刷新
+            foreach (SlaveDeviceInfo slaveDeviceInfo in DRYInfoLIst)
+            {
+                ModbusSlaveTcp drySlave = SlaveManager.GetOrCreateSlave<DryerSlave>(slaveDeviceInfo.Ip, slaveDeviceInfo.Port, slaveDeviceInfo.SlaveId, slaveDeviceInfo.SlaveCatagoryName, (ip, port, slaveId, catagoryName) => new DryerSlave(ip, port, slaveId, catagoryName));
+                TimerTaskManager.AddTimerEvent(1000, drySlave.RefreshData);
+            }
+
+            // 注册机械臂的定时数据刷新
+            foreach (SlaveDeviceInfo slaveDeviceInfo in ROBInfoLIst)
+            {
+                ModbusSlaveTcp robotSlave = SlaveManager.GetOrCreateSlave<RobotSlave>(slaveDeviceInfo.Ip, slaveDeviceInfo.Port, slaveDeviceInfo.SlaveId, slaveDeviceInfo.SlaveCatagoryName, (ip, port, slaveId, catagoryName) => new RobotSlave(ip, port, slaveId, catagoryName));
+                TimerTaskManager.AddTimerEvent(1000, robotSlave.RefreshData);
+            }
+
+            // 注册电表的定时数据刷新
+            foreach (SlaveDeviceInfo slaveDeviceInfo in PMInfoLIst)
+            {
+                ModbusSlaveTcp powerMeterSlave = SlaveManager.GetOrCreateSlave<PowerMeterSlave>(slaveDeviceInfo.Ip, slaveDeviceInfo.Port, slaveDeviceInfo.SlaveId, slaveDeviceInfo.SlaveCatagoryName, (ip, port, slaveId, catagoryName) => new PowerMeterSlave(ip, port, slaveId, catagoryName));
+                TimerTaskManager.AddTimerEvent(1000, powerMeterSlave.RefreshData);
+            }
+
+            // 注册车间环境的定时数据刷新
+            foreach (SlaveDeviceInfo slaveDeviceInfo in WEInfoLIst)
+            {
+                ModbusSlaveTcp workshopEnvironmentSlave = SlaveManager.GetOrCreateSlave<WorkshopEnvironmentSlave>(slaveDeviceInfo.Ip, slaveDeviceInfo.Port, slaveDeviceInfo.SlaveId, slaveDeviceInfo.SlaveCatagoryName, (ip, port, slaveId, catagoryName) => new WorkshopEnvironmentSlave(ip, port, slaveId, catagoryName));
+                TimerTaskManager.AddTimerEvent(1000, workshopEnvironmentSlave.RefreshData);
+            }
+
+
 
             TimerTaskManager.AddTimerEvent(1000, Initialize);
-            TimerTaskManager.AddTimerEvent(1000, injectionMoldingMachineSlave.RefreshData);
-            TimerTaskManager.AddTimerEvent(1000, injectionMoldingMachineSlave.RefreshData);
+            TimerTaskManager.AddTimerEvent(1000, TestLoop);
+
+            Test();
         }
 
-        public async void test()
+        public void Test()
         {
+
+        }
+
+        public async void TestLoop()
+        {
+
+            InjectionMoldingMachineSlave injectionMoldingMachineSlave1 = SlaveManager.GetOrCreateSlave<InjectionMoldingMachineSlave>("127.0.0.1", 502, 1, "InjectionMoldingMachine", null);
+            MoldTemperatureControllerSlave moldTemperatureControllerSlave1 = SlaveManager.GetOrCreateSlave<MoldTemperatureControllerSlave>("127.0.0.1", 503, 2, "MoldTemperatureController", null);
+            DryerSlave dryerSlave = SlaveManager.GetOrCreateSlave<DryerSlave>("127.0.0.1", 504, 3, "Dryer", null);
+            RobotSlave robotSlave = SlaveManager.GetOrCreateSlave<RobotSlave>("127.0.0.1", 505, 4, "Robot", null);
+            PowerMeterSlave powerMeterSlave = SlaveManager.GetOrCreateSlave<PowerMeterSlave>("127.0.0.1", 518, 61, "PowerMeter", (ip, port, slaveId, catagoryName) => new PowerMeterSlave(ip, port, slaveId, catagoryName));
+            WorkshopEnvironmentSlave workshopEnvironmentSlave = SlaveManager.GetOrCreateSlave<WorkshopEnvironmentSlave>("127.0.0.1", 519, 71, "WorkshopEnvironment", (ip, port, slaveId, catagoryName) => new WorkshopEnvironmentSlave(ip, port, slaveId, catagoryName));
+
+            SimpleLogger.Instance.Info("模温机数据:" + moldTemperatureControllerSlave1.PumpFlow.ToString("D"));
+            SimpleLogger.Instance.Info("注塑机数据:" + injectionMoldingMachineSlave1.BarrelTemp1.ToString("D"));
+            SimpleLogger.Instance.Info("干燥剂数据:" + dryerSlave.HeatingPower.ToString("D"));
+            SimpleLogger.Instance.Info("机械臂数据:" + robotSlave.TotalPicks.ToString("D"));
+            SimpleLogger.Instance.Info("电能器数据:" + powerMeterSlave.TotalEnergy.ToString("D"));
+            SimpleLogger.Instance.Info("机械间数据:" + workshopEnvironmentSlave.Humidity.ToString("D"));
         }
 
         /// <summary>

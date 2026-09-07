@@ -1,5 +1,27 @@
 ﻿{
   "InjectionMoldingMachine": {
+    "instance": {
+      "IM-01": {
+        "ip": "127.0.0.1",
+        "port": "502",
+        "slaveId": "1"
+      },
+      "IM-02": {
+        "ip": "127.0.0.1",
+        "port": "506",
+        "slaveId": "5"
+      },
+      "IM-03": {
+        "ip": "127.0.0.1",
+        "port": "510",
+        "slaveId": "9"
+      },
+      "IM-04": {
+        "ip": "127.0.0.1",
+        "port": "514",
+        "slaveId": "13"
+      }
+    },
     "mapping": {
       "00001": {
         "Name": "power",
@@ -380,6 +402,28 @@
     }
   },
   "MoldTemperatureController": {
+    "instance": {
+      "MTC-01": {
+        "ip": "127.0.0.1",
+        "port": "503",
+        "slaveId": "2"
+      },
+      "MTC-02": {
+        "ip": "127.0.0.1",
+        "port": "507",
+        "slaveId": "6"
+      },
+      "MTC-03": {
+        "ip": "127.0.0.1",
+        "port": "511",
+        "slaveId": "10"
+      },
+      "MTC-04": {
+        "ip": "127.0.0.1",
+        "port": "515",
+        "slaveId": "14"
+      }
+    },
     "mapping": {
       "00001": {
         "Name": "power",
@@ -496,6 +540,28 @@
     }
   },
   "Dryer": {
+    "instance": {
+      "DRY-01": {
+        "ip": "127.0.0.1",
+        "port": "504",
+        "slaveId": "3"
+      },
+      "DRY-02": {
+        "ip": "127.0.0.1",
+        "port": "508",
+        "slaveId": "7"
+      },
+      "DRY-03": {
+        "ip": "127.0.0.1",
+        "port": "512",
+        "slaveId": "11"
+      },
+      "DRY-04": {
+        "ip": "127.0.0.1",
+        "port": "516",
+        "slaveId": "15"
+      }
+    },
     "mapping": {
       "00001": {
         "Name": "power",
@@ -628,6 +694,28 @@
     }
   },
   "Robot": {
+    "instance": {
+      "ROB-01": {
+        "ip": "127.0.0.1",
+        "port": "505",
+        "slaveId": "4"
+      },
+      "ROB-02": {
+        "ip": "127.0.0.1",
+        "port": "509",
+        "slaveId": "8"
+      },
+      "ROB-03": {
+        "ip": "127.0.0.1",
+        "port": "513",
+        "slaveId": "12"
+      },
+      "ROB-04": {
+        "ip": "127.0.0.1",
+        "port": "517",
+        "slaveId": "16"
+      }
+    },
     "mapping": {
       "00001": {
         "Name": "power",
@@ -784,6 +872,13 @@
     }
   },
   "PowerMeter": {
+    "instance": {
+      "EM-01": {
+        "ip": "127.0.0.1",
+        "port": "518",
+        "slaveId": "61"
+      }
+    },
     "mapping": {
       "00001": {
         "Name": "remote_close",
@@ -924,6 +1019,13 @@
     }
   },
   "WorkshopEnvironment": {
+    "instance": {
+      "EM-01": {
+        "ip": "127.0.0.1",
+        "port": "519",
+        "slaveId": "71"
+      }
+    },
     "mapping": {
       "10001": {
         "Name": "high_temp_alarm",

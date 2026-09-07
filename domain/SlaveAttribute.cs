@@ -21,11 +21,16 @@ namespace moju.domain
         {
             try
             {
+                if (Value == null)
+                {
+                    SimpleLogger.Instance.Error($"数值转化失败,名称:{Name} 区域:{Region} 地址:{Address} 描述:{Description}");
+                    return new ushort();
+                }
                 return (ushort)Value;
             }
             catch (Exception e)
             {
-                throw new FormatException($"数值转化为ushort失败", e);
+                throw new FormatException($"数值转化为ushort失败。", e);
             }
         }
 
@@ -33,6 +38,11 @@ namespace moju.domain
         {
             try
             {
+                if (Value == null)
+                {
+                    SimpleLogger.Instance.Error($"数值转化失败,名称:{Name} 区域:{Region} 地址:{Address} 描述:{Description}");
+                    return "";
+                }
                 return (String)Value;
             }
             catch (Exception e)
@@ -45,6 +55,11 @@ namespace moju.domain
         {
             try
             {
+                if (Value == null)
+                {
+                    SimpleLogger.Instance.Error($"数值转化失败,名称:{Name} 区域:{Region} 地址:{Address} 描述:{Description}");
+                    return false;
+                }
                 return (GetUshort() == 1);
             }
             catch (Exception e)

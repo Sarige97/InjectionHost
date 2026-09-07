@@ -12,24 +12,24 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static moju.device.interfaces.ModbusSlave;
+using static moju.device.interfaces.ModbusSlaveTcp;
 
 namespace moju.device.interfaces
 {
-    internal abstract class ModbusSlave
+    internal abstract class ModbusSlaveTcp : IModbusSlave
     {
 
-        protected String Ip { get; private set; }
-        protected int Port { get; private set; }
-        protected int SlaveId { get; private set; }
+        public String Ip { get; private set; }
+        public int Port { get; private set; }
+        public int SlaveId { get; private set; }
         /// <summary>
         /// 状态机
         /// </summary>
-        protected SlaveChannelStatus SlaveChannelStatus { get; private set; }
+        public SlaveChannelStatus SlaveChannelStatus { get; private set; }
         /// <summary>
         /// 这台机器modbus地址和具体数据的映射关系
         /// </summary>
-        protected List<SlaveAttribute> SlaveAttributeList { get; private set; }
+        public List<SlaveAttribute> SlaveAttributeList { get; private set; }
 
 
         /// <summary>
@@ -37,25 +37,25 @@ namespace moju.device.interfaces
         /// </summary>
         /// <param name="responseBytes"></param>
         /// <returns></returns>
-        protected delegate Dictionary<ushort, bool> ReadWritableCoilResponseParse(byte[] responseBytes);
+        public delegate Dictionary<ushort, bool> ReadWritableCoilResponseParse(byte[] responseBytes);
         /// <summary>
         /// 用于解析读取可读写寄存器值时的委托方法
         /// </summary>
         /// <param name="responseBytes"></param>
         /// <returns></returns>
-        protected delegate Dictionary<ushort, ushort> ReadWritableRegisterResponseParse(byte[] responseBytes);
+        public delegate Dictionary<ushort, ushort> ReadWritableRegisterResponseParse(byte[] responseBytes);
         /// <summary>
         /// 用于解析读取只读线圈时的委托方法
         /// </summary>
         /// <param name="responseBytes"></param>
         /// <returns></returns>
-        protected delegate Dictionary<ushort, bool> ReadReadOnlyCoilResponseParse(byte[] responseBytes);
+        public delegate Dictionary<ushort, bool> ReadReadOnlyCoilResponseParse(byte[] responseBytes);
         /// <summary>
         /// 用于解析读取只读寄存器时的委托方法
         /// </summary>
         /// <param name="responseBytes"></param>
         /// <returns></returns>
-        protected delegate Dictionary<ushort, ushort> ReadReadOnlyRegisterResponseParse(byte[] responseBytes);
+        public delegate Dictionary<ushort, ushort> ReadReadOnlyRegisterResponseParse(byte[] responseBytes);
 
         /// <summary>
         /// 把ip和端口组合成ip:port的格式
@@ -68,7 +68,7 @@ namespace moju.device.interfaces
             return ip + ":" + port.ToString();
         }
 
-        public ModbusSlave(String ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList)
+        public ModbusSlaveTcp(String ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList)
         {
             this.Ip = ip;
             this.Port = port;
@@ -76,7 +76,7 @@ namespace moju.device.interfaces
             this.SlaveAttributeList = slaveAttributeList;
         }
 
-        public ModbusSlave(String ip, int port, int slaveId, string catagoryName)
+        public ModbusSlaveTcp(String ip, int port, int slaveId, string catagoryName)
         {
             this.Ip = ip;
             this.Port = port;
@@ -90,7 +90,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress">查询开始地址</param>
         /// <param name="length">查询个数</param>
         /// <returns>地址和布尔值的映射</returns>
-        protected async Task<Dictionary<ushort, bool>> ReadWritableCoil(ushort startAddress, ushort length, ReadWritableCoilResponseParse readWritableCoilResponseParse)
+        public async Task<Dictionary<ushort, bool>> ReadWritableCoil(ushort startAddress, ushort length, ReadWritableCoilResponseParse readWritableCoilResponseParse)
         {
             try
             {
@@ -164,7 +164,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        protected async Task<Dictionary<ushort, bool>> ReadWritableCoil(ushort startAddress, ushort length)
+        public async Task<Dictionary<ushort, bool>> ReadWritableCoil(ushort startAddress, ushort length)
         {
             return await ReadWritableCoil(startAddress, length, null);
         }
@@ -175,7 +175,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress">查询开始地址</param>
         /// <param name="length">查询个数</param>
         /// <returns>地址和寄存器值的映射</returns>
-        protected async Task<Dictionary<ushort, ushort>> ReadWritableRegister(ushort startAddress, ushort dataLengh, ReadWritableRegisterResponseParse readWritableRegisterResponseParse)
+        public async Task<Dictionary<ushort, ushort>> ReadWritableRegister(ushort startAddress, ushort dataLengh, ReadWritableRegisterResponseParse readWritableRegisterResponseParse)
         {
             try
             {
@@ -247,7 +247,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        protected async Task<Dictionary<ushort, ushort>> ReadWritableRegister(ushort startAddress, ushort dataLengh)
+        public async Task<Dictionary<ushort, ushort>> ReadWritableRegister(ushort startAddress, ushort dataLengh)
         {
             return await ReadWritableRegister(startAddress, dataLengh, null);
         }
@@ -258,7 +258,7 @@ namespace moju.device.interfaces
         /// <param name="writeAddress"></param>
         /// <param name="input"></param>
         /// <returns></returns>
-        protected async Task<bool> WriteSingleCoil(ushort writeAddress, bool input)
+        public async Task<bool> WriteSingleCoil(ushort writeAddress, bool input)
         {
             try
             {
@@ -309,7 +309,7 @@ namespace moju.device.interfaces
         /// <param name="dataLengh"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        protected async Task<bool> WriteMultiCoil(ushort writeStartAddress, ushort writeLenght, byte[] writeData)
+        public async Task<bool> WriteMultiCoil(ushort writeStartAddress, ushort writeLenght, byte[] writeData)
         {
             try
             {
@@ -374,7 +374,7 @@ namespace moju.device.interfaces
         /// <param name="writeStartAddress"></param>
         /// <param name="boolList"></param>
         /// <returns></returns>
-        protected async Task<bool> WriteMultiCoil(ushort writeStartAddress, ushort writeLenght, params bool[] boolList)
+        public async Task<bool> WriteMultiCoil(ushort writeStartAddress, ushort writeLenght, params bool[] boolList)
         {
             byte[] toBeWriteBytes = NumberBaseConvertor.BoolList2ByteArray(boolList);
             return await WriteMultiCoil(writeStartAddress, writeLenght, toBeWriteBytes);
@@ -387,7 +387,7 @@ namespace moju.device.interfaces
         /// <param name="writeAddress"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        protected async Task<bool> WriteSingleRegister(ushort writeAddress, ushort writeData)
+        public async Task<bool> WriteSingleRegister(ushort writeAddress, ushort writeData)
         {
             try
             {
@@ -440,7 +440,7 @@ namespace moju.device.interfaces
         /// <param name="dataLengh"></param>
         /// <param name="writeData"></param>
         /// <returns></returns>
-        protected async Task<bool> WriteMultiRegister(ushort writeStartAddress, ushort writeLength, ushort[] writeData)
+        public async Task<bool> WriteMultiRegister(ushort writeStartAddress, ushort writeLength, ushort[] writeData)
         {
             try
             {
@@ -511,7 +511,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        protected async Task<Dictionary<ushort, bool>> ReadReadOnlyCoil(ushort startAddress, ushort length, ReadReadOnlyCoilResponseParse readOnlyCoilResponseParse)
+        public async Task<Dictionary<ushort, bool>> ReadReadOnlyCoil(ushort startAddress, ushort length, ReadReadOnlyCoilResponseParse readOnlyCoilResponseParse)
         {
             try
             {
@@ -579,7 +579,7 @@ namespace moju.device.interfaces
 
         }
 
-        protected async Task<Dictionary<ushort, bool>> ReadReadOnlyCoil(ushort startAddress, ushort length)
+        public async Task<Dictionary<ushort, bool>> ReadReadOnlyCoil(ushort startAddress, ushort length)
         {
             return await ReadReadOnlyCoil(startAddress, length, null);
         }
@@ -591,7 +591,7 @@ namespace moju.device.interfaces
         /// <param name="startAddress"></param>
         /// <param name="length"></param>
         /// <returns></returns>
-        protected async Task<Dictionary<ushort, ushort>> ReadReadOnlyRegister(ushort startAddress, ushort dataLengh, ReadReadOnlyRegisterResponseParse readOnlyRegisterResponseParse)
+        public async Task<Dictionary<ushort, ushort>> ReadReadOnlyRegister(ushort startAddress, ushort dataLengh, ReadReadOnlyRegisterResponseParse readOnlyRegisterResponseParse)
         {
             try
             {
@@ -659,12 +659,12 @@ namespace moju.device.interfaces
             }
         }
 
-        protected async Task<Dictionary<ushort, ushort>> ReadReadOnlyRegister(ushort startAddress, ushort dataLengh)
+        public async Task<Dictionary<ushort, ushort>> ReadReadOnlyRegister(ushort startAddress, ushort dataLengh)
         {
             return await ReadReadOnlyRegister(startAddress, dataLengh, null);
         }
 
-        protected void FillResultInMapping<T>(Dictionary<ushort, T> result, List<SlaveAttribute> modbusMappingList)
+        public void FillResultInMapping<T>(Dictionary<ushort, T> result, List<SlaveAttribute> modbusMappingList)
         {
             // 将获取到的结果填充到_modbusMappingList
             foreach (SlaveAttribute addressInfo in modbusMappingList)
@@ -678,7 +678,7 @@ namespace moju.device.interfaces
 
         }
 
-        protected SlaveAttribute GetAttributeByRegionAndAddress(int region, ushort address )
+        public SlaveAttribute GetAttributeByRegionAndAddress(int region, ushort address )
         {
             foreach (SlaveAttribute attribute in SlaveAttributeList)
             {
@@ -690,10 +690,9 @@ namespace moju.device.interfaces
             string errorMsg = $"从站{Ip}:{Port}-{SlaveId}获取地址${address}时失败，可能Modbus协议配置中没有改地址";
             SimpleLogger.Instance.Error(errorMsg);
             throw new ArgumentException(errorMsg);
-
-
         }
 
-        abstract public void RefreshData();
+        public abstract void RefreshData();
+
     }
 }

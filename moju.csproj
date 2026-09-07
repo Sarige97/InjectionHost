@@ -59,10 +59,17 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Compile Include="constants\ModbusConstants.cs" />
+    <Compile Include="device\DryerSlave.cs" />
     <Compile Include="device\InjectionMoldingMachineSlave.cs" />
-    <Compile Include="device\interfaces\ModbusSlave.cs" />
+    <Compile Include="device\interfaces\IModbusSlave.cs" />
+    <Compile Include="device\interfaces\ModbusSlaveTcp.cs" />
+    <Compile Include="device\MoldTemperatureControllerSlave.cs" />
+    <Compile Include="device\PowerMeterSlave.cs" />
+    <Compile Include="device\RobotSlave.cs" />
     <Compile Include="device\SlaveManager.cs" />
+    <Compile Include="device\WorkshopEnvironmentSlave.cs" />
     <Compile Include="domain\SlaveAttribute.cs" />
+    <Compile Include="domain\SlaveDeviceInfo.cs" />
     <Compile Include="domain\User.cs" />
     <Compile Include="MainForm1.cs">
       <SubType>Form</SubType>

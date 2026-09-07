@@ -13,17 +13,17 @@ namespace moju.device
 {
     internal class SlaveManager
     {
-        public static SlaveManager Instance { get; private set; } = new SlaveManager();
-
         /// <summary>
         /// 读取json配置后，按机器将配置保存在这里
         /// </summary>
-        private static Dictionary<string, List<SlaveAttribute>> _modbusAddressInfoListMapping = new Dictionary<string, List<SlaveAttribute>>();
+        private static Dictionary<string, List<SlaveDeviceInfo>> _modbusAddressInfoListMapping = new Dictionary<string, List<SlaveDeviceInfo>>();
 
         /// <summary>
         /// 根据ip:port-slaveId为键，保存从站实例
         /// </summary>
-        private static Dictionary<string, ModbusSlave> _slaveMapping = new Dictionary<string, ModbusSlave>();
+        private static Dictionary<string, ModbusSlaveTcp> _slaveMapping = new Dictionary<string, ModbusSlaveTcp>();
+
+        private static readonly Object _lock = new object();
 
 
         static SlaveManager()
@@ -34,10 +34,24 @@ namespace moju.device
             string jsonContent = File.ReadAllText(absoluteAddress);
             JObject root = JObject.Parse(jsonContent);
             // 解析成型机的json
-            JToken injectionMoldingMachine = root["InjectionMoldingMachine"];
-            JToken mapping = injectionMoldingMachine["mapping"];
-            List<SlaveAttribute> injectionMoldingMachineList = ((JObject)mapping).Properties().Select(x => x.Value.ToObject<SlaveAttribute>()).ToList();
-            _modbusAddressInfoListMapping.Add("InjectionMoldingMachine", injectionMoldingMachineList);
+            //JToken injectionMoldingMachine = root["InjectionMoldingMachine"];
+            //JToken mapping = injectionMoldingMachine["mapping"];
+            //List<SlaveAttribute> injectionMoldingMachineList = ((JObject)mapping).Properties().Select(x => x.Value.ToObject<SlaveAttribute>()).ToList();
+            //_modbusAddressInfoListMapping.Add("InjectionMoldingMachine", injectionMoldingMachineList);
+            foreach (JProperty property in root.Properties())
+            {
+                JObject jObject = property.Value as JObject;
+                string name = property.Name;
+                List<SlaveAttribute> slaveAttributeList = ((JObject)jObject["mapping"]).Properties().Select(x => x.Value.ToObject<SlaveAttribute>()).ToList();
+                List<SlaveDeviceInfo> slaveDeviceInfoList = ((JObject)jObject["instance"]).Properties().Select(x => x.Value.ToObject<SlaveDeviceInfo>()).ToList();
+                foreach (SlaveDeviceInfo slaveDeviceInfo in slaveDeviceInfoList)
+                {
+                    slaveDeviceInfo.SlaveCatagoryName = name;
+                    slaveDeviceInfo.SlaveAttributeList = slaveAttributeList;
+                }
+                _modbusAddressInfoListMapping.Add(name, slaveDeviceInfoList);
+            }
+
         }
 
         public SlaveManager()
@@ -46,6 +60,12 @@ namespace moju.device
         }
 
         public static List<SlaveAttribute> GetModbusMapping(string catagoryName)
+        {
+            List<SlaveDeviceInfo> slaveDeviceInfos = _modbusAddressInfoListMapping[catagoryName];
+            return slaveDeviceInfos[0].SlaveAttributeList;
+        }
+
+        public static List<SlaveDeviceInfo> getModbusSlaveInstance(string catagoryName)
         {
             return _modbusAddressInfoListMapping[catagoryName];
         }
@@ -61,24 +81,30 @@ namespace moju.device
         /// <param name="catagory">json配置中的机器名</param>
         /// <param name="factory">工厂方法，用于获取从站实例，返回实例必须继承ModbusSlave</param>
         /// <returns></returns>
-        public T GetOrCreateSlave<T>(string ip, int port, int slaveId, string catagory, Func<string, int, int, string, T> factory) where T : ModbusSlave
+        public static T GetOrCreateSlave<T>(string ip, int port, int slaveId, string catagory, Func<string, int, int, string, T> factory) where T : ModbusSlaveTcp
         {
-            
-            if (_slaveMapping.TryGetValue(GetModbusSlaveKey(ip, port, slaveId), out ModbusSlave modbusSlave))
+
+            lock (_lock)
             {
-                // 获取到了直接返回
-                return (T)modbusSlave;
-            }
-            else
-            {
-                List<SlaveAttribute> slaveAttributeList = _modbusAddressInfoListMapping[catagory];
-                ModbusSlave tempModbusSlave = factory(ip, port, slaveId, catagory);
-                _slaveMapping.Add(GetModbusSlaveKey(ip, port, slaveId), tempModbusSlave);
-                return (T)tempModbusSlave;
+                if (_slaveMapping.TryGetValue(GetModbusSlaveKey(ip, port, slaveId), out ModbusSlaveTcp modbusSlave))
+                {
+                    // 获取到了直接返回
+                    return (T)modbusSlave;
+                }
+                else
+                {
+                    if (factory == null)
+                    {
+                        throw new ArgumentException($"指定从站未实例化,且没有输入工厂函数;ip:{ip},port:{port},slaveId:{slaveId},catagory:{catagory}");
+                    }
+                    ModbusSlaveTcp tempModbusSlave = factory(ip, port, slaveId, catagory);
+                    _slaveMapping.Add(GetModbusSlaveKey(ip, port, slaveId), tempModbusSlave);
+                    return (T)tempModbusSlave;
+                }
             }
         }
 
-        private string GetModbusSlaveKey(string ip, int port, int slaveId)
+        private static string GetModbusSlaveKey(string ip, int port, int slaveId)
         {
             return $"{ip}:{port}-{slaveId}";
         }
