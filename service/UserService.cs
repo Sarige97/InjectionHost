@@ -43,7 +43,16 @@ namespace moju.service
 
         public async Task<bool> login(string username, string passwordPlainText)
         {
+            if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(passwordPlainText))
+            {
+                return false;
+            }
+
             User user = await UserRepository.Instance.SelectUserByUsername(username);
+            if(user == null || string.IsNullOrWhiteSpace(user.salt) )
+            {
+                return false;
+            }
             byte[] saltBytes = Convert.FromBase64String(user.salt);
             using (var pbkdf2 = new Rfc2898DeriveBytes(passwordPlainText, saltBytes, 10000))
             {

@@ -60,7 +60,7 @@ namespace moju.domain
                     SimpleLogger.Instance.Error($"数值转化失败,名称:{Name} 区域:{Region} 地址:{Address} 描述:{Description}");
                     return false;
                 }
-                return (GetUshort() == 1);
+                return (bool)Value;
             }
             catch (Exception e)
             {

@@ -28,10 +28,10 @@ namespace moju.repository
         /// <returns></returns>
         public async Task<bool> Insert(User user)
         {
-             string sql = "insert into USER " +
-                "(USERNAME, password, salt, realName, department, remark, status, extFiled1, extFiled2, extFiled3, extFiled4, extFiled5, extFiled6, extFiled7, extFiled8, extFiled9, extFiled10)" +
-                " values " +
-                "(@username, @password, @salt, @realname, @department, @remark, @status, @extFiled1, @extFiled2, @extFiled3, @extFiled4, @extFiled5, @extFiled6, @extFiled7, @extFiled8, @extFiled9, @extFiled10)";
+            string sql = "insert into USER " +
+               "(USERNAME, password, salt, realName, department, remark, status, extFiled1, extFiled2, extFiled3, extFiled4, extFiled5, extFiled6, extFiled7, extFiled8, extFiled9, extFiled10)" +
+               " values " +
+               "(@username, @password, @salt, @realname, @department, @remark, @status, @extFiled1, @extFiled2, @extFiled3, @extFiled4, @extFiled5, @extFiled6, @extFiled7, @extFiled8, @extFiled9, @extFiled10)";
 
             List<SQLiteParameter> parameters = new List<SQLiteParameter>();
             parameters.Add(new SQLiteParameter("username", user.username));
@@ -59,9 +59,20 @@ namespace moju.repository
         public async Task<User> SelectUserByUsername(string username)
         {
             string sql = "select username, password, salt, realName, department, remark, status, extFiled1, extFiled2, extFiled3, extFiled4, extFiled5, extFiled6, extFiled7, extFiled8, extFiled9, extFiled10 from USER where username = @username";
-
+            if (string.IsNullOrWhiteSpace(username))
+            {
+                return null;
+            }
             SQLiteParameter[] parameters = new SQLiteParameter[] { new SQLiteParameter("username", username) };
-            return (await DoQuery<User>(sql, parameters)).ResultList[0];
+            QueryResult<User> queryResult = await DoQuery<User>(sql, parameters);
+            if (queryResult.ResultList.Count > 0)
+            {
+                return queryResult.ResultList[0];
+            }
+            else
+            {
+                return null;
+            }
         }
 
     }

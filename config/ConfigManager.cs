@@ -32,7 +32,27 @@ namespace moju.config
         public string ModbusMappingJsonAddress { get; private set; } = "config/slave/SlaveAddressMapping.json";
 
 
+
         private ConfigManager()
+        {
+            try
+            {
+                Init();
+            }
+            catch (Exception e)
+            {
+                string errorMsg = ErrorMessage == null ? e.Message : ErrorMessage;
+                throw new Exception($"配置初始化失败，{errorMsg};");
+            }
+
+            if (Status != 0)
+            {
+                throw new Exception($"配置初始化失败，{ErrorMessage};");
+            }
+
+        }
+
+        private void Init()
         {
             // 初始化
             XmlDocument document = new XmlDocument();
@@ -112,10 +132,7 @@ namespace moju.config
 
             // 设置初始化成功标记
             Status = 0;
-
         }
-
-
 
 
 

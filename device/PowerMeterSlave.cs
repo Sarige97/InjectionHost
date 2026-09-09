@@ -48,7 +48,7 @@ namespace moju.device
                             Dictionary<ushort, bool> writableCoilMapping = await ReadWritableCoil(firstAddress, (ushort)modbusAddressesInfoList.Count);
                             if (writableCoilMapping != null)
                             {
-                                FillResultInMapping<bool>(writableCoilMapping, SlaveAttributeList);
+                                FillResultInMapping<bool>(writableCoilMapping, region, SlaveAttributeList);
                             }
                             break;
                         }
@@ -60,7 +60,7 @@ namespace moju.device
                             Dictionary<ushort, bool> readonlyCoilMapping = await ReadReadOnlyCoil(firstAddress, (ushort)modbusAddressesInfoList.Count);
                             if (readonlyCoilMapping != null)
                             {
-                                FillResultInMapping<bool>(readonlyCoilMapping, SlaveAttributeList);
+                                FillResultInMapping<bool>(readonlyCoilMapping, region, SlaveAttributeList);
                             }
                             break;
                         }
@@ -72,7 +72,7 @@ namespace moju.device
                             Dictionary<ushort, ushort> writableRegisterMapping = await ReadWritableRegister(firstAddress, (ushort)modbusAddressesInfoList.Count);
                             if (writableRegisterMapping != null)
                             {
-                                FillResultInMapping<ushort>(writableRegisterMapping, SlaveAttributeList);
+                                FillResultInMapping<ushort>(writableRegisterMapping, region, SlaveAttributeList);
                             }
                             break;
                         }
@@ -84,7 +84,7 @@ namespace moju.device
                             Dictionary<ushort, ushort> readOnlyRegisterMapping = await ReadReadOnlyRegister(firstAddress, (ushort)modbusAddressesInfoList.Count);
                             if (readOnlyRegisterMapping != null)
                             {
-                                FillResultInMapping<ushort>(readOnlyRegisterMapping, SlaveAttributeList);
+                                FillResultInMapping<ushort>(readOnlyRegisterMapping, region, SlaveAttributeList);
                             }
                             break;
                         }

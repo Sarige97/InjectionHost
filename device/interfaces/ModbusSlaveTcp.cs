@@ -23,7 +23,7 @@ namespace moju.device.interfaces
         public int Port { get; private set; }
         public int SlaveId { get; private set; }
         /// <summary>
-        /// 状态机
+        /// 状态
         /// </summary>
         public SlaveChannelStatus SlaveChannelStatus { get; private set; }
         /// <summary>
@@ -81,7 +81,7 @@ namespace moju.device.interfaces
             this.Ip = ip;
             this.Port = port;
             this.SlaveId = slaveId;
-            this.SlaveAttributeList = SlaveManager.GetModbusMapping(catagoryName);
+            this.SlaveAttributeList = SlaveManager.GetModbusMapping(ip, port, slaveId, catagoryName);
         }
 
         /// <summary>
@@ -293,7 +293,7 @@ namespace moju.device.interfaces
                     // TODO 异常 操作成功但是要记录错误日志
                 }
 
-                return false;
+                return true;
             }
             catch (Exception e)
             {
@@ -350,7 +350,7 @@ namespace moju.device.interfaces
 
 
                 // 解析响应报文
-                if (!requestBytes.SequenceEqual(responseBytes))
+                if (!requestBytes.Take(12).ToArray().SequenceEqual(responseBytes))
                 {
                     // 请求报文与响应报文不一致，不处理但记录异常日志
 
@@ -423,7 +423,7 @@ namespace moju.device.interfaces
                     // TODO 异常 操作成功但是要记录错误日志
                 }
 
-                return false;
+                return true;
             }
             catch (Exception e)
             {
@@ -486,7 +486,7 @@ namespace moju.device.interfaces
 
 
                 // 解析响应报文
-                if (!requestBytes.SequenceEqual(responseBytes))
+                if (!requestBytes.Take(12).ToArray().SequenceEqual(responseBytes))
                 {
                     // 请求报文与响应报文不一致，不处理但记录异常日志
 
@@ -664,18 +664,17 @@ namespace moju.device.interfaces
             return await ReadReadOnlyRegister(startAddress, dataLengh, null);
         }
 
-        public void FillResultInMapping<T>(Dictionary<ushort, T> result, List<SlaveAttribute> modbusMappingList)
+        public void FillResultInMapping<T>(Dictionary<ushort, T> result, int region, List<SlaveAttribute> modbusMappingList)
         {
             // 将获取到的结果填充到_modbusMappingList
             foreach (SlaveAttribute addressInfo in modbusMappingList)
             {
                 ushort address = addressInfo.Address;
-                if (result.ContainsKey(address))
+                if (result.ContainsKey(address) && addressInfo.Region == region)
                 {
                     addressInfo.Value = result[address];
                 }
             }
-
         }
 
         public SlaveAttribute GetAttributeByRegionAndAddress(int region, ushort address )

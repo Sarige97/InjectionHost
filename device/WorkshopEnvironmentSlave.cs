@@ -37,44 +37,49 @@ namespace moju.device
         /// <summary>
         /// 车间温度
         /// </summary>
-        public ushort WorkshopTemp
+        public string WorkshopTemp
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 0).GetUshort();
+                ushort temp = GetAttributeByRegionAndAddress(3, 0).GetUshort();
+                return Convert.ToString(((int)temp) / 10.0) + "℃";
             }
         }
 
         /// <summary>
         /// 湿度
         /// </summary>
-        public ushort Humidity
+        public string Humidity
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 1).GetUshort();
+                ushort humidity = GetAttributeByRegionAndAddress(3, 1).GetUshort();
+                return Convert.ToString((int)humidity / 10.0) + "%";
             }
         }
 
         /// <summary>
         /// 露点
         /// </summary>
-        public ushort DewPoint
+        public string DewPoint
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 2).GetUshort();
+                ushort dewPoint = GetAttributeByRegionAndAddress(3, 2).GetUshort();
+                return Convert.ToString((int)dewPoint / 10.0) + "℃";
+
             }
         }
 
         /// <summary>
         /// 噪音
         /// </summary>
-        public ushort NoiseLevel
+        public string NoiseLevel
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 3).GetUshort();
+                ushort noiseLevel = GetAttributeByRegionAndAddress(3, 3).GetUshort();
+                return Convert.ToString((int)noiseLevel / 10.0) + "dB";
             }
         }
 
@@ -148,7 +153,7 @@ namespace moju.device
                             Dictionary<ushort, bool> writableCoilMapping = await ReadWritableCoil(firstAddress, (ushort)modbusAddressesInfoList.Count);
                             if (writableCoilMapping != null)
                             {
-                                FillResultInMapping<bool>(writableCoilMapping, SlaveAttributeList);
+                                FillResultInMapping<bool>(writableCoilMapping, region, SlaveAttributeList);
                             }
                             break;
                         }
@@ -160,7 +165,7 @@ namespace moju.device
                             Dictionary<ushort, bool> readonlyCoilMapping = await ReadReadOnlyCoil(firstAddress, (ushort)modbusAddressesInfoList.Count);
                             if (readonlyCoilMapping != null)
                             {
-                                FillResultInMapping<bool>(readonlyCoilMapping, SlaveAttributeList);
+                                FillResultInMapping<bool>(readonlyCoilMapping, region, SlaveAttributeList);
                             }
                             break;
                         }
@@ -172,7 +177,7 @@ namespace moju.device
                             Dictionary<ushort, ushort> writableRegisterMapping = await ReadWritableRegister(firstAddress, (ushort)modbusAddressesInfoList.Count);
                             if (writableRegisterMapping != null)
                             {
-                                FillResultInMapping<ushort>(writableRegisterMapping, SlaveAttributeList);
+                                FillResultInMapping<ushort>(writableRegisterMapping, region, SlaveAttributeList);
                             }
                             break;
                         }
@@ -184,7 +189,7 @@ namespace moju.device
                             Dictionary<ushort, ushort> readOnlyRegisterMapping = await ReadReadOnlyRegister(firstAddress, (ushort)modbusAddressesInfoList.Count);
                             if (readOnlyRegisterMapping != null)
                             {
-                                FillResultInMapping<ushort>(readOnlyRegisterMapping, SlaveAttributeList);
+                                FillResultInMapping<ushort>(readOnlyRegisterMapping, region, SlaveAttributeList);
                             }
                             break;
                         }
@@ -197,6 +202,5 @@ namespace moju.device
                 }
             }
         }
-
     }
 }

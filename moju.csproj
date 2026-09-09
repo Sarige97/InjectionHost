@@ -71,11 +71,29 @@
     <Compile Include="domain\SlaveAttribute.cs" />
     <Compile Include="domain\SlaveDeviceInfo.cs" />
     <Compile Include="domain\User.cs" />
-    <Compile Include="MainForm1.cs">
+    <Compile Include="UI\StandartDoubleLabel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\StandartDoubleLabel.Designer.cs">
+      <DependentUpon>StandartDoubleLabel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\WelcomePage.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainForm1.Designer.cs">
-      <DependentUpon>MainForm1.cs</DependentUpon>
+    <Compile Include="UI\WelcomePage.Designer.cs">
+      <DependentUpon>WelcomePage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\LoginControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\LoginControl.Designer.cs">
+      <DependentUpon>LoginControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="log\LogConstants.cs" />
     <Compile Include="log\SimpleLogger.cs" />
@@ -96,8 +114,17 @@
     <Compile Include="tool\ModbusTool.cs" />
     <Compile Include="tool\NumberBaseConvertor.cs" />
     <Compile Include="tool\StreamTool.cs" />
-    <EmbeddedResource Include="MainForm1.resx">
-      <DependentUpon>MainForm1.cs</DependentUpon>
+    <EmbeddedResource Include="UI\StandartDoubleLabel.resx">
+      <DependentUpon>StandartDoubleLabel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\WelcomePage.resx">
+      <DependentUpon>WelcomePage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\LoginControl.resx">
+      <DependentUpon>LoginControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
