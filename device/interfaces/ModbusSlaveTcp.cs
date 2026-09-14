@@ -16,7 +16,7 @@ using static moju.device.interfaces.ModbusSlaveTcp;
 
 namespace moju.device.interfaces
 {
-    internal abstract class ModbusSlaveTcp : IModbusSlave
+    public abstract class ModbusSlaveTcp : IModbusSlave
     {
 
         public String Ip { get; private set; }
@@ -686,7 +686,7 @@ namespace moju.device.interfaces
                     return attribute;
                 }
             }
-            string errorMsg = $"从站{Ip}:{Port}-{SlaveId}获取地址${address}时失败，可能Modbus协议配置中没有改地址";
+            string errorMsg = $"从站{Ip}:{Port}-{SlaveId}获取{region}区地址{address}时失败，可能Modbus协议配置中没有该地址";
             SimpleLogger.Instance.Error(errorMsg);
             throw new ArgumentException(errorMsg);
         }

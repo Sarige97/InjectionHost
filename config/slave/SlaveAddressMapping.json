@@ -104,25 +104,49 @@
         "unit": ""
       },
       "30004": {
-        "Name": "total_shots",
+        "Name": "total_shots_low",
         "region": 3,
         "address": 3,
         "Description": "总模数;每完成一个生产循环 +1;达产后自动停机",
         "dotIndex": 0,
         "unit": ""
       },
+      "30005": {
+        "Name": "total_shots_high",
+        "region": 3,
+        "address": 4,
+        "Description": "总模数;每完成一个生产循环 +1;达产后自动停机",
+        "dotIndex": 0,
+        "unit": ""
+      },
       "30006": {
-        "Name": "good_parts",
+        "Name": "good_parts_low",
         "region": 3,
         "address": 5,
         "Description": "合格品数;合格 +1",
         "dotIndex": 0,
         "unit": ""
       },
+      "30007": {
+        "Name": "good_parts_high",
+        "region": 3,
+        "address": 6,
+        "Description": "合格品数;合格 +1",
+        "dotIndex": 0,
+        "unit": ""
+      },
       "30008": {
-        "Name": "reject_parts",
+        "Name": "reject_parts_low",
         "region": 3,
         "address": 7,
+        "Description": "次品数;约 0.4% 概率次品 +1;偶发次品",
+        "dotIndex": 0,
+        "unit": ""
+      },
+      "30009": {
+        "Name": "reject_parts_high",
+        "region": 3,
+        "address": 8,
         "Description": "次品数;约 0.4% 概率次品 +1;偶发次品",
         "dotIndex": 0,
         "unit": ""
@@ -905,9 +929,17 @@
         "unit": ""
       },
       "30001": {
-        "Name": "total_energy",
+        "Name": "total_energy_low",
         "region": 3,
         "address": 0,
+        "Description": "累计电能;按功率累计递增, 断电冻结",
+        "dotIndex": 2,
+        "unit": "kWh"
+      },
+      "30002": {
+        "Name": "total_energy_high",
+        "region": 3,
+        "address": 1,
         "Description": "累计电能;按功率累计递增, 断电冻结",
         "dotIndex": 2,
         "unit": "kWh"

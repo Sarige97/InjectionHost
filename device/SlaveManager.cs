@@ -33,21 +33,23 @@ namespace moju.device
             string absoluteAddress = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, jsonAddress);
             string jsonContent = File.ReadAllText(absoluteAddress);
             JObject root = JObject.Parse(jsonContent);
-            // 解析成型机的json
-            //JToken injectionMoldingMachine = root["InjectionMoldingMachine"];
-            //JToken mapping = injectionMoldingMachine["mapping"];
-            //List<SlaveAttribute> injectionMoldingMachineList = ((JObject)mapping).Properties().Select(x => x.Value.ToObject<SlaveAttribute>()).ToList();
-            //_modbusAddressInfoListMapping.Add("InjectionMoldingMachine", injectionMoldingMachineList);
             foreach (JProperty property in root.Properties())
             {
                 JObject jObject = property.Value as JObject;
+                // 机器分类名称
                 string name = property.Name;
+                // 设备信息
                 List<SlaveDeviceInfo> slaveDeviceInfoList = ((JObject)jObject["instance"]).Properties().Select(x => x.Value.ToObject<SlaveDeviceInfo>()).ToList();
-                foreach (SlaveDeviceInfo slaveDeviceInfo in slaveDeviceInfoList)
+                // 设备名
+                List<string> nameList = ((JObject)jObject["instance"]).Properties().Select(x => x.Name).ToList();
+                // 将设备名填充到信息中
+                for (int i = 0; i < slaveDeviceInfoList.Count; i++)
                 {
+
                     List<SlaveAttribute> slaveAttributeList = ((JObject)jObject["mapping"]).Properties().Select(x => x.Value.ToObject<SlaveAttribute>()).ToList();
-                    slaveDeviceInfo.SlaveCatagoryName = name;
-                    slaveDeviceInfo.SlaveAttributeList = slaveAttributeList;
+                    slaveDeviceInfoList[i].SlaveCatagoryName = name;
+                    slaveDeviceInfoList[i].SlaveAttributeList = slaveAttributeList;
+                    slaveDeviceInfoList[i].name = nameList[i];
                 }
                 _modbusAddressInfoListMapping.Add(name, slaveDeviceInfoList);
             }
@@ -59,9 +61,9 @@ namespace moju.device
 
         }
 
-        public static List<SlaveAttribute> GetModbusMapping(string ip, int port, int slaveId, string catagoryName)
+        public static List<SlaveAttribute> GetModbusMapping(string ip, int port, int slaveId, string categoryName)
         {
-            List<SlaveDeviceInfo> slaveDeviceInfos = _modbusAddressInfoListMapping[catagoryName];
+            List<SlaveDeviceInfo> slaveDeviceInfos = _modbusAddressInfoListMapping[categoryName];
             foreach (SlaveDeviceInfo slaveDeviceInfo in slaveDeviceInfos)
             {
                 if (ip != null && ip.Equals(slaveDeviceInfo.Ip) && slaveDeviceInfo.Port == port && slaveDeviceInfo.SlaveId == slaveId)
@@ -72,9 +74,25 @@ namespace moju.device
             return null;
         }
 
-        public static List<SlaveDeviceInfo> getModbusDeviceInfo(string catagoryName)
+        public static List<SlaveDeviceInfo> GetModbusDeviceInfo(string categoryName)
         {
-            return _modbusAddressInfoListMapping[catagoryName];
+            return _modbusAddressInfoListMapping[categoryName];
+        }
+
+        /// <summary>
+        /// 根据json中的分类名和instance的key来获取对应的设备信息
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <param name="deviceId"></param>
+        /// <returns></returns>
+        public static SlaveDeviceInfo GetSlaveByCatagoryAndDeviceId(string categoryName, string deviceId)
+        {
+            if (string.IsNullOrEmpty(categoryName) || string.IsNullOrEmpty(deviceId))
+            {
+                return null;
+            }
+            List<SlaveDeviceInfo> slaveDeviceInfos = GetModbusDeviceInfo(categoryName);
+            return slaveDeviceInfos.Where(x => deviceId.Equals(x.name)).ToArray()[0];
         }
 
         /// <summary>

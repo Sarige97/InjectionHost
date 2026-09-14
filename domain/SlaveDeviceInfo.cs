@@ -8,6 +8,7 @@ namespace moju.domain
 {
     internal class SlaveDeviceInfo
     {
+        public string name { set; get; }
         public string SlaveCatagoryName { set; get; }
         public string Ip { set; get; }
         public int Port { set; get; }
@@ -19,7 +20,7 @@ namespace moju.domain
         {
         }
 
-        public SlaveDeviceInfo(string ip, int port, int slaveId)
+        public SlaveDeviceInfo(string name,string ip, int port, int slaveId)
         {
             Ip = ip;
             Port = port;

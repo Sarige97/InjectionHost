@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace moju.modbus
 {
-    internal enum SlaveChannelStatus
+    public enum SlaveChannelStatus
     {
         Ok,
         ConnectFailed,

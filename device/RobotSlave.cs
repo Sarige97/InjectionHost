@@ -83,44 +83,45 @@ namespace moju.device
         /// <summary>
         /// 循环时间
         /// </summary>
-        public ushort CycleTime
+        public string CycleTime
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 2).GetUshort();
+                ushort cycleTime = GetAttributeByRegionAndAddress(3, 2).GetUshort();
+                return Convert.ToString(cycleTime / 10.0f) + "s";
             }
         }
         
         /// <summary>
         /// 累计取件数
         /// </summary>
-        public ushort TotalPicks
+        public string TotalPicks
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 3).GetUshort();
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 3).GetUshort());
             }
         }
 
         /// <summary>
         /// 取出成功数
         /// </summary>
-        public ushort PickSuccess
+        public string PickSuccess
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 5).GetUshort();
+                return GetAttributeByRegionAndAddress(3, 5).GetUshort() + "个";
             }
         }
 
         /// <summary>
         /// 取出失败数
         /// </summary>
-        public ushort PickFail
+        public string PickFail
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 7).GetUshort();
+                return GetAttributeByRegionAndAddress(3, 7).GetUshort() + "个";
             }
         }
 

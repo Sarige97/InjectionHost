@@ -4,6 +4,7 @@ using moju.log;
 using moju.tool;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +14,15 @@ namespace moju.device
     internal class PowerMeterSlave : ModbusSlaveTcp
     {
 
-        public ushort TotalEnergy
+        public string TotalEnergy
         {
 
             get
             {
-                return GetAttributeByRegionAndAddress(3, 0).GetUshort();
+                ushort totalEnergyLow = GetAttributeByRegionAndAddress(3, 0).GetUshort();
+                ushort totalEnergyHigh = GetAttributeByRegionAndAddress(3, 1).GetUshort();
+                int totalEnergy = NumberBaseConvertor.CombineTwoUshort2Int(totalEnergyHigh, totalEnergyLow);
+                return totalEnergy + "kwh";
             }
         }
 

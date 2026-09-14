@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace moju.domain
 {
-    internal class SlaveAttribute
+    public class SlaveAttribute
     {
         public string Name { get; set; }
         public int Region { get; set; }

@@ -37,11 +37,11 @@ namespace moju.device
         /// <summary>
         /// 加热中
         /// </summary>
-        public bool Heating
+        public string Heating
         {
             get
             {
-                return GetAttributeByRegionAndAddress(1, 1).GetBool();
+                return GetAttributeByRegionAndAddress(1, 1).GetBool()?"加热中":"未加热";
             }
         }
 
@@ -81,55 +81,58 @@ namespace moju.device
         /// <summary>
         /// 实际温度
         /// </summary>
-        public ushort TempActual
+        public string TempActual
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 2).GetUshort();
+                ushort temp = GetAttributeByRegionAndAddress(3, 2).GetUshort();
+                return Convert.ToString(temp / 10.0f) + "℃";
             }
         }
 
         /// <summary>
         /// 回水温度
         /// </summary>
-        public ushort ReturnWaterTemp
+        public string ReturnWaterTemp
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 3).GetUshort();
+                ushort temp = GetAttributeByRegionAndAddress(3, 3).GetUshort();
+                return Convert.ToString(temp / 10.0f) + "℃";
             }
         }
 
         /// <summary>
         /// 泵压力
         /// </summary>
-        public ushort PumpPressure
+        public string PumpPressure
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 4).GetUshort();
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 4).GetUshort()) + "bar";
             }
         }
 
         /// <summary>
         /// 泵流量
         /// </summary>
-        public ushort PumpFlow
+        public string PumpFlow
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 5).GetUshort();
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 5).GetUshort()) + "L/min";
             }
         }
 
         /// <summary>
         /// 泵电流
         /// </summary>
-        public ushort PumpCurrent
+        public string PumpCurrent
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 6).GetUshort();
+                ushort current = GetAttributeByRegionAndAddress(3, 6).GetUshort();
+                return Convert.ToString(current / 10.0f) + "A";
             }
         }
 
@@ -142,6 +145,11 @@ namespace moju.device
             {
                 return GetAttributeByRegionAndAddress(4, 0).GetUshort();
             }
+        }
+
+        public async Task<bool> SetTempSetPoint(ushort value)
+        {
+            return await WriteSingleRegister(0, value);
         }
 
         public MoldTemperatureControllerSlave(string ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList) : base(ip, port, slaveId, slaveAttributeList)

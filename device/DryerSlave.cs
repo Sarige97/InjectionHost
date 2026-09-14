@@ -45,6 +45,15 @@ namespace moju.device
             }
         }
 
+        public string Drying
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(1, 1).GetBool() ? "干燥中" : "未干燥";
+
+            }
+        }
+
         /// <summary>
         /// 报警
         /// </summary>
@@ -81,55 +90,58 @@ namespace moju.device
         /// <summary>
         /// 干燥温度实际
         /// </summary>
-        public ushort DryTempActual
+        public string DryTempActual
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 2).GetUshort();
+                ushort dryTempUshort = GetAttributeByRegionAndAddress(3, 2).GetUshort();
+                return Convert.ToString(dryTempUshort / 10.0f) + "℃";
             }
         }
 
         /// <summary>
         /// 露点
         /// </summary>
-        public ushort DewPoint
+        public string DewPoint
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 3).GetUshort();
+                ushort dewPointUshort = GetAttributeByRegionAndAddress(3, 3).GetUshort();
+                return Convert.ToString(dewPointUshort / 10.0f) + "℃";
             }
         }
 
         /// <summary>
         /// 料点
         /// </summary>
-        public ushort MeterialLevel
+        public string MaterialLevel
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 4).GetUshort();
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 4).GetUshort()) + "%";
             }
         }
 
         /// <summary>
         /// 加热功率(kW)
         /// </summary>
-        public ushort HeatingPower
+        public string HeatingPower
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 5).GetUshort();
+                return GetAttributeByRegionAndAddress(3, 5).GetUshort() + "kW";
             }
         }
 
-       /// <summary>
-       /// 风机电流
-       /// </summary>
-        public ushort FanCurrent
+        /// <summary>
+        /// 风机电流
+        /// </summary>
+        public string FanCurrent
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 6).GetUshort();
+                ushort current = GetAttributeByRegionAndAddress(3, 6).GetUshort();
+                return Convert.ToString(current / 10.0f) + "A";
             }
         }
 
@@ -142,6 +154,11 @@ namespace moju.device
             {
                 return GetAttributeByRegionAndAddress(4, 0).GetUshort();
             }
+        }
+
+        public async Task<bool> SetDryTempSetPoint(ushort value)
+        {
+            return await WriteSingleRegister(0, (ushort)value);
         }
 
         public DryerSlave(string ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList) : base(ip, port, slaveId, slaveAttributeList)

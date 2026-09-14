@@ -35,6 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>packages\Newtonsoft.Json.13.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -43,6 +44,7 @@
     <Reference Include="System.Data.SQLite, Version=1.0.119.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>packages\Stub.System.Data.SQLite.Core.NetFramework.1.0.119.0\lib\net46\System.Data.SQLite.dll</HintPath>
     </Reference>
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -68,9 +70,40 @@
     <Compile Include="device\RobotSlave.cs" />
     <Compile Include="device\SlaveManager.cs" />
     <Compile Include="device\WorkshopEnvironmentSlave.cs" />
+    <Compile Include="domain\DataHistory.cs" />
     <Compile Include="domain\SlaveAttribute.cs" />
     <Compile Include="domain\SlaveDeviceInfo.cs" />
     <Compile Include="domain\User.cs" />
+    <Compile Include="UI\HistoryTemp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\HistoryTemp.Designer.cs">
+      <DependentUpon>HistoryTemp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\InjectionGroupDetail.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\InjectionGroupDetail.Designer.cs">
+      <DependentUpon>InjectionGroupDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\InjectMachineGroup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UI\InjectMachineGroup.Designer.cs">
+      <DependentUpon>InjectMachineGroup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UI\SetBarrelTemp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\SetBarrelTemp.Designer.cs">
+      <DependentUpon>SetBarrelTemp.cs</DependentUpon>
+    </Compile>
     <Compile Include="UI\StandartDoubleLabel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -89,11 +122,11 @@
     <Compile Include="UI\LoginControl.Designer.cs">
       <DependentUpon>LoginControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UI\MainForm.cs">
-      <SubType>Form</SubType>
+    <Compile Include="UI\Homepage.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UI\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="UI\Homepage.Designer.cs">
+      <DependentUpon>Homepage.cs</DependentUpon>
     </Compile>
     <Compile Include="log\LogConstants.cs" />
     <Compile Include="log\SimpleLogger.cs" />
@@ -114,6 +147,21 @@
     <Compile Include="tool\ModbusTool.cs" />
     <Compile Include="tool\NumberBaseConvertor.cs" />
     <Compile Include="tool\StreamTool.cs" />
+    <EmbeddedResource Include="UI\HistoryTemp.resx">
+      <DependentUpon>HistoryTemp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\InjectionGroupDetail.resx">
+      <DependentUpon>InjectionGroupDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\InjectMachineGroup.resx">
+      <DependentUpon>InjectMachineGroup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UI\SetBarrelTemp.resx">
+      <DependentUpon>SetBarrelTemp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UI\StandartDoubleLabel.resx">
       <DependentUpon>StandartDoubleLabel.cs</DependentUpon>
     </EmbeddedResource>
@@ -123,8 +171,8 @@
     <EmbeddedResource Include="UI\LoginControl.resx">
       <DependentUpon>LoginControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UI\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <EmbeddedResource Include="UI\Homepage.resx">
+      <DependentUpon>Homepage.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

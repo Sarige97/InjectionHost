@@ -11,8 +11,10 @@ using System.Threading.Tasks;
 
 namespace moju.device
 {
-    internal class InjectionMoldingMachineSlave : ModbusSlaveTcp
+    public class InjectionMoldingMachineSlave : ModbusSlaveTcp
     {
+        public Queue<DataHistory<int>> HistoryTemp = new Queue<DataHistory<int>>();
+
         // 运行 读写
         public bool Running
         {
@@ -60,84 +62,119 @@ namespace moju.device
             }
         }
         // 总模数
-        public ushort TotalShots
+        public string TotalShots
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 3).GetUshort();
+                ushort low = GetAttributeByRegionAndAddress(3, 3).GetUshort();
+                ushort high = GetAttributeByRegionAndAddress(3, 4).GetUshort();
+                int result = NumberBaseConvertor.CombineTwoUshort2Int(high, low);
+                return result + "个";
             }
         }
         // 合格品数
-        public ushort GoodParts
+        public string GoodParts
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 5).GetUshort();
+                ushort low = GetAttributeByRegionAndAddress(3, 5).GetUshort();
+                ushort high = GetAttributeByRegionAndAddress(3, 6).GetUshort();
+                int result = NumberBaseConvertor.CombineTwoUshort2Int(high, low);
+                return result + "个";
             }
         }
         // 次品数
-        public ushort RejectParts
+        public string RejectParts
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 7).GetUshort();
+                ushort low = GetAttributeByRegionAndAddress(3, 7).GetUshort();
+                ushort high = GetAttributeByRegionAndAddress(3, 8).GetUshort();
+                int result = NumberBaseConvertor.CombineTwoUshort2Int(high, low);
+                return result + "个";
+            }
+        }
+
+        // 平均生产周期
+        public string AveCycleTime
+        {
+            get
+            {
+                ushort avgTime = GetAttributeByRegionAndAddress(3, 10).GetUshort();
+                return Convert.ToString(avgTime / 10.0) + "s";
             }
         }
         // 料筒1段温度
-        public ushort BarrelTemp1
+        public string BarrelTemp1
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 19).GetUshort();
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 19).GetUshort() / 10.0);
             }
         }
         // 料筒2段温度
-        public ushort BarrelTemp2
+        public string BarrelTemp2
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 20).GetUshort();
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 20).GetUshort() / 10.0);
             }
         }
         // 料筒3段温度
-        public ushort BarrelTemp3
+        public string BarrelTemp3
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 21).GetUshort();
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 21).GetUshort() / 10.0);
             }
         }
         // 料筒4段温度
-        public ushort BarrelTemp4
+        public string BarrelTemp4
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 22).GetUshort();
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 22).GetUshort() / 10.0);
             }
         }
         // 料筒5段温度
-        public ushort BarrelTemp5
+        public string BarrelTemp5
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 23).GetUshort();
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 23).GetUshort() / 10.0);
             }
         }
 
         // 模具温度
-        public ushort MoldTempActual
+        public string MoldTempActual
         {
             get
             {
-                return GetAttributeByRegionAndAddress(3, 29).GetUshort();
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 29).GetUshort() / 10.0f) + "℃";
+            }
+        }
+
+        public string HydraulicOilTemp
+        {
+            get
+            {
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 30).GetUshort() / 10.0f) + "℃";
+            }
+        }
+
+        public string CoolingWaterTemp
+        {
+            get
+            {
+                return Convert.ToString(GetAttributeByRegionAndAddress(3, 31).GetUshort() / 10.0f) + "℃";
             }
         }
         // 料筒1段温度设定 读写
-        public ushort BarrelSetpoint1
+        public string BarrelSetpoint1
         {
             get
             {
-                return GetAttributeByRegionAndAddress(4, 2).GetUshort();
+                return GetAttributeByRegionAndAddress(4, 2).GetUshort().ToString();
             }
         }
 
@@ -147,11 +184,11 @@ namespace moju.device
         }
 
         // 料筒2段温度设定 读写
-        public ushort BarrelSetpoint2
+        public string BarrelSetpoint2
         {
             get
             {
-                return GetAttributeByRegionAndAddress(4, 3).GetUshort();
+                return GetAttributeByRegionAndAddress(4, 3).GetUshort().ToString();
             }
         }
 
@@ -161,11 +198,11 @@ namespace moju.device
         }
 
         // 料筒3段温度设定 读写
-        public ushort BarrelSetpoint3
+        public string BarrelSetpoint3
         {
             get
             {
-                return GetAttributeByRegionAndAddress(4, 4).GetUshort();
+                return GetAttributeByRegionAndAddress(4, 4).GetUshort().ToString();
             }
         }
 
@@ -175,15 +212,29 @@ namespace moju.device
         }
 
         // 料筒4段温度设定 读写
-        public ushort BarrelSetpoint4
+        public string BarrelSetpoint4
         {
             get
             {
-                return GetAttributeByRegionAndAddress(4, 5).GetUshort();
+                return GetAttributeByRegionAndAddress(4, 5).GetUshort().ToString();
             }
         }
 
         public async Task<bool> SetBarrelSetPoint4(ushort value)
+        {
+            return await WriteSingleRegister(5, value);
+        }
+
+        // 料筒5段温度设定 读写
+        public string BarrelSetpoint5
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(4, 6).GetUshort().ToString();
+            }
+        }
+
+        public async Task<bool> SetBarrelSetPoint5(ushort value)
         {
             return await WriteSingleRegister(5, value);
         }
@@ -193,14 +244,37 @@ namespace moju.device
         {
             get
             {
-                return GetAttributeByRegionAndAddress(4, 6).GetUshort();
+                return GetAttributeByRegionAndAddress(4, 7).GetUshort();
             }
         }
         public async Task<bool> SetMoldTempSetpoint(ushort value)
         {
-            return await WriteSingleRegister(6, value);
+            return await WriteSingleRegister(7, value);
         }
 
+        public string InjectionPressure
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(3, 39).GetUshort() + "bar";
+            }
+
+        }
+
+        public string InjectionSpeed
+        {
+            get
+            {
+                return GetAttributeByRegionAndAddress(3, 40).GetUshort() + "%";
+            }
+
+        }
+
+
+        public async Task<bool> SetBarrelTemp(short temp1, short temp2, short temp3, short temp4, short temp5)
+        {
+            return await WriteMultiRegister(2, 5, new ushort[] { (ushort)(temp1), (ushort)(temp2), (ushort)(temp3), (ushort)(temp4), (ushort)(temp5) });
+        }
 
 
         public InjectionMoldingMachineSlave(String ip, int port, int slaveId, List<SlaveAttribute> slaveAttributeList) : base(ip, port, slaveId, slaveAttributeList)
@@ -282,6 +356,32 @@ namespace moju.device
                         }
                 }
             }
+            try
+            {
+                // 获取模具实时温度，加入历史
+                ushort temp = this.GetAttributeByRegionAndAddress(3, 29).GetUshort();
+                // 判断队列中最老的数据是否距今一小时以上，如果是则移除，直到没有一小时以上的数据
+                while (HistoryTemp.Count > 0)
+                {
+                    DateTime oldTime = HistoryTemp.Peek().dateTime;
+                    TimeSpan timeSpan = DateTime.Now - oldTime;
+                    if (timeSpan.TotalMinutes > 60)
+                    {
+                        HistoryTemp.Dequeue();
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+                // 将老数据移除完后加入新数据
+                HistoryTemp.Enqueue(new DataHistory<int>(DateTime.Now, temp));
+            }
+            catch
+            {
+                SimpleLogger.Instance.Debug("将模具实时温度加入历史对象时报错");
+            }
+
         }
     }
 }

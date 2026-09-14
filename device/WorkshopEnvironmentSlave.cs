@@ -2,11 +2,13 @@
 using moju.domain;
 using moju.log;
 using moju.tool;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace moju.device
 {
@@ -41,7 +43,7 @@ namespace moju.device
         {
             get
             {
-                ushort temp = GetAttributeByRegionAndAddress(3, 0).GetUshort();
+                short temp = (short)GetAttributeByRegionAndAddress(3, 0).GetUshort();
                 return Convert.ToString(((int)temp) / 10.0) + "℃";
             }
         }
@@ -54,7 +56,7 @@ namespace moju.device
             get
             {
                 ushort humidity = GetAttributeByRegionAndAddress(3, 1).GetUshort();
-                return Convert.ToString((int)humidity / 10.0) + "%";
+                return Convert.ToString((int)humidity) + "%";
             }
         }
 
@@ -86,33 +88,51 @@ namespace moju.device
         /// <summary>
         /// 空调设定温度
         /// </summary>
-        public ushort HvacTempSetPoint
+        public string HvacTempSetPoint
         {
             get
             {
-                return GetAttributeByRegionAndAddress(4, 0).GetUshort();
+                short temp = (short)GetAttributeByRegionAndAddress(4, 0).GetUshort();
+                return Convert.ToString(((int)temp) / 10.0) + "℃";
+
             }
         }
 
         /// <summary>
         /// 目标湿度
         /// </summary>
-        public ushort HumiditySetPoint
+        public string HumiditySetPoint
         {
             get
             {
-                return GetAttributeByRegionAndAddress(4, 1).GetUshort();
+                ushort humidity = GetAttributeByRegionAndAddress(4, 1).GetUshort();
+                return Convert.ToString((int)humidity) + "%";
             }
         }
 
         /// <summary>
         /// 设定空调温度
         /// </summary>
-        /// <param name="value"></param>
+        /// <param name="value">value整数和一位小数</param>
         /// <returns></returns>
-        public async Task<bool> setHvacTEmpSetPoint(ushort value)
+        public async Task<bool> setHvacTEmpSetPoint(string temp)
         {
-            return await WriteSingleRegister(0, value);
+            // 判断温度是否合法
+            if (NumberBaseConvertor.TryParseStr2Ushort10x(temp, out ushort result))
+            {
+                if (await WriteSingleRegister(0, result))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("输入的温度不是合法的温度");
+            }
         }
 
         /// <summary>
@@ -120,9 +140,29 @@ namespace moju.device
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public async Task<bool> setHumiditySetPoint(ushort value)
+        public async Task<bool> setHumiditySetPoint(string value)
         {
-            return await WriteSingleRegister(1, value);
+            // 判断湿度是否合法
+            if (NumberBaseConvertor.TryParseStr2Ushort(value, out ushort result))
+            {
+                // 1000表示100.0
+                if ((short)result < 0 || (short)result > 100)
+                {
+                    throw new ArgumentException("输入的温度必须在0-100之间");
+                }
+                if (await WriteSingleRegister(1, result))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("输入的温度不是合法的温度");
+            }
         }
 
 

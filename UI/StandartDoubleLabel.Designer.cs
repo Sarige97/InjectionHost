@@ -75,7 +75,7 @@
             this.Controls.Add(this.MiddleLabel);
             this.Controls.Add(this.LeftLabel);
             this.Name = "StandardDoubleLabel";
-            this.Size = new System.Drawing.Size(360, 30);
+            this.Size = new System.Drawing.Size(651, 30);
             this.ResumeLayout(false);
             this.PerformLayout();
 
