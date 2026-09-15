@@ -8,11 +8,55 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace moju.device
 {
     public class InjectionMoldingMachineSlave : ModbusSlaveTcp
     {
+
+        private SlaveAlarm _slaveAlarm = new SlaveAlarm();
+
+        private SlaveAlarm _coilConnectAlarm = new SlaveAlarm();
+
+        private SlaveAlarm _RegisterConnectAlarm = new SlaveAlarm();
+
+        private SlaveAlarm _InputCoilConnectAlarm = new SlaveAlarm();
+
+        private SlaveAlarm _InputRegisterConnectAlarm = new SlaveAlarm();
+
+        private Dictionary<int, string> _alarmMessageMapping = new Dictionary<int, string>() {
+            {0, "无"} ,
+            {1, "油温过高"} ,
+            {2, "模具报警"} ,
+            {4, "射胶异常"} ,
+
+        };
+        public string SetAlarmCodeAndGetAlarmMessage(ushort alarmCode)
+        {
+            // 如果异常码没有发生变化，则不需要更新和消息
+            if (alarmCode == _slaveAlarm.AlarmCode)
+            {
+                return null;
+            }
+            // 如果异常码从异常变为正常
+            if (_slaveAlarm.AlarmCode != 0 && alarmCode == 0)
+            {
+                string alarmMessage = _alarmMessageMapping[_slaveAlarm.AlarmCode];
+                _slaveAlarm.AlarmCode = alarmCode;
+                return $"{alarmMessage}报警已解除";
+            }
+            // 如果从正常到异常
+            if (_slaveAlarm.AlarmCode == 0 && alarmCode != 0)
+            {
+                string alarmMessage = _alarmMessageMapping[alarmCode];
+                _slaveAlarm.AlarmCode = alarmCode;
+                return $"{alarmMessage}报警";
+            }
+            return null;
+        }
+
+
         public Queue<DataHistory<int>> HistoryTemp = new Queue<DataHistory<int>>();
 
         // 运行 读写
@@ -310,6 +354,19 @@ namespace moju.device
                             {
                                 FillResultInMapping<bool>(writableCoilMapping, region, SlaveAttributeList);
                             }
+
+                            //// 只处理和之前状态不一样的
+                            //// 之前读不到现在读到了
+                            //if (_coilConnectAlarm.AlarmCode == -1 && writableCoilMapping != null)
+                            //{
+                            //    AlarmHandler($"modbus请求恢复，恢复从站注塑机{Ip}:{Port} slaveId:{SlaveId}");
+                            //}
+                            ////之前读到了，现在读不到
+                            //if(_coilConnectAlarm.AlarmCode != -1 && writableCoilMapping == null)
+                            //{
+                            //    AlarmHandler($"modbus请求失败，失败从站注塑机{Ip}:{Port} slaveId:{SlaveId}");
+                            //}
+
                             break;
                         }
                     case 1:
@@ -322,6 +379,19 @@ namespace moju.device
                             {
                                 FillResultInMapping<bool>(readonlyCoilMapping, region, SlaveAttributeList);
                             }
+
+                            //// 只处理和之前状态不一样的
+                            //// 之前读不到现在读到了
+                            //if (_InputCoilConnectAlarm.AlarmCode == -1 && readonlyCoilMapping != null)
+                            //{
+                            //    AlarmHandler($"modbus请求恢复，恢复从站注塑机{Ip}:{Port} slaveId:{SlaveId}");
+                            //}
+                            ////之前读到了，现在读不到
+                            //if (_InputCoilConnectAlarm.AlarmCode != -1 && readonlyCoilMapping == null)
+                            //{
+                            //    AlarmHandler($"modbus请求失败，失败从站注塑机{Ip}:{Port} slaveId:{SlaveId}");
+                            //}
+
                             break;
                         }
                     case 4:
@@ -334,6 +404,19 @@ namespace moju.device
                             {
                                 FillResultInMapping<ushort>(writableRegisterMapping, region, SlaveAttributeList);
                             }
+
+                            //// 只处理和之前状态不一样的
+                            //// 之前读不到现在读到了
+                            //if (_RegisterConnectAlarm.AlarmCode == -1 && writableRegisterMapping != null)
+                            //{
+                            //    AlarmHandler($"modbus请求恢复，恢复从站注塑机{Ip}:{Port} slaveId:{SlaveId}");
+                            //}
+                            ////之前读到了，现在读不到
+                            //if (_RegisterConnectAlarm.AlarmCode != -1 && writableRegisterMapping == null)
+                            //{
+                            //    AlarmHandler($"modbus请求失败，失败从站注塑机{Ip}:{Port} slaveId:{SlaveId}");
+                            //}
+
                             break;
                         }
                     case 3:
@@ -346,6 +429,20 @@ namespace moju.device
                             {
                                 FillResultInMapping<ushort>(readOnlyRegisterMapping, region, SlaveAttributeList);
                             }
+
+                            //// 只处理和之前状态不一样的
+                            //// 之前读不到现在读到了
+                            //if (_InputRegisterConnectAlarm.AlarmCode == -1 && readOnlyRegisterMapping != null)
+                            //{
+                            //    AlarmHandler($"modbus请求恢复，恢复从站注塑机{Ip}:{Port} slaveId:{SlaveId}");
+                            //}
+                            ////之前读到了，现在读不到
+                            //if (_InputRegisterConnectAlarm.AlarmCode != -1 && readOnlyRegisterMapping == null)
+                            //{
+                            //    AlarmHandler($"modbus请求失败，失败从站注塑机{Ip}:{Port} slaveId:{SlaveId}");
+                            //}
+
+
                             break;
                         }
                     default:
@@ -380,6 +477,18 @@ namespace moju.device
             catch
             {
                 SimpleLogger.Instance.Debug("将模具实时温度加入历史对象时报错");
+            }
+
+            try
+            {
+                string alarmMessage = SetAlarmCodeAndGetAlarmMessage(AlarmCode);
+                if(!string.IsNullOrEmpty(alarmMessage))
+                {
+                    SimpleLogger.Instance.Error(alarmMessage);
+                }
+            } catch
+            {
+                SimpleLogger.Instance.Error("记录注塑机错误码时报错");
             }
 
         }

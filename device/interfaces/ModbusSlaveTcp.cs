@@ -692,6 +692,6 @@ namespace moju.device.interfaces
         }
 
         public abstract void RefreshData();
-
+    
     }
 }

@@ -71,6 +71,7 @@
     <Compile Include="device\SlaveManager.cs" />
     <Compile Include="device\WorkshopEnvironmentSlave.cs" />
     <Compile Include="domain\DataHistory.cs" />
+    <Compile Include="domain\SlaveAlarm.cs" />
     <Compile Include="domain\SlaveAttribute.cs" />
     <Compile Include="domain\SlaveDeviceInfo.cs" />
     <Compile Include="domain\User.cs" />

@@ -23,7 +23,7 @@ namespace moju.domain
             {
                 if (Value == null)
                 {
-                    SimpleLogger.Instance.Error($"数值转化失败,名称:{Name} 区域:{Region} 地址:{Address} 描述:{Description}");
+                    //SimpleLogger.Instance.Error($"数值转化到ushort失败,名称:{Name} 区域:{Region} 地址:{Address} 描述:{Description}");
                     return new ushort();
                 }
                 return (ushort)Value;
@@ -40,7 +40,7 @@ namespace moju.domain
             {
                 if (Value == null)
                 {
-                    SimpleLogger.Instance.Error($"数值转化失败,名称:{Name} 区域:{Region} 地址:{Address} 描述:{Description}");
+                    //SimpleLogger.Instance.Error($"数值转化到string失败,名称:{Name} 区域:{Region} 地址:{Address} 描述:{Description}");
                     return "";
                 }
                 return (String)Value;
@@ -57,7 +57,7 @@ namespace moju.domain
             {
                 if (Value == null)
                 {
-                    SimpleLogger.Instance.Error($"数值转化失败,名称:{Name} 区域:{Region} 地址:{Address} 描述:{Description}");
+                    //SimpleLogger.Instance.Error($"数值转化到bool失败,名称:{Name} 区域:{Region} 地址:{Address} 描述:{Description}");
                     return false;
                 }
                 return (bool)Value;

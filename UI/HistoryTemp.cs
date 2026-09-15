@@ -33,11 +33,14 @@ namespace moju.UI
         public void refreshData(Object sender, EventArgs args)
         {
             Queue<DataHistory<int>> historyTemp = _injectionMoldingMachineSlave.HistoryTemp;
-            Series series = chart1.Series["temperature"];
-            series.Points.Clear();
-            foreach (DataHistory<int> tempData in historyTemp)
+            if (chart1 != null && chart1.Series != null && chart1.Series["temperature"] != null)
             {
-                series.Points.AddXY(tempData.dateTime, tempData.value);
+                Series series = chart1.Series["temperature"];
+                series.Points.Clear();
+                foreach (DataHistory<int> tempData in historyTemp)
+                {
+                    series.Points.AddXY(tempData.dateTime, tempData.value / 10.0f);
+                }
             }
         }
 

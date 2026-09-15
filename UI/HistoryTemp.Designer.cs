@@ -40,6 +40,7 @@
             chartArea1.AxisX.Crossing = 1.7976931348623157E+308D;
             chartArea1.AxisX.LabelStyle.Format = "HH:mm:ss";
             chartArea1.AxisX.Title = "时间";
+            chartArea1.AxisY.IsStartedFromZero = false;
             chartArea1.AxisY.Title = "温度";
             chartArea1.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea1);

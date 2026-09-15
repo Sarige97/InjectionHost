@@ -104,7 +104,10 @@ namespace muju
                 injectMachineGroup.Init();
                 TimerTaskManager.AddTimerEvent(500, injectMachineGroup.RefreshData);
                 injectMachineGroup.InjectionMachineGroupDetailButtonClick += ChangeMainPanel2Detail;
+
             }
+
+            SimpleLogger.Instance.LogEvent += AddLog;
 
 
 
@@ -216,9 +219,19 @@ namespace muju
             }
         }
 
-        private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
+        public void AddLog(Object o, String message)
         {
-
+            if (string.IsNullOrEmpty(message))
+            {
+                return;
+            }
+            if (LogRichText.Text.EndsWith("\n") || LogRichText.Text.EndsWith("\r\n") || LogRichText.Text.EndsWith("\r"))
+            {
+                LogRichText.Text +=  message;
+            } else
+            {
+                LogRichText.Text += Environment.NewLine + message;
+            }
         }
     }
 }

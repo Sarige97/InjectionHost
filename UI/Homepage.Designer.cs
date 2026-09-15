@@ -48,7 +48,9 @@
             this.LabelBoxWorkshopDewPoint = new moju.UI.StandardDoubleLabel();
             this.LabelBoxWorkshopHumidity = new moju.UI.StandardDoubleLabel();
             this.LabelBoxWorkshopTemperature = new moju.UI.StandardDoubleLabel();
+            this.LogRichText = new System.Windows.Forms.RichTextBox();
             this.panel1.SuspendLayout();
+            this.LogPanel.SuspendLayout();
             this.panel5.SuspendLayout();
             this.MainPanel.SuspendLayout();
             this.flowLayoutPanel.SuspendLayout();
@@ -70,18 +72,19 @@
             // LogPanel
             // 
             this.LogPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.LogPanel.Controls.Add(this.LogRichText);
             this.LogPanel.Location = new System.Drawing.Point(221, 855);
             this.LogPanel.Name = "LogPanel";
-            this.LogPanel.Size = new System.Drawing.Size(1693, 172);
+            this.LogPanel.Size = new System.Drawing.Size(1693, 215);
             this.LogPanel.TabIndex = 0;
             // 
             // panel5
             // 
             this.panel5.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel5.Controls.Add(this.Overview);
-            this.panel5.Location = new System.Drawing.Point(10, 10);
+            this.panel5.Location = new System.Drawing.Point(3, 10);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(204, 105);
+            this.panel5.Size = new System.Drawing.Size(211, 105);
             this.panel5.TabIndex = 0;
             // 
             // Overview
@@ -119,7 +122,6 @@
             this.flowLayoutPanel.Size = new System.Drawing.Size(1691, 837);
             this.flowLayoutPanel.TabIndex = 0;
             this.flowLayoutPanel.WrapContents = false;
-            this.flowLayoutPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.flowLayoutPanel1_Paint);
             // 
             // injectMachineGroup1
             // 
@@ -181,16 +183,16 @@
             this.OverviewPanel.Controls.Add(this.LabelBoxWorkshopDewPoint);
             this.OverviewPanel.Controls.Add(this.LabelBoxWorkshopHumidity);
             this.OverviewPanel.Controls.Add(this.LabelBoxWorkshopTemperature);
-            this.OverviewPanel.Location = new System.Drawing.Point(10, 10);
+            this.OverviewPanel.Location = new System.Drawing.Point(3, 10);
             this.OverviewPanel.Name = "OverviewPanel";
-            this.OverviewPanel.Size = new System.Drawing.Size(204, 1017);
+            this.OverviewPanel.Size = new System.Drawing.Size(211, 1064);
             this.OverviewPanel.TabIndex = 0;
             // 
             // LabelBoxPower
             // 
             this.LabelBoxPower.ForeColor = System.Drawing.SystemColors.GrayText;
             this.LabelBoxPower.LeftLabelText = "总电量";
-            this.LabelBoxPower.Location = new System.Drawing.Point(-114, 984);
+            this.LabelBoxPower.Location = new System.Drawing.Point(-108, 1031);
             this.LabelBoxPower.Name = "LabelBoxPower";
             this.LabelBoxPower.RightLabelText = "0kwh";
             this.LabelBoxPower.Size = new System.Drawing.Size(303, 28);
@@ -278,6 +280,15 @@
             this.LabelBoxWorkshopTemperature.Size = new System.Drawing.Size(303, 28);
             this.LabelBoxWorkshopTemperature.TabIndex = 0;
             // 
+            // LogRichText
+            // 
+            this.LogRichText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.LogRichText.Location = new System.Drawing.Point(0, 0);
+            this.LogRichText.Name = "LogRichText";
+            this.LogRichText.Size = new System.Drawing.Size(1691, 213);
+            this.LogRichText.TabIndex = 0;
+            this.LogRichText.Text = "";
+            // 
             // Homepage
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -286,6 +297,7 @@
             this.Name = "Homepage";
             this.Size = new System.Drawing.Size(1920, 1080);
             this.panel1.ResumeLayout(false);
+            this.LogPanel.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.MainPanel.ResumeLayout(false);
@@ -317,6 +329,7 @@
         private moju.UI.InjectMachineGroup injectMachineGroup2;
         private moju.UI.InjectMachineGroup injectMachineGroup3;
         private moju.UI.InjectMachineGroup injectMachineGroup4;
+        private System.Windows.Forms.RichTextBox LogRichText;
     }
 }
 

@@ -12,7 +12,6 @@ namespace moju.device
 {
     internal class RobotSlave : ModbusSlaveTcp
     {
-
         /// <summary>
         /// 电源
         /// </summary>
@@ -233,5 +232,6 @@ namespace moju.device
                 }
             }
         }
+
     }
 }
