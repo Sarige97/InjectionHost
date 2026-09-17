@@ -1,0 +1,62 @@
+{
+  "_说明": "breaker.py 断路器代理的单设备掉线规则。schedule=定时窗口: 每 every_min 分钟掉线一次、持续 offline_sec 秒（支持小数，测试可写 0.1）；random=随机: 每分钟 prob_per_min% 概率掉线、持续 dur_min~dur_max 秒随机；mode: refuse=断电式(连接被拒/重置) silent=黑洞式(连接保留但无响应)。删除 devices 里对应键或字段即停用；手动控制：运行 breaker.py 后输入 help。",
+  "defaults": {
+    "mode": "refuse"
+  },
+  "devices": {
+    "IM-01": {
+      "mode": "refuse"
+    },
+    "MTC-01": {
+      "mode": "refuse"
+    },
+    "DRY-01": {
+      "mode": "refuse"
+    },
+    "ROB-01": {
+      "mode": "refuse"
+    },
+    "IM-02": {
+      "mode": "refuse"
+    },
+    "MTC-02": {
+      "mode": "refuse"
+    },
+    "DRY-02": {
+      "mode": "refuse"
+    },
+    "ROB-02": {
+      "mode": "refuse"
+    },
+    "IM-03": {
+      "mode": "refuse"
+    },
+    "MTC-03": {
+      "mode": "refuse"
+    },
+    "DRY-03": {
+      "mode": "refuse"
+    },
+    "ROB-03": {
+      "mode": "refuse"
+    },
+    "IM-04": {
+      "mode": "refuse"
+    },
+    "MTC-04": {
+      "mode": "refuse"
+    },
+    "DRY-04": {
+      "mode": "refuse"
+    },
+    "ROB-04": {
+      "mode": "refuse"
+    },
+    "EM-01": {
+      "mode": "refuse"
+    },
+    "ENV-01": {
+      "mode": "refuse"
+    }
+  }
+}

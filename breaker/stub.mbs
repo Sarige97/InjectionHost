@@ -1,0 +1,2745 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="0.5.0" editnum="1">
+    <name>注塑工厂数据桩</name>
+    <author>modbus-stub</author>
+    <comment>注塑工厂 Modbus 模拟: 18 设备各自独立 TCP 端口(15502~15519) + 标准区域语义(0x控制/1x状态/3x传感器/4x设定) + 可交互控制</comment>
+    <ports>
+        <port>
+            <name>P-IM-01</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15502</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="IM-01">1</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-MTC-01</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15503</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="MTC-01">2</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-DRY-01</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15504</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="DRY-01">3</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-ROB-01</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15505</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="ROB-01">4</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-IM-02</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15506</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="IM-02">5</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-MTC-02</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15507</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="MTC-02">6</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-DRY-02</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15508</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="DRY-02">7</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-ROB-02</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15509</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="ROB-02">8</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-IM-03</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15510</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="IM-03">9</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-MTC-03</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15511</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="MTC-03">10</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-DRY-03</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15512</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="DRY-03">11</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-ROB-03</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15513</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="ROB-03">12</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-IM-04</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15514</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="IM-04">13</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-MTC-04</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15515</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="MTC-04">14</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-DRY-04</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15516</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="DRY-04">15</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-ROB-04</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15517</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="ROB-04">16</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-EM-01</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15518</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="EM-01">61</deviceref>
+            </deviceref>
+        </port>
+        <port>
+            <name>P-ENV-01</name>
+            <type>TCP</type>
+            <host>0.0.0.0</host>
+            <port>15519</port>
+            <maxconn>32</maxconn>
+            <timeout>30000</timeout>
+            <timeoutFirstByte>1000</timeoutFirstByte>
+            <timeoutInterByte>50</timeoutInterByte>
+            <isBroadcastEnabled>false</isBroadcastEnabled>
+            <deviceref>
+                <deviceref name="ENV-01">71</deviceref>
+            </deviceref>
+        </port>
+    </ports>
+    <devices>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>200</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>IM-01</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, total={mem3x.getuint32(3)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 1009 + 7)
+DUR = [20, 30, 25, 150, 40, 15, 20]
+TOTAL = sum(DUR)
+POFF = (idx % 4) * 75
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_f3_left = 0
+_prev_stage = -1
+SET_T = [2200, 2100, 2000, 1900, 1800]
+mem4x.setuint16(0, 3)
+mem4x.setuint16(1, 50000)
+for i in range(5):
+    mem4x.setint16(2 + i, SET_T[i])
+mem4x.setint16(7, 850)
+mem4x.setuint16(8, 25)
+mem3x.setuint32(3, 0)
+mem3x.setuint32(5, 0)
+mem3x.setuint32(7, 0)
+mem3x.setuint16(9, TOTAL)
+mem3x.setuint16(10, TOTAL)
+mem3x.setuint16(11, 92)
+for i in range(5):
+    mem3x.setint16(19 + i, SET_T[i])
+mem3x.setint16(29, 850)
+mem3x.setint16(30, 450)
+mem3x.setint16(31, 280)
+mem3x.setuint32(52, 0)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem1x.setbit(1, True)
+mem1x.setbit(2, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+auto = mem0x.getbit(2)
+mode = mem4x.getuint16(0)
+target = mem4x.getuint16(1)
+setT = [mem4x.getint16(2 + i) for i in range(5)]
+setMold = mem4x.getint16(7)
+DUR[2] = mem4x.getuint16(8)
+TOTAL = sum(DUR)
+p = (c + POFF) % TOTAL
+stage = 0
+acc = 0
+for i, d in enumerate(DUR):
+    if p &lt; acc + d:
+        stage = i
+        break
+    acc += d
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + POFF) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(80, 200)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + POFF + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(80, 200)
+f2 = _f2_left &gt; 0
+if _f3_left &gt; 0:
+    _f3_left -= 1
+else:
+    if (c + POFF + 400) % 600 == 0 and random.random() &lt; _p_fault:
+        _f3_left = random.randint(80, 200)
+f3 = _f3_left &gt; 0
+fault = f1 or f2 or f3
+producing = power and run and auto and mode != 0 and not fault and (target &lt;= 0 or mem3x.getuint32(3) &lt; target)
+if _prev_stage == 6 and stage == 0 and producing:
+    if random.random() &lt; 0.004:
+        mem3x.setuint32(7, mem3x.getuint32(7) + 1)
+    else:
+        mem3x.setuint32(5, mem3x.getuint32(5) + 1)
+    mem3x.setuint32(3, mem3x.getuint32(3) + 1)
+    mem3x.setuint16(51, mem3x.getuint16(51) + 1)
+    cyc = int(TOTAL * random.uniform(0.95, 1.05))
+    mem3x.setuint16(9, cyc)
+    mem3x.setuint16(10, int((mem3x.getuint16(10) + cyc) / 2))
+_prev_stage = stage
+st = 0
+if power:
+    st |= 1
+    if producing:
+        st |= (1 &lt;&lt; (stage + 1))
+    if fault:
+        st |= (1 &lt;&lt; 8)
+mem3x.setuint16(0, st)
+for i in range(5):
+    cur = mem3x.getint16(19 + i)
+    if cur &lt;= 0:
+        cur = setT[i]
+    if not power:
+        target_t = 260
+    elif not producing:
+        target_t = int(setT[i] * 0.82)
+    elif fault:
+        target_t = setT[i] + random.randint(-30, 10)
+    else:
+        target_t = setT[i] + random.randint(-8, 8)
+    mem3x.setint16(19 + i, int(cur + (target_t - cur) * 0.15))
+curm = mem3x.getint16(29)
+if not power:
+    tm = 260
+elif not producing:
+    tm = int(setMold * 0.85)
+elif f2:
+    tm = 1250 + random.randint(-50, 50)
+else:
+    tm = setMold + random.randint(-5, 5)
+mem3x.setint16(29, int(curm + (tm - curm) * 0.1))
+curo = mem3x.getint16(30)
+if f1:
+    mem3x.setint16(30, 580 + random.randint(0, 20))
+elif not power:
+    mem3x.setint16(30, int(curo + (300 - curo) * 0.05))
+else:
+    mem3x.setint16(30, int(curo + (450 + random.randint(-10, 10) - curo) * 0.1))
+mem3x.setint16(31, 280 + random.randint(-10, 10))
+if not power or not producing:
+    mem3x.setuint16(39, 0)
+    mem3x.setuint16(40, 0)
+    mem3x.setuint16(41, 0)
+    mem3x.setuint16(42, 0)
+    mem3x.setuint16(43, 0)
+    mem3x.setuint16(44, 0)
+    mem3x.setuint16(48, 0)
+    mem3x.setuint16(49, 0)
+    mem3x.setuint16(47, 0)
+    if f3:
+        mem3x.setuint16(39, random.randint(200, 260))
+else:
+    if stage == 1:
+        mem3x.setuint16(39, random.randint(130, 175))
+        mem3x.setuint16(40, random.randint(70, 95))
+        mem3x.setuint16(45, max(0, mem3x.getuint16(45) - random.randint(1, 5)))
+    elif stage == 2:
+        mem3x.setuint16(39, random.randint(60, 90))
+        mem3x.setuint16(41, random.randint(55, 85))
+    elif stage == 4:
+        mem3x.setuint16(42, random.randint(150, 240))
+        mem3x.setuint16(43, random.randint(8, 20))
+        mem3x.setuint16(46, min(200, mem3x.getuint16(46) + random.randint(1, 3)))
+    else:
+        mem3x.setuint16(39, 0)
+        mem3x.setuint16(40, 0)
+        mem3x.setuint16(41, 0)
+        mem3x.setuint16(42, 0)
+        mem3x.setuint16(43, 0)
+    if stage in (0, 5, 6):
+        mem3x.setuint16(44, random.randint(30, 60))
+        mem3x.setuint16(45, 1000)
+    mem3x.setuint16(49, random.randint(30, 60) if stage in (1, 2) else random.randint(0, 20))
+    mem3x.setuint16(48, random.randint(900, 1500))
+    mem3x.setuint16(47, random.randint(20, 90))
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0) + (4 if f3 else 0))
+mem3x.setuint16(2, 1 if fault else 0)
+mem1x.setbit(0, (stage in (0, 5)) and producing)
+mem1x.setbit(1, power and not fault)
+mem1x.setbit(2, producing)
+mem1x.setbit(3, fault)
+u = mem3x.getuint16(11)
+if fault or (power and not producing):
+    if u &gt; 10:
+        mem3x.setuint16(11, u - 1)
+else:
+    if u &lt; 92:
+        mem3x.setuint16(11, u + 1)
+if power:
+    pw = {0: 8, 1: 45, 2: 30, 3: 12, 4: 22, 5: 10, 6: 9}.get(stage, 10)
+    mem3x.setuint16(50, (pw + random.randint(-2, 3)) if producing else 3)
+    mem3x.setuint32(52, int(time() - _mb_start))
+else:
+    mem3x.setuint16(50, 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>20</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>MTC-01</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 3001 + 11)
+SETT = random.choice([800, 900, 1000, 1100, 1200])
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_fp = (idx % 4) * 150
+mem4x.setuint16(0, SETT)
+mem3x.setint16(2, SETT)
+mem3x.setint16(3, SETT - random.randint(30, 80))
+mem3x.setuint16(4, 3)
+mem3x.setuint16(5, 25)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem1x.setbit(0, True)
+mem3x.setuint16(6, 45)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+heat = mem0x.getbit(2)
+setT = mem4x.getuint16(0)
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + _fp) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(100, 250)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + _fp + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(100, 250)
+f2 = _f2_left &gt; 0
+cur = mem3x.getint16(2)
+if f1:
+    target = setT + random.randint(50, 120)
+elif not power:
+    target = 250
+elif not run:
+    target = 300
+elif heat:
+    target = setT + random.randint(-10, 10)
+else:
+    target = max(250, cur - 10)
+mem3x.setint16(2, int(cur + (target - cur) * 0.08))
+curb = mem3x.getint16(3)
+mem3x.setint16(3, int(curb + (mem3x.getint16(2) - 40 - curb) * 0.1))
+dev = mem3x.getint16(2) - setT
+st = 0
+if power:
+    st |= 1
+    if run:
+        st |= 2
+    if power and run and heat and dev &lt; -20:
+        st |= 4
+    elif dev &gt; 20:
+        st |= 8
+    if f1 or f2:
+        st |= 0x10
+mem3x.setuint16(0, st)
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+mem1x.setbit(2, f1 or f2)
+mem1x.setbit(0, power)
+mem1x.setbit(1, power and run and heat and dev &lt; -20)
+if not power or not run or f2:
+    mem3x.setuint16(4, 0)
+    mem3x.setuint16(5, 0)
+else:
+    mem3x.setuint16(4, 2 + random.randint(0, 3))
+    mem3x.setuint16(5, random.randint(15, 40))
+mem3x.setuint16(6, random.randint(30, 60) if power else 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>20</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>DRY-01</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, level={mem3x.getuint16(4)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 4021 + 17)
+SETD = int(random.choice([750, 800, 850, 900]))
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_fp = (idx % 4) * 150
+_level = 85.0
+mem4x.setuint16(0, SETD)
+mem3x.setint16(2, SETD)
+mem3x.setint16(3, -350)
+mem3x.setuint16(4, 85)
+mem3x.setuint16(5, 5)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem0x.setbit(3, True)
+mem1x.setbit(0, True)
+mem1x.setbit(1, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+fan = mem0x.getbit(2)
+heat = mem0x.getbit(3)
+setD = mem4x.getuint16(0)
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + _fp) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(100, 250)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + _fp + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(100, 250)
+f2 = _f2_left &gt; 0
+cur = mem3x.getint16(2)
+if f2:
+    target = setD + random.randint(30, 60)
+elif not power:
+    target = 250
+elif not run or not heat:
+    target = max(250, cur - 10)
+else:
+    target = setD + random.randint(-6, 6)
+mem3x.setint16(2, int(cur + (target - cur) * 0.08))
+curd = mem3x.getint16(3)
+if f1:
+    tde = -100 + random.randint(-40, 20)
+else:
+    tde = -340 + random.randint(-30, 30)
+mem3x.setint16(3, int(curd + (tde - curd) * 0.08))
+if power and run and not f1 and not f2:
+    _level -= random.uniform(0.01, 0.05)
+    if _level &lt; 20:
+        _level = 90
+    mem3x.setuint16(4, int(_level))
+st = 0
+if power:
+    st |= 1
+    if run:
+        st |= 2
+    if fan:
+        st |= 4
+    if heat:
+        st |= 8
+    if mem3x.getuint16(4) &lt; 25:
+        st |= 0x10
+    if f1 or f2:
+        st |= 0x20
+mem3x.setuint16(0, st)
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+mem1x.setbit(2, mem3x.getuint16(4) &lt; 25)
+mem1x.setbit(3, f1 or f2)
+mem1x.setbit(0, power)
+mem1x.setbit(1, power and run and fan and heat)
+mem3x.setuint16(5, random.randint(3, 8) if heat else 0)
+mem3x.setuint16(6, random.randint(8, 20) if fan else 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>40</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>ROB-01</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, taken={mem3x.getuint32(3)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 2027 + 3)
+TOTAL = 310
+WAIT = 270
+POFF = (idx % 4) * 75
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_prev_stage = -1
+_manual_left = 0
+_start_prev = False
+_px = 0.0
+_py = 0.0
+_pz = 0.0
+mem3x.setuint32(3, 0)
+mem3x.setuint32(5, 0)
+mem3x.setuint32(7, 0)
+mem3x.setuint16(2, 30)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, False)
+mem1x.setbit(3, True)
+mem1x.setbit(0, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+auto = mem0x.getbit(1)
+start_req = mem0x.getbit(2)
+if (not auto) and start_req and (not _start_prev) and _manual_left &lt;= 0:
+    _manual_left = 35
+_start_prev = start_req
+p = (c + POFF) % TOTAL
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + POFF) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(60, 150)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + POFF + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(60, 150)
+f2 = _f2_left &gt; 0
+fault = f1 or f2
+if auto:
+    if p &lt; WAIT:
+        stage = 0
+    elif p &lt; WAIT + 20:
+        stage = 1
+    elif p &lt; WAIT + 35:
+        stage = 2
+    else:
+        stage = 3
+else:
+    if _manual_left &gt; 0:
+        _manual_left -= 1
+        if _manual_left &gt; 20:
+            stage = 1
+        elif _manual_left &gt; 5:
+            stage = 2
+        else:
+            stage = 3
+    else:
+        stage = 0
+if _prev_stage == 3 and stage == 0 and not fault:
+    mem3x.setuint32(3, mem3x.getuint32(3) + 1)
+    if random.random() &lt; 0.02:
+        mem3x.setuint32(7, mem3x.getuint32(7) + 1)
+    else:
+        mem3x.setuint32(5, mem3x.getuint32(5) + 1)
+_prev_stage = stage
+st = 0
+if power:
+    st |= 1
+    if not fault:
+        if stage == 0:
+            st |= 2
+        if stage == 1:
+            st |= 4
+        if stage == 2:
+            st |= 8
+        if stage == 3:
+            st |= 16
+        if auto:
+            st |= 64
+    else:
+        st |= 32
+mem3x.setuint16(0, st)
+_px += random.uniform(-0.5, 0.5)
+_py += random.uniform(-0.5, 0.5)
+_pz += random.uniform(-0.5, 0.5)
+if stage == 0:
+    x = max(0, min(8, int(_px)))
+    y = max(0, min(8, int(_py)))
+    z = max(0, min(8, int(_pz)))
+elif stage == 1:
+    x = 100 + random.randint(-5, 5)
+    y = 300 + random.randint(-5, 5)
+    z = 80 + random.randint(-5, 5)
+elif stage == 2:
+    x = 0
+    y = 400 + random.randint(-5, 5)
+    z = 200 + random.randint(-5, 5)
+else:
+    x = random.randint(0, 10)
+    y = random.randint(0, 10)
+    z = random.randint(0, 10)
+mem3x.setuint16(9, x)
+mem3x.setuint16(10, y)
+mem3x.setuint16(11, z)
+mem3x.setuint16(12, 1 if (stage in (1, 2) and not fault) else 0)
+if fault:
+    mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+    mem1x.setbit(2, True)
+    mem1x.setbit(0, False)
+else:
+    mem3x.setuint16(1, 0)
+    mem1x.setbit(2, False)
+    mem1x.setbit(0, power)
+mem1x.setbit(1, (stage in (1, 2) and not fault))
+mem3x.setuint16(13, random.randint(2, 8) if power else 0)
+mem3x.setuint16(14, stage if power else 0)
+mem3x.setuint16(2, int(30 * random.uniform(0.9, 1.1)))</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>200</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>IM-02</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, total={mem3x.getuint32(3)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 1009 + 7)
+DUR = [20, 30, 25, 150, 40, 15, 20]
+TOTAL = sum(DUR)
+POFF = (idx % 4) * 75
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_f3_left = 0
+_prev_stage = -1
+SET_T = [2200, 2100, 2000, 1900, 1800]
+mem4x.setuint16(0, 3)
+mem4x.setuint16(1, 50000)
+for i in range(5):
+    mem4x.setint16(2 + i, SET_T[i])
+mem4x.setint16(7, 850)
+mem4x.setuint16(8, 25)
+mem3x.setuint32(3, 0)
+mem3x.setuint32(5, 0)
+mem3x.setuint32(7, 0)
+mem3x.setuint16(9, TOTAL)
+mem3x.setuint16(10, TOTAL)
+mem3x.setuint16(11, 92)
+for i in range(5):
+    mem3x.setint16(19 + i, SET_T[i])
+mem3x.setint16(29, 850)
+mem3x.setint16(30, 450)
+mem3x.setint16(31, 280)
+mem3x.setuint32(52, 0)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem1x.setbit(1, True)
+mem1x.setbit(2, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+auto = mem0x.getbit(2)
+mode = mem4x.getuint16(0)
+target = mem4x.getuint16(1)
+setT = [mem4x.getint16(2 + i) for i in range(5)]
+setMold = mem4x.getint16(7)
+DUR[2] = mem4x.getuint16(8)
+TOTAL = sum(DUR)
+p = (c + POFF) % TOTAL
+stage = 0
+acc = 0
+for i, d in enumerate(DUR):
+    if p &lt; acc + d:
+        stage = i
+        break
+    acc += d
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + POFF) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(80, 200)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + POFF + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(80, 200)
+f2 = _f2_left &gt; 0
+if _f3_left &gt; 0:
+    _f3_left -= 1
+else:
+    if (c + POFF + 400) % 600 == 0 and random.random() &lt; _p_fault:
+        _f3_left = random.randint(80, 200)
+f3 = _f3_left &gt; 0
+fault = f1 or f2 or f3
+producing = power and run and auto and mode != 0 and not fault and (target &lt;= 0 or mem3x.getuint32(3) &lt; target)
+if _prev_stage == 6 and stage == 0 and producing:
+    if random.random() &lt; 0.004:
+        mem3x.setuint32(7, mem3x.getuint32(7) + 1)
+    else:
+        mem3x.setuint32(5, mem3x.getuint32(5) + 1)
+    mem3x.setuint32(3, mem3x.getuint32(3) + 1)
+    mem3x.setuint16(51, mem3x.getuint16(51) + 1)
+    cyc = int(TOTAL * random.uniform(0.95, 1.05))
+    mem3x.setuint16(9, cyc)
+    mem3x.setuint16(10, int((mem3x.getuint16(10) + cyc) / 2))
+_prev_stage = stage
+st = 0
+if power:
+    st |= 1
+    if producing:
+        st |= (1 &lt;&lt; (stage + 1))
+    if fault:
+        st |= (1 &lt;&lt; 8)
+mem3x.setuint16(0, st)
+for i in range(5):
+    cur = mem3x.getint16(19 + i)
+    if cur &lt;= 0:
+        cur = setT[i]
+    if not power:
+        target_t = 260
+    elif not producing:
+        target_t = int(setT[i] * 0.82)
+    elif fault:
+        target_t = setT[i] + random.randint(-30, 10)
+    else:
+        target_t = setT[i] + random.randint(-8, 8)
+    mem3x.setint16(19 + i, int(cur + (target_t - cur) * 0.15))
+curm = mem3x.getint16(29)
+if not power:
+    tm = 260
+elif not producing:
+    tm = int(setMold * 0.85)
+elif f2:
+    tm = 1250 + random.randint(-50, 50)
+else:
+    tm = setMold + random.randint(-5, 5)
+mem3x.setint16(29, int(curm + (tm - curm) * 0.1))
+curo = mem3x.getint16(30)
+if f1:
+    mem3x.setint16(30, 580 + random.randint(0, 20))
+elif not power:
+    mem3x.setint16(30, int(curo + (300 - curo) * 0.05))
+else:
+    mem3x.setint16(30, int(curo + (450 + random.randint(-10, 10) - curo) * 0.1))
+mem3x.setint16(31, 280 + random.randint(-10, 10))
+if not power or not producing:
+    mem3x.setuint16(39, 0)
+    mem3x.setuint16(40, 0)
+    mem3x.setuint16(41, 0)
+    mem3x.setuint16(42, 0)
+    mem3x.setuint16(43, 0)
+    mem3x.setuint16(44, 0)
+    mem3x.setuint16(48, 0)
+    mem3x.setuint16(49, 0)
+    mem3x.setuint16(47, 0)
+    if f3:
+        mem3x.setuint16(39, random.randint(200, 260))
+else:
+    if stage == 1:
+        mem3x.setuint16(39, random.randint(130, 175))
+        mem3x.setuint16(40, random.randint(70, 95))
+        mem3x.setuint16(45, max(0, mem3x.getuint16(45) - random.randint(1, 5)))
+    elif stage == 2:
+        mem3x.setuint16(39, random.randint(60, 90))
+        mem3x.setuint16(41, random.randint(55, 85))
+    elif stage == 4:
+        mem3x.setuint16(42, random.randint(150, 240))
+        mem3x.setuint16(43, random.randint(8, 20))
+        mem3x.setuint16(46, min(200, mem3x.getuint16(46) + random.randint(1, 3)))
+    else:
+        mem3x.setuint16(39, 0)
+        mem3x.setuint16(40, 0)
+        mem3x.setuint16(41, 0)
+        mem3x.setuint16(42, 0)
+        mem3x.setuint16(43, 0)
+    if stage in (0, 5, 6):
+        mem3x.setuint16(44, random.randint(30, 60))
+        mem3x.setuint16(45, 1000)
+    mem3x.setuint16(49, random.randint(30, 60) if stage in (1, 2) else random.randint(0, 20))
+    mem3x.setuint16(48, random.randint(900, 1500))
+    mem3x.setuint16(47, random.randint(20, 90))
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0) + (4 if f3 else 0))
+mem3x.setuint16(2, 1 if fault else 0)
+mem1x.setbit(0, (stage in (0, 5)) and producing)
+mem1x.setbit(1, power and not fault)
+mem1x.setbit(2, producing)
+mem1x.setbit(3, fault)
+u = mem3x.getuint16(11)
+if fault or (power and not producing):
+    if u &gt; 10:
+        mem3x.setuint16(11, u - 1)
+else:
+    if u &lt; 92:
+        mem3x.setuint16(11, u + 1)
+if power:
+    pw = {0: 8, 1: 45, 2: 30, 3: 12, 4: 22, 5: 10, 6: 9}.get(stage, 10)
+    mem3x.setuint16(50, (pw + random.randint(-2, 3)) if producing else 3)
+    mem3x.setuint32(52, int(time() - _mb_start))
+else:
+    mem3x.setuint16(50, 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>20</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>MTC-02</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 3001 + 11)
+SETT = random.choice([800, 900, 1000, 1100, 1200])
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_fp = (idx % 4) * 150
+mem4x.setuint16(0, SETT)
+mem3x.setint16(2, SETT)
+mem3x.setint16(3, SETT - random.randint(30, 80))
+mem3x.setuint16(4, 3)
+mem3x.setuint16(5, 25)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem1x.setbit(0, True)
+mem3x.setuint16(6, 45)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+heat = mem0x.getbit(2)
+setT = mem4x.getuint16(0)
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + _fp) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(100, 250)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + _fp + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(100, 250)
+f2 = _f2_left &gt; 0
+cur = mem3x.getint16(2)
+if f1:
+    target = setT + random.randint(50, 120)
+elif not power:
+    target = 250
+elif not run:
+    target = 300
+elif heat:
+    target = setT + random.randint(-10, 10)
+else:
+    target = max(250, cur - 10)
+mem3x.setint16(2, int(cur + (target - cur) * 0.08))
+curb = mem3x.getint16(3)
+mem3x.setint16(3, int(curb + (mem3x.getint16(2) - 40 - curb) * 0.1))
+dev = mem3x.getint16(2) - setT
+st = 0
+if power:
+    st |= 1
+    if run:
+        st |= 2
+    if power and run and heat and dev &lt; -20:
+        st |= 4
+    elif dev &gt; 20:
+        st |= 8
+    if f1 or f2:
+        st |= 0x10
+mem3x.setuint16(0, st)
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+mem1x.setbit(2, f1 or f2)
+mem1x.setbit(0, power)
+mem1x.setbit(1, power and run and heat and dev &lt; -20)
+if not power or not run or f2:
+    mem3x.setuint16(4, 0)
+    mem3x.setuint16(5, 0)
+else:
+    mem3x.setuint16(4, 2 + random.randint(0, 3))
+    mem3x.setuint16(5, random.randint(15, 40))
+mem3x.setuint16(6, random.randint(30, 60) if power else 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>20</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>DRY-02</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, level={mem3x.getuint16(4)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 4021 + 17)
+SETD = int(random.choice([750, 800, 850, 900]))
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_fp = (idx % 4) * 150
+_level = 85.0
+mem4x.setuint16(0, SETD)
+mem3x.setint16(2, SETD)
+mem3x.setint16(3, -350)
+mem3x.setuint16(4, 85)
+mem3x.setuint16(5, 5)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem0x.setbit(3, True)
+mem1x.setbit(0, True)
+mem1x.setbit(1, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+fan = mem0x.getbit(2)
+heat = mem0x.getbit(3)
+setD = mem4x.getuint16(0)
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + _fp) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(100, 250)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + _fp + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(100, 250)
+f2 = _f2_left &gt; 0
+cur = mem3x.getint16(2)
+if f2:
+    target = setD + random.randint(30, 60)
+elif not power:
+    target = 250
+elif not run or not heat:
+    target = max(250, cur - 10)
+else:
+    target = setD + random.randint(-6, 6)
+mem3x.setint16(2, int(cur + (target - cur) * 0.08))
+curd = mem3x.getint16(3)
+if f1:
+    tde = -100 + random.randint(-40, 20)
+else:
+    tde = -340 + random.randint(-30, 30)
+mem3x.setint16(3, int(curd + (tde - curd) * 0.08))
+if power and run and not f1 and not f2:
+    _level -= random.uniform(0.01, 0.05)
+    if _level &lt; 20:
+        _level = 90
+    mem3x.setuint16(4, int(_level))
+st = 0
+if power:
+    st |= 1
+    if run:
+        st |= 2
+    if fan:
+        st |= 4
+    if heat:
+        st |= 8
+    if mem3x.getuint16(4) &lt; 25:
+        st |= 0x10
+    if f1 or f2:
+        st |= 0x20
+mem3x.setuint16(0, st)
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+mem1x.setbit(2, mem3x.getuint16(4) &lt; 25)
+mem1x.setbit(3, f1 or f2)
+mem1x.setbit(0, power)
+mem1x.setbit(1, power and run and fan and heat)
+mem3x.setuint16(5, random.randint(3, 8) if heat else 0)
+mem3x.setuint16(6, random.randint(8, 20) if fan else 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>40</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>ROB-02</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, taken={mem3x.getuint32(3)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 2027 + 3)
+TOTAL = 310
+WAIT = 270
+POFF = (idx % 4) * 75
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_prev_stage = -1
+_manual_left = 0
+_start_prev = False
+_px = 0.0
+_py = 0.0
+_pz = 0.0
+mem3x.setuint32(3, 0)
+mem3x.setuint32(5, 0)
+mem3x.setuint32(7, 0)
+mem3x.setuint16(2, 30)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, False)
+mem1x.setbit(3, True)
+mem1x.setbit(0, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+auto = mem0x.getbit(1)
+start_req = mem0x.getbit(2)
+if (not auto) and start_req and (not _start_prev) and _manual_left &lt;= 0:
+    _manual_left = 35
+_start_prev = start_req
+p = (c + POFF) % TOTAL
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + POFF) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(60, 150)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + POFF + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(60, 150)
+f2 = _f2_left &gt; 0
+fault = f1 or f2
+if auto:
+    if p &lt; WAIT:
+        stage = 0
+    elif p &lt; WAIT + 20:
+        stage = 1
+    elif p &lt; WAIT + 35:
+        stage = 2
+    else:
+        stage = 3
+else:
+    if _manual_left &gt; 0:
+        _manual_left -= 1
+        if _manual_left &gt; 20:
+            stage = 1
+        elif _manual_left &gt; 5:
+            stage = 2
+        else:
+            stage = 3
+    else:
+        stage = 0
+if _prev_stage == 3 and stage == 0 and not fault:
+    mem3x.setuint32(3, mem3x.getuint32(3) + 1)
+    if random.random() &lt; 0.02:
+        mem3x.setuint32(7, mem3x.getuint32(7) + 1)
+    else:
+        mem3x.setuint32(5, mem3x.getuint32(5) + 1)
+_prev_stage = stage
+st = 0
+if power:
+    st |= 1
+    if not fault:
+        if stage == 0:
+            st |= 2
+        if stage == 1:
+            st |= 4
+        if stage == 2:
+            st |= 8
+        if stage == 3:
+            st |= 16
+        if auto:
+            st |= 64
+    else:
+        st |= 32
+mem3x.setuint16(0, st)
+_px += random.uniform(-0.5, 0.5)
+_py += random.uniform(-0.5, 0.5)
+_pz += random.uniform(-0.5, 0.5)
+if stage == 0:
+    x = max(0, min(8, int(_px)))
+    y = max(0, min(8, int(_py)))
+    z = max(0, min(8, int(_pz)))
+elif stage == 1:
+    x = 100 + random.randint(-5, 5)
+    y = 300 + random.randint(-5, 5)
+    z = 80 + random.randint(-5, 5)
+elif stage == 2:
+    x = 0
+    y = 400 + random.randint(-5, 5)
+    z = 200 + random.randint(-5, 5)
+else:
+    x = random.randint(0, 10)
+    y = random.randint(0, 10)
+    z = random.randint(0, 10)
+mem3x.setuint16(9, x)
+mem3x.setuint16(10, y)
+mem3x.setuint16(11, z)
+mem3x.setuint16(12, 1 if (stage in (1, 2) and not fault) else 0)
+if fault:
+    mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+    mem1x.setbit(2, True)
+    mem1x.setbit(0, False)
+else:
+    mem3x.setuint16(1, 0)
+    mem1x.setbit(2, False)
+    mem1x.setbit(0, power)
+mem1x.setbit(1, (stage in (1, 2) and not fault))
+mem3x.setuint16(13, random.randint(2, 8) if power else 0)
+mem3x.setuint16(14, stage if power else 0)
+mem3x.setuint16(2, int(30 * random.uniform(0.9, 1.1)))</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>200</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>IM-03</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, total={mem3x.getuint32(3)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 1009 + 7)
+DUR = [20, 30, 25, 150, 40, 15, 20]
+TOTAL = sum(DUR)
+POFF = (idx % 4) * 75
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_f3_left = 0
+_prev_stage = -1
+SET_T = [2200, 2100, 2000, 1900, 1800]
+mem4x.setuint16(0, 3)
+mem4x.setuint16(1, 50000)
+for i in range(5):
+    mem4x.setint16(2 + i, SET_T[i])
+mem4x.setint16(7, 850)
+mem4x.setuint16(8, 25)
+mem3x.setuint32(3, 0)
+mem3x.setuint32(5, 0)
+mem3x.setuint32(7, 0)
+mem3x.setuint16(9, TOTAL)
+mem3x.setuint16(10, TOTAL)
+mem3x.setuint16(11, 92)
+for i in range(5):
+    mem3x.setint16(19 + i, SET_T[i])
+mem3x.setint16(29, 850)
+mem3x.setint16(30, 450)
+mem3x.setint16(31, 280)
+mem3x.setuint32(52, 0)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem1x.setbit(1, True)
+mem1x.setbit(2, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+auto = mem0x.getbit(2)
+mode = mem4x.getuint16(0)
+target = mem4x.getuint16(1)
+setT = [mem4x.getint16(2 + i) for i in range(5)]
+setMold = mem4x.getint16(7)
+DUR[2] = mem4x.getuint16(8)
+TOTAL = sum(DUR)
+p = (c + POFF) % TOTAL
+stage = 0
+acc = 0
+for i, d in enumerate(DUR):
+    if p &lt; acc + d:
+        stage = i
+        break
+    acc += d
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + POFF) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(80, 200)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + POFF + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(80, 200)
+f2 = _f2_left &gt; 0
+if _f3_left &gt; 0:
+    _f3_left -= 1
+else:
+    if (c + POFF + 400) % 600 == 0 and random.random() &lt; _p_fault:
+        _f3_left = random.randint(80, 200)
+f3 = _f3_left &gt; 0
+fault = f1 or f2 or f3
+producing = power and run and auto and mode != 0 and not fault and (target &lt;= 0 or mem3x.getuint32(3) &lt; target)
+if _prev_stage == 6 and stage == 0 and producing:
+    if random.random() &lt; 0.004:
+        mem3x.setuint32(7, mem3x.getuint32(7) + 1)
+    else:
+        mem3x.setuint32(5, mem3x.getuint32(5) + 1)
+    mem3x.setuint32(3, mem3x.getuint32(3) + 1)
+    mem3x.setuint16(51, mem3x.getuint16(51) + 1)
+    cyc = int(TOTAL * random.uniform(0.95, 1.05))
+    mem3x.setuint16(9, cyc)
+    mem3x.setuint16(10, int((mem3x.getuint16(10) + cyc) / 2))
+_prev_stage = stage
+st = 0
+if power:
+    st |= 1
+    if producing:
+        st |= (1 &lt;&lt; (stage + 1))
+    if fault:
+        st |= (1 &lt;&lt; 8)
+mem3x.setuint16(0, st)
+for i in range(5):
+    cur = mem3x.getint16(19 + i)
+    if cur &lt;= 0:
+        cur = setT[i]
+    if not power:
+        target_t = 260
+    elif not producing:
+        target_t = int(setT[i] * 0.82)
+    elif fault:
+        target_t = setT[i] + random.randint(-30, 10)
+    else:
+        target_t = setT[i] + random.randint(-8, 8)
+    mem3x.setint16(19 + i, int(cur + (target_t - cur) * 0.15))
+curm = mem3x.getint16(29)
+if not power:
+    tm = 260
+elif not producing:
+    tm = int(setMold * 0.85)
+elif f2:
+    tm = 1250 + random.randint(-50, 50)
+else:
+    tm = setMold + random.randint(-5, 5)
+mem3x.setint16(29, int(curm + (tm - curm) * 0.1))
+curo = mem3x.getint16(30)
+if f1:
+    mem3x.setint16(30, 580 + random.randint(0, 20))
+elif not power:
+    mem3x.setint16(30, int(curo + (300 - curo) * 0.05))
+else:
+    mem3x.setint16(30, int(curo + (450 + random.randint(-10, 10) - curo) * 0.1))
+mem3x.setint16(31, 280 + random.randint(-10, 10))
+if not power or not producing:
+    mem3x.setuint16(39, 0)
+    mem3x.setuint16(40, 0)
+    mem3x.setuint16(41, 0)
+    mem3x.setuint16(42, 0)
+    mem3x.setuint16(43, 0)
+    mem3x.setuint16(44, 0)
+    mem3x.setuint16(48, 0)
+    mem3x.setuint16(49, 0)
+    mem3x.setuint16(47, 0)
+    if f3:
+        mem3x.setuint16(39, random.randint(200, 260))
+else:
+    if stage == 1:
+        mem3x.setuint16(39, random.randint(130, 175))
+        mem3x.setuint16(40, random.randint(70, 95))
+        mem3x.setuint16(45, max(0, mem3x.getuint16(45) - random.randint(1, 5)))
+    elif stage == 2:
+        mem3x.setuint16(39, random.randint(60, 90))
+        mem3x.setuint16(41, random.randint(55, 85))
+    elif stage == 4:
+        mem3x.setuint16(42, random.randint(150, 240))
+        mem3x.setuint16(43, random.randint(8, 20))
+        mem3x.setuint16(46, min(200, mem3x.getuint16(46) + random.randint(1, 3)))
+    else:
+        mem3x.setuint16(39, 0)
+        mem3x.setuint16(40, 0)
+        mem3x.setuint16(41, 0)
+        mem3x.setuint16(42, 0)
+        mem3x.setuint16(43, 0)
+    if stage in (0, 5, 6):
+        mem3x.setuint16(44, random.randint(30, 60))
+        mem3x.setuint16(45, 1000)
+    mem3x.setuint16(49, random.randint(30, 60) if stage in (1, 2) else random.randint(0, 20))
+    mem3x.setuint16(48, random.randint(900, 1500))
+    mem3x.setuint16(47, random.randint(20, 90))
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0) + (4 if f3 else 0))
+mem3x.setuint16(2, 1 if fault else 0)
+mem1x.setbit(0, (stage in (0, 5)) and producing)
+mem1x.setbit(1, power and not fault)
+mem1x.setbit(2, producing)
+mem1x.setbit(3, fault)
+u = mem3x.getuint16(11)
+if fault or (power and not producing):
+    if u &gt; 10:
+        mem3x.setuint16(11, u - 1)
+else:
+    if u &lt; 92:
+        mem3x.setuint16(11, u + 1)
+if power:
+    pw = {0: 8, 1: 45, 2: 30, 3: 12, 4: 22, 5: 10, 6: 9}.get(stage, 10)
+    mem3x.setuint16(50, (pw + random.randint(-2, 3)) if producing else 3)
+    mem3x.setuint32(52, int(time() - _mb_start))
+else:
+    mem3x.setuint16(50, 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>20</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>MTC-03</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 3001 + 11)
+SETT = random.choice([800, 900, 1000, 1100, 1200])
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_fp = (idx % 4) * 150
+mem4x.setuint16(0, SETT)
+mem3x.setint16(2, SETT)
+mem3x.setint16(3, SETT - random.randint(30, 80))
+mem3x.setuint16(4, 3)
+mem3x.setuint16(5, 25)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem1x.setbit(0, True)
+mem3x.setuint16(6, 45)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+heat = mem0x.getbit(2)
+setT = mem4x.getuint16(0)
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + _fp) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(100, 250)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + _fp + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(100, 250)
+f2 = _f2_left &gt; 0
+cur = mem3x.getint16(2)
+if f1:
+    target = setT + random.randint(50, 120)
+elif not power:
+    target = 250
+elif not run:
+    target = 300
+elif heat:
+    target = setT + random.randint(-10, 10)
+else:
+    target = max(250, cur - 10)
+mem3x.setint16(2, int(cur + (target - cur) * 0.08))
+curb = mem3x.getint16(3)
+mem3x.setint16(3, int(curb + (mem3x.getint16(2) - 40 - curb) * 0.1))
+dev = mem3x.getint16(2) - setT
+st = 0
+if power:
+    st |= 1
+    if run:
+        st |= 2
+    if power and run and heat and dev &lt; -20:
+        st |= 4
+    elif dev &gt; 20:
+        st |= 8
+    if f1 or f2:
+        st |= 0x10
+mem3x.setuint16(0, st)
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+mem1x.setbit(2, f1 or f2)
+mem1x.setbit(0, power)
+mem1x.setbit(1, power and run and heat and dev &lt; -20)
+if not power or not run or f2:
+    mem3x.setuint16(4, 0)
+    mem3x.setuint16(5, 0)
+else:
+    mem3x.setuint16(4, 2 + random.randint(0, 3))
+    mem3x.setuint16(5, random.randint(15, 40))
+mem3x.setuint16(6, random.randint(30, 60) if power else 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>20</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>DRY-03</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, level={mem3x.getuint16(4)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 4021 + 17)
+SETD = int(random.choice([750, 800, 850, 900]))
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_fp = (idx % 4) * 150
+_level = 85.0
+mem4x.setuint16(0, SETD)
+mem3x.setint16(2, SETD)
+mem3x.setint16(3, -350)
+mem3x.setuint16(4, 85)
+mem3x.setuint16(5, 5)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem0x.setbit(3, True)
+mem1x.setbit(0, True)
+mem1x.setbit(1, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+fan = mem0x.getbit(2)
+heat = mem0x.getbit(3)
+setD = mem4x.getuint16(0)
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + _fp) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(100, 250)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + _fp + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(100, 250)
+f2 = _f2_left &gt; 0
+cur = mem3x.getint16(2)
+if f2:
+    target = setD + random.randint(30, 60)
+elif not power:
+    target = 250
+elif not run or not heat:
+    target = max(250, cur - 10)
+else:
+    target = setD + random.randint(-6, 6)
+mem3x.setint16(2, int(cur + (target - cur) * 0.08))
+curd = mem3x.getint16(3)
+if f1:
+    tde = -100 + random.randint(-40, 20)
+else:
+    tde = -340 + random.randint(-30, 30)
+mem3x.setint16(3, int(curd + (tde - curd) * 0.08))
+if power and run and not f1 and not f2:
+    _level -= random.uniform(0.01, 0.05)
+    if _level &lt; 20:
+        _level = 90
+    mem3x.setuint16(4, int(_level))
+st = 0
+if power:
+    st |= 1
+    if run:
+        st |= 2
+    if fan:
+        st |= 4
+    if heat:
+        st |= 8
+    if mem3x.getuint16(4) &lt; 25:
+        st |= 0x10
+    if f1 or f2:
+        st |= 0x20
+mem3x.setuint16(0, st)
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+mem1x.setbit(2, mem3x.getuint16(4) &lt; 25)
+mem1x.setbit(3, f1 or f2)
+mem1x.setbit(0, power)
+mem1x.setbit(1, power and run and fan and heat)
+mem3x.setuint16(5, random.randint(3, 8) if heat else 0)
+mem3x.setuint16(6, random.randint(8, 20) if fan else 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>40</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>ROB-03</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, taken={mem3x.getuint32(3)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 2027 + 3)
+TOTAL = 310
+WAIT = 270
+POFF = (idx % 4) * 75
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_prev_stage = -1
+_manual_left = 0
+_start_prev = False
+_px = 0.0
+_py = 0.0
+_pz = 0.0
+mem3x.setuint32(3, 0)
+mem3x.setuint32(5, 0)
+mem3x.setuint32(7, 0)
+mem3x.setuint16(2, 30)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, False)
+mem1x.setbit(3, True)
+mem1x.setbit(0, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+auto = mem0x.getbit(1)
+start_req = mem0x.getbit(2)
+if (not auto) and start_req and (not _start_prev) and _manual_left &lt;= 0:
+    _manual_left = 35
+_start_prev = start_req
+p = (c + POFF) % TOTAL
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + POFF) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(60, 150)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + POFF + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(60, 150)
+f2 = _f2_left &gt; 0
+fault = f1 or f2
+if auto:
+    if p &lt; WAIT:
+        stage = 0
+    elif p &lt; WAIT + 20:
+        stage = 1
+    elif p &lt; WAIT + 35:
+        stage = 2
+    else:
+        stage = 3
+else:
+    if _manual_left &gt; 0:
+        _manual_left -= 1
+        if _manual_left &gt; 20:
+            stage = 1
+        elif _manual_left &gt; 5:
+            stage = 2
+        else:
+            stage = 3
+    else:
+        stage = 0
+if _prev_stage == 3 and stage == 0 and not fault:
+    mem3x.setuint32(3, mem3x.getuint32(3) + 1)
+    if random.random() &lt; 0.02:
+        mem3x.setuint32(7, mem3x.getuint32(7) + 1)
+    else:
+        mem3x.setuint32(5, mem3x.getuint32(5) + 1)
+_prev_stage = stage
+st = 0
+if power:
+    st |= 1
+    if not fault:
+        if stage == 0:
+            st |= 2
+        if stage == 1:
+            st |= 4
+        if stage == 2:
+            st |= 8
+        if stage == 3:
+            st |= 16
+        if auto:
+            st |= 64
+    else:
+        st |= 32
+mem3x.setuint16(0, st)
+_px += random.uniform(-0.5, 0.5)
+_py += random.uniform(-0.5, 0.5)
+_pz += random.uniform(-0.5, 0.5)
+if stage == 0:
+    x = max(0, min(8, int(_px)))
+    y = max(0, min(8, int(_py)))
+    z = max(0, min(8, int(_pz)))
+elif stage == 1:
+    x = 100 + random.randint(-5, 5)
+    y = 300 + random.randint(-5, 5)
+    z = 80 + random.randint(-5, 5)
+elif stage == 2:
+    x = 0
+    y = 400 + random.randint(-5, 5)
+    z = 200 + random.randint(-5, 5)
+else:
+    x = random.randint(0, 10)
+    y = random.randint(0, 10)
+    z = random.randint(0, 10)
+mem3x.setuint16(9, x)
+mem3x.setuint16(10, y)
+mem3x.setuint16(11, z)
+mem3x.setuint16(12, 1 if (stage in (1, 2) and not fault) else 0)
+if fault:
+    mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+    mem1x.setbit(2, True)
+    mem1x.setbit(0, False)
+else:
+    mem3x.setuint16(1, 0)
+    mem1x.setbit(2, False)
+    mem1x.setbit(0, power)
+mem1x.setbit(1, (stage in (1, 2) and not fault))
+mem3x.setuint16(13, random.randint(2, 8) if power else 0)
+mem3x.setuint16(14, stage if power else 0)
+mem3x.setuint16(2, int(30 * random.uniform(0.9, 1.1)))</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>200</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>IM-04</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, total={mem3x.getuint32(3)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 1009 + 7)
+DUR = [20, 30, 25, 150, 40, 15, 20]
+TOTAL = sum(DUR)
+POFF = (idx % 4) * 75
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_f3_left = 0
+_prev_stage = -1
+SET_T = [2200, 2100, 2000, 1900, 1800]
+mem4x.setuint16(0, 3)
+mem4x.setuint16(1, 50000)
+for i in range(5):
+    mem4x.setint16(2 + i, SET_T[i])
+mem4x.setint16(7, 850)
+mem4x.setuint16(8, 25)
+mem3x.setuint32(3, 0)
+mem3x.setuint32(5, 0)
+mem3x.setuint32(7, 0)
+mem3x.setuint16(9, TOTAL)
+mem3x.setuint16(10, TOTAL)
+mem3x.setuint16(11, 92)
+for i in range(5):
+    mem3x.setint16(19 + i, SET_T[i])
+mem3x.setint16(29, 850)
+mem3x.setint16(30, 450)
+mem3x.setint16(31, 280)
+mem3x.setuint32(52, 0)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem1x.setbit(1, True)
+mem1x.setbit(2, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+auto = mem0x.getbit(2)
+mode = mem4x.getuint16(0)
+target = mem4x.getuint16(1)
+setT = [mem4x.getint16(2 + i) for i in range(5)]
+setMold = mem4x.getint16(7)
+DUR[2] = mem4x.getuint16(8)
+TOTAL = sum(DUR)
+p = (c + POFF) % TOTAL
+stage = 0
+acc = 0
+for i, d in enumerate(DUR):
+    if p &lt; acc + d:
+        stage = i
+        break
+    acc += d
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + POFF) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(80, 200)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + POFF + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(80, 200)
+f2 = _f2_left &gt; 0
+if _f3_left &gt; 0:
+    _f3_left -= 1
+else:
+    if (c + POFF + 400) % 600 == 0 and random.random() &lt; _p_fault:
+        _f3_left = random.randint(80, 200)
+f3 = _f3_left &gt; 0
+fault = f1 or f2 or f3
+producing = power and run and auto and mode != 0 and not fault and (target &lt;= 0 or mem3x.getuint32(3) &lt; target)
+if _prev_stage == 6 and stage == 0 and producing:
+    if random.random() &lt; 0.004:
+        mem3x.setuint32(7, mem3x.getuint32(7) + 1)
+    else:
+        mem3x.setuint32(5, mem3x.getuint32(5) + 1)
+    mem3x.setuint32(3, mem3x.getuint32(3) + 1)
+    mem3x.setuint16(51, mem3x.getuint16(51) + 1)
+    cyc = int(TOTAL * random.uniform(0.95, 1.05))
+    mem3x.setuint16(9, cyc)
+    mem3x.setuint16(10, int((mem3x.getuint16(10) + cyc) / 2))
+_prev_stage = stage
+st = 0
+if power:
+    st |= 1
+    if producing:
+        st |= (1 &lt;&lt; (stage + 1))
+    if fault:
+        st |= (1 &lt;&lt; 8)
+mem3x.setuint16(0, st)
+for i in range(5):
+    cur = mem3x.getint16(19 + i)
+    if cur &lt;= 0:
+        cur = setT[i]
+    if not power:
+        target_t = 260
+    elif not producing:
+        target_t = int(setT[i] * 0.82)
+    elif fault:
+        target_t = setT[i] + random.randint(-30, 10)
+    else:
+        target_t = setT[i] + random.randint(-8, 8)
+    mem3x.setint16(19 + i, int(cur + (target_t - cur) * 0.15))
+curm = mem3x.getint16(29)
+if not power:
+    tm = 260
+elif not producing:
+    tm = int(setMold * 0.85)
+elif f2:
+    tm = 1250 + random.randint(-50, 50)
+else:
+    tm = setMold + random.randint(-5, 5)
+mem3x.setint16(29, int(curm + (tm - curm) * 0.1))
+curo = mem3x.getint16(30)
+if f1:
+    mem3x.setint16(30, 580 + random.randint(0, 20))
+elif not power:
+    mem3x.setint16(30, int(curo + (300 - curo) * 0.05))
+else:
+    mem3x.setint16(30, int(curo + (450 + random.randint(-10, 10) - curo) * 0.1))
+mem3x.setint16(31, 280 + random.randint(-10, 10))
+if not power or not producing:
+    mem3x.setuint16(39, 0)
+    mem3x.setuint16(40, 0)
+    mem3x.setuint16(41, 0)
+    mem3x.setuint16(42, 0)
+    mem3x.setuint16(43, 0)
+    mem3x.setuint16(44, 0)
+    mem3x.setuint16(48, 0)
+    mem3x.setuint16(49, 0)
+    mem3x.setuint16(47, 0)
+    if f3:
+        mem3x.setuint16(39, random.randint(200, 260))
+else:
+    if stage == 1:
+        mem3x.setuint16(39, random.randint(130, 175))
+        mem3x.setuint16(40, random.randint(70, 95))
+        mem3x.setuint16(45, max(0, mem3x.getuint16(45) - random.randint(1, 5)))
+    elif stage == 2:
+        mem3x.setuint16(39, random.randint(60, 90))
+        mem3x.setuint16(41, random.randint(55, 85))
+    elif stage == 4:
+        mem3x.setuint16(42, random.randint(150, 240))
+        mem3x.setuint16(43, random.randint(8, 20))
+        mem3x.setuint16(46, min(200, mem3x.getuint16(46) + random.randint(1, 3)))
+    else:
+        mem3x.setuint16(39, 0)
+        mem3x.setuint16(40, 0)
+        mem3x.setuint16(41, 0)
+        mem3x.setuint16(42, 0)
+        mem3x.setuint16(43, 0)
+    if stage in (0, 5, 6):
+        mem3x.setuint16(44, random.randint(30, 60))
+        mem3x.setuint16(45, 1000)
+    mem3x.setuint16(49, random.randint(30, 60) if stage in (1, 2) else random.randint(0, 20))
+    mem3x.setuint16(48, random.randint(900, 1500))
+    mem3x.setuint16(47, random.randint(20, 90))
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0) + (4 if f3 else 0))
+mem3x.setuint16(2, 1 if fault else 0)
+mem1x.setbit(0, (stage in (0, 5)) and producing)
+mem1x.setbit(1, power and not fault)
+mem1x.setbit(2, producing)
+mem1x.setbit(3, fault)
+u = mem3x.getuint16(11)
+if fault or (power and not producing):
+    if u &gt; 10:
+        mem3x.setuint16(11, u - 1)
+else:
+    if u &lt; 92:
+        mem3x.setuint16(11, u + 1)
+if power:
+    pw = {0: 8, 1: 45, 2: 30, 3: 12, 4: 22, 5: 10, 6: 9}.get(stage, 10)
+    mem3x.setuint16(50, (pw + random.randint(-2, 3)) if producing else 3)
+    mem3x.setuint32(52, int(time() - _mb_start))
+else:
+    mem3x.setuint16(50, 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>20</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>MTC-04</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 3001 + 11)
+SETT = random.choice([800, 900, 1000, 1100, 1200])
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_fp = (idx % 4) * 150
+mem4x.setuint16(0, SETT)
+mem3x.setint16(2, SETT)
+mem3x.setint16(3, SETT - random.randint(30, 80))
+mem3x.setuint16(4, 3)
+mem3x.setuint16(5, 25)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem1x.setbit(0, True)
+mem3x.setuint16(6, 45)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+heat = mem0x.getbit(2)
+setT = mem4x.getuint16(0)
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + _fp) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(100, 250)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + _fp + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(100, 250)
+f2 = _f2_left &gt; 0
+cur = mem3x.getint16(2)
+if f1:
+    target = setT + random.randint(50, 120)
+elif not power:
+    target = 250
+elif not run:
+    target = 300
+elif heat:
+    target = setT + random.randint(-10, 10)
+else:
+    target = max(250, cur - 10)
+mem3x.setint16(2, int(cur + (target - cur) * 0.08))
+curb = mem3x.getint16(3)
+mem3x.setint16(3, int(curb + (mem3x.getint16(2) - 40 - curb) * 0.1))
+dev = mem3x.getint16(2) - setT
+st = 0
+if power:
+    st |= 1
+    if run:
+        st |= 2
+    if power and run and heat and dev &lt; -20:
+        st |= 4
+    elif dev &gt; 20:
+        st |= 8
+    if f1 or f2:
+        st |= 0x10
+mem3x.setuint16(0, st)
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+mem1x.setbit(2, f1 or f2)
+mem1x.setbit(0, power)
+mem1x.setbit(1, power and run and heat and dev &lt; -20)
+if not power or not run or f2:
+    mem3x.setuint16(4, 0)
+    mem3x.setuint16(5, 0)
+else:
+    mem3x.setuint16(4, 2 + random.randint(0, 3))
+    mem3x.setuint16(5, random.randint(15, 40))
+mem3x.setuint16(6, random.randint(30, 60) if power else 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>20</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>DRY-04</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, level={mem3x.getuint16(4)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 4021 + 17)
+SETD = int(random.choice([750, 800, 850, 900]))
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_fp = (idx % 4) * 150
+_level = 85.0
+mem4x.setuint16(0, SETD)
+mem3x.setint16(2, SETD)
+mem3x.setint16(3, -350)
+mem3x.setuint16(4, 85)
+mem3x.setuint16(5, 5)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, True)
+mem0x.setbit(3, True)
+mem1x.setbit(0, True)
+mem1x.setbit(1, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+run = mem0x.getbit(1)
+fan = mem0x.getbit(2)
+heat = mem0x.getbit(3)
+setD = mem4x.getuint16(0)
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + _fp) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(100, 250)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + _fp + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(100, 250)
+f2 = _f2_left &gt; 0
+cur = mem3x.getint16(2)
+if f2:
+    target = setD + random.randint(30, 60)
+elif not power:
+    target = 250
+elif not run or not heat:
+    target = max(250, cur - 10)
+else:
+    target = setD + random.randint(-6, 6)
+mem3x.setint16(2, int(cur + (target - cur) * 0.08))
+curd = mem3x.getint16(3)
+if f1:
+    tde = -100 + random.randint(-40, 20)
+else:
+    tde = -340 + random.randint(-30, 30)
+mem3x.setint16(3, int(curd + (tde - curd) * 0.08))
+if power and run and not f1 and not f2:
+    _level -= random.uniform(0.01, 0.05)
+    if _level &lt; 20:
+        _level = 90
+    mem3x.setuint16(4, int(_level))
+st = 0
+if power:
+    st |= 1
+    if run:
+        st |= 2
+    if fan:
+        st |= 4
+    if heat:
+        st |= 8
+    if mem3x.getuint16(4) &lt; 25:
+        st |= 0x10
+    if f1 or f2:
+        st |= 0x20
+mem3x.setuint16(0, st)
+mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+mem1x.setbit(2, mem3x.getuint16(4) &lt; 25)
+mem1x.setbit(3, f1 or f2)
+mem1x.setbit(0, power)
+mem1x.setbit(1, power and run and fan and heat)
+mem3x.setuint16(5, random.randint(3, 8) if heat else 0)
+mem3x.setuint16(6, random.randint(8, 20) if fan else 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>40</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>ROB-04</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, taken={mem3x.getuint32(3)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+nm = mbdevice.getname()
+try:
+    idx = int(nm.rsplit('-', 1)[1])
+except Exception:
+    idx = 0
+random.seed(idx * 2027 + 3)
+TOTAL = 310
+WAIT = 270
+POFF = (idx % 4) * 75
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_prev_stage = -1
+_manual_left = 0
+_start_prev = False
+_px = 0.0
+_py = 0.0
+_pz = 0.0
+mem3x.setuint32(3, 0)
+mem3x.setuint32(5, 0)
+mem3x.setuint32(7, 0)
+mem3x.setuint16(2, 30)
+mem0x.setbit(0, True)
+mem0x.setbit(1, True)
+mem0x.setbit(2, False)
+mem1x.setbit(3, True)
+mem1x.setbit(0, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+power = mem0x.getbit(0)
+auto = mem0x.getbit(1)
+start_req = mem0x.getbit(2)
+if (not auto) and start_req and (not _start_prev) and _manual_left &lt;= 0:
+    _manual_left = 35
+_start_prev = start_req
+p = (c + POFF) % TOTAL
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if (c + POFF) % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(60, 150)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + POFF + 200) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(60, 150)
+f2 = _f2_left &gt; 0
+fault = f1 or f2
+if auto:
+    if p &lt; WAIT:
+        stage = 0
+    elif p &lt; WAIT + 20:
+        stage = 1
+    elif p &lt; WAIT + 35:
+        stage = 2
+    else:
+        stage = 3
+else:
+    if _manual_left &gt; 0:
+        _manual_left -= 1
+        if _manual_left &gt; 20:
+            stage = 1
+        elif _manual_left &gt; 5:
+            stage = 2
+        else:
+            stage = 3
+    else:
+        stage = 0
+if _prev_stage == 3 and stage == 0 and not fault:
+    mem3x.setuint32(3, mem3x.getuint32(3) + 1)
+    if random.random() &lt; 0.02:
+        mem3x.setuint32(7, mem3x.getuint32(7) + 1)
+    else:
+        mem3x.setuint32(5, mem3x.getuint32(5) + 1)
+_prev_stage = stage
+st = 0
+if power:
+    st |= 1
+    if not fault:
+        if stage == 0:
+            st |= 2
+        if stage == 1:
+            st |= 4
+        if stage == 2:
+            st |= 8
+        if stage == 3:
+            st |= 16
+        if auto:
+            st |= 64
+    else:
+        st |= 32
+mem3x.setuint16(0, st)
+_px += random.uniform(-0.5, 0.5)
+_py += random.uniform(-0.5, 0.5)
+_pz += random.uniform(-0.5, 0.5)
+if stage == 0:
+    x = max(0, min(8, int(_px)))
+    y = max(0, min(8, int(_py)))
+    z = max(0, min(8, int(_pz)))
+elif stage == 1:
+    x = 100 + random.randint(-5, 5)
+    y = 300 + random.randint(-5, 5)
+    z = 80 + random.randint(-5, 5)
+elif stage == 2:
+    x = 0
+    y = 400 + random.randint(-5, 5)
+    z = 200 + random.randint(-5, 5)
+else:
+    x = random.randint(0, 10)
+    y = random.randint(0, 10)
+    z = random.randint(0, 10)
+mem3x.setuint16(9, x)
+mem3x.setuint16(10, y)
+mem3x.setuint16(11, z)
+mem3x.setuint16(12, 1 if (stage in (1, 2) and not fault) else 0)
+if fault:
+    mem3x.setuint16(1, (1 if f1 else 0) + (2 if f2 else 0))
+    mem1x.setbit(2, True)
+    mem1x.setbit(0, False)
+else:
+    mem3x.setuint16(1, 0)
+    mem1x.setbit(2, False)
+    mem1x.setbit(0, power)
+mem1x.setbit(1, (stage in (1, 2) and not fault))
+mem3x.setuint16(13, random.randint(2, 8) if power else 0)
+mem3x.setuint16(14, stage if power else 0)
+mem3x.setuint16(2, int(30 * random.uniform(0.9, 1.1)))</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>40</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>EM-01</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped, energy={mem3x.getuint32(0)}")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+random.seed(999)
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+mem3x.setuint32(0, 0)
+mem3x.setuint32(2, 0)
+mem3x.setuint16(4, 380)
+mem3x.setuint16(5, 381)
+mem3x.setuint16(6, 379)
+mem3x.setuint16(7, 1500)
+mem3x.setuint16(8, 1480)
+mem3x.setuint16(9, 1510)
+mem3x.setuint16(10, 100)
+mem3x.setuint16(11, 30)
+mem3x.setuint16(12, 900)
+mem3x.setuint16(13, 5000)
+mem3x.setuint16(14, 0)
+mem0x.setbit(0, True)
+mem1x.setbit(0, True)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+on = mem0x.getbit(0)
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if c % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(80, 200)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + 300) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(80, 200)
+f2 = _f2_left &gt; 0
+if not on:
+    mem3x.setuint16(4, 0)
+    mem3x.setuint16(5, 0)
+    mem3x.setuint16(6, 0)
+    mem3x.setuint16(7, 0)
+    mem3x.setuint16(8, 0)
+    mem3x.setuint16(9, 0)
+    mem3x.setuint16(10, 0)
+    mem3x.setuint16(11, 0)
+    mem3x.setuint16(12, 0)
+    mem3x.setuint16(13, 0)
+    mem3x.setuint16(14, 0)
+    mem1x.setbit(1, False)
+else:
+    va = 380 + random.randint(-5, 5)
+    vb = 381 + random.randint(-5, 5)
+    vc = 379 + random.randint(-5, 5)
+    if f1:
+        va = int(va * 0.92)
+        vb = int(vb * 0.92)
+        vc = int(vc * 0.92)
+    mem3x.setuint16(4, va)
+    mem3x.setuint16(5, vb)
+    mem3x.setuint16(6, vc)
+    base = random.randint(120, 220)
+    mem3x.setuint16(7, base * 10 + random.randint(-15, 15))
+    mem3x.setuint16(8, base * 10 - random.randint(0, 20) + random.randint(-10, 10))
+    mem3x.setuint16(9, base * 10 + random.randint(-10, 20) + random.randint(-10, 10))
+    cur_kw = mem3x.getuint16(10)
+    tgt_kw = random.randint(80, 150)
+    mem3x.setuint16(10, int(cur_kw + (tgt_kw - cur_kw) * 0.3))
+    mem3x.setuint16(11, random.randint(20, 40))
+    if f2:
+        mem3x.setuint16(12, random.randint(700, 820))
+    else:
+        mem3x.setuint16(12, random.randint(860, 950))
+    mem3x.setuint16(13, 5000 + random.randint(-10, 10))
+    inc = max(1, int(mem3x.getuint16(10) * 0.1 / 36))
+    mem3x.setuint32(0, mem3x.getuint32(0) + inc)
+    mem3x.setuint32(2, mem3x.getuint32(2) + inc)
+    mem3x.setuint16(14, (1 if f1 else 0) + (2 if f2 else 0))
+    mem1x.setbit(1, f2 or mem3x.getuint16(12) &lt; 800)
+mem3x.setuint32(15, mem3x.getuint32(0) if on else 0)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+        <device>
+            <byteArrayFormat>Hex</byteArrayFormat>
+            <byteArraySeparator>\s</byteArraySeparator>
+            <count0x>16</count0x>
+            <count1x>20</count1x>
+            <count3x>20</count3x>
+            <count4x>16</count4x>
+            <delay>0</delay>
+            <exceptionStatusAddress>1</exceptionStatusAddress>
+            <isEnableScript>true</isEnableScript>
+            <isReadOnly>false</isReadOnly>
+            <isSaveData>false</isSaveData>
+            <maxReadCoils>2040</maxReadCoils>
+            <maxReadDiscreteInputs>2040</maxReadDiscreteInputs>
+            <maxReadHoldingRegisters>125</maxReadHoldingRegisters>
+            <maxReadInputRegisters>125</maxReadInputRegisters>
+            <maxWriteMultipleCoils>127</maxWriteMultipleCoils>
+            <maxWriteMultipleRegisters>123</maxWriteMultipleRegisters>
+            <name>ENV-01</name>
+            <registerOrder>R0R1R2R3</registerOrder>
+            <scriptFinal>print(f"{mbdevice.getname()} stopped")</scriptFinal>
+            <scriptInit>import random, math
+_mb_start = time()
+random.seed(555)
+_p_fault = 0.05
+_f1_left = 0
+_f2_left = 0
+_t = 260.0
+_h = 55.0
+mem4x.setint16(0, 260)
+mem4x.setuint16(1, 55)
+mem3x.setint16(0, 260)
+mem3x.setuint16(1, 55)
+mem3x.setint16(2, -50)
+mem3x.setuint16(3, 72)
+mem1x.setbit(0, False)
+mem1x.setbit(1, False)</scriptInit>
+            <scriptLoop>c = mbdevice.getpycycle()
+setT = mem4x.getint16(0)
+setH = mem4x.getuint16(1)
+if _f1_left &gt; 0:
+    _f1_left -= 1
+else:
+    if c % 600 == 0 and random.random() &lt; _p_fault:
+        _f1_left = random.randint(150, 300)
+f1 = _f1_left &gt; 0
+if _f2_left &gt; 0:
+    _f2_left -= 1
+else:
+    if (c + 300) % 600 == 0 and random.random() &lt; _p_fault:
+        _f2_left = random.randint(150, 300)
+f2 = _f2_left &gt; 0
+if f1:
+    _t += 0.6
+else:
+    _t += (setT - _t) * 0.02
+_t += random.uniform(-0.3, 0.3)
+if _t &gt; 600:
+    _t = 600
+if _t &lt; -300:
+    _t = -300
+mem3x.setint16(0, int(_t))
+if f2:
+    _h += 1.0
+else:
+    _h += (setH - _h) * 0.03
+_h += random.uniform(-1.0, 1.0)
+if _h &gt; 100:
+    _h = 100
+if _h &lt; 0:
+    _h = 0
+mem3x.setuint16(1, int(_h))
+mem3x.setint16(2, int(_t - (100 - _h) * 2))
+mem3x.setuint16(3, 70 + random.randint(0, 8))
+mem1x.setbit(0, f1 or mem3x.getint16(0) &gt; 320)
+mem1x.setbit(1, f2 or mem3x.getuint16(1) &gt; 70)</scriptLoop>
+            <stringEncoding>UTF-8</stringEncoding>
+            <stringLengthType>ZerroEnded</stringLengthType>
+            <swapBytes>SwapNo</swapBytes>
+        </device>
+    </devices>
+</project>
