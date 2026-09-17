@@ -50,7 +50,7 @@ namespace moju.UI
             {
                 if (int.TryParse(text, out int result))
                 {
-                    return Convert.ToString(result * 1.0F);
+                    return Convert.ToString(result / 10.0F);
                 }
                 else
                 {
