@@ -50,7 +50,7 @@ namespace moju.UI
 
         private void ExitButton_Click(object sender, EventArgs e)
         {
-
+            Application.Exit();
         }
 
         private void LoginNameInput_Click(object sender, EventArgs e)
