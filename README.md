@@ -8,6 +8,13 @@
 
 **技术栈**：C# · .NET Framework 4.6 · WinForms · Modbus TCP · SQLite · MSChart · Newtonsoft.Json
 
+## 预览
+<img width="328" height="306" alt="image" src="https://github.com/user-attachments/assets/c4384525-89a9-4d37-8370-ecd2eef59203" />
+<img width="1937" height="1118" alt="image" src="https://github.com/user-attachments/assets/66ea95ba-c831-4e65-9edb-2086f6821bf1" />
+<img width="1937" height="1118" alt="image" src="https://github.com/user-attachments/assets/0457567b-a8fb-49c4-a6c9-d3415ac674c8" />
+<img width="1937" height="1118" alt="image" src="https://github.com/user-attachments/assets/7aa62f7e-711c-423c-9b82-38db6c55ebcb" />
+
+
 ---
 
 ## 功能
