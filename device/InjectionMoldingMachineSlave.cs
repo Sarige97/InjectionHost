@@ -280,7 +280,7 @@ namespace moju.device
 
         public async Task<bool> SetBarrelSetPoint5(ushort value)
         {
-            return await WriteSingleRegister(5, value);
+            return await WriteSingleRegister(6, value);
         }
 
         // 模具设定温度 读写

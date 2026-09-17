@@ -36,9 +36,6 @@ namespace moju.UI
             string username = LoginNameInput.Text;
             string password = PasswordInput.Text;
             bool result = await UserService.Instance.login(username, password);
-
-            result = true;
-
             if (result)
             {
                 OnLoginSuccess();
