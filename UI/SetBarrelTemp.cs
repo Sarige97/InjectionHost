@@ -42,20 +42,13 @@ namespace moju.UI
 
         private string changeText2Dot1(string text)
         {
-            if (text.EndsWith("0"))
+            if (int.TryParse(text, out int result))
             {
-                return text.Substring(0, text.Length - 1);
+                return Convert.ToString(result / 10.0F);
             }
             else
             {
-                if (int.TryParse(text, out int result))
-                {
-                    return Convert.ToString(result / 10.0F);
-                }
-                else
-                {
-                    return text;
-                }
+                return text;
             }
         }
 
@@ -115,7 +108,7 @@ namespace moju.UI
                 }
                 else
                 {
-                    BarrelTemp5 =(short) (short.Parse(Input_BarrelTemp5.Text) * 10);
+                    BarrelTemp5 = (short)(short.Parse(Input_BarrelTemp5.Text) * 10);
                 }
                 DialogResult = DialogResult.OK;
             }
